@@ -14,7 +14,7 @@ const Post =sequelize.define('post',
             type:Sequelize.STRING(1234),
             allowNull:true
         },
-        image_url:{
+        imageUrl:{
             type:Sequelize.STRING(400),
             allowNull:true
         },
