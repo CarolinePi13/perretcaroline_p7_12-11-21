@@ -21,13 +21,14 @@ exports.signup= (req, res, next) =>{
   if (passwordSchema.validate(req.body.password)){// checks for the password validity
     bcrypt.hash(req.body.password, 10).then(
         (hash)=>{
-            const user = User.create({//creates the object user
+             User.create({//creates the object user
                 firstName:req.body.firstName,
                 lastName:req.body.lastName,
                 email: req.body.email,
                 password: hash,
                 
-            }).then(//saves thar object in the db
+            })
+        }).then(//saves thar object in the db
                 ()=>{
                     res.status(201).json({
                         message: 'User added successfully!'
@@ -40,13 +41,10 @@ exports.signup= (req, res, next) =>{
                     message: 'This email adress is already used for an account'
                 });
             })
-        }
-    );
-
-  }else{//the password does not match the password schema
+        }else{//the password does not match the password schema
     return res.status(400).json({
-      message:'le mot de passe doit contenir au moins une majuscule, une minuscule, et un chiffre, il doit faire entre 8 et 20 caracteres'})
-  }
+      message:'le mot de passe doit contenir au moins une majuscule, une minuscule, et un chiffre, il doit faire entre 8 et 20 caracteres'})}
+  
     
 };
 

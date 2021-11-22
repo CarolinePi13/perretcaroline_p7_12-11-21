@@ -1,23 +1,50 @@
 const Post = require('../models/post');
+const fs = require('fs');
 
 exports.CreateAPost=(req, res, next) =>{
-    const post = Post.create({
+
+
+   Post.create({
         content:req.body.content,
-        imageUrl:req.body.imageUrl,
-        userId:req.body.userId
-    }).then(()=>res.status(200).json({message:'success!'}))
-    
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        userId:req.userId
+    })
+    .then(
+        () => 
+          res.status(201).json({
+            message: 'Post created successfully!',
+          }))
+    .catch(
+            (error) => {
+              res.status(400).json({
+                error: error,
+                message: 'something went wrong with the post creation'
+        
+              });
+            }
+          );
+        
 };
 exports.getAllPosts=(req, res, next) =>{
-    Post.findAll().then ((posts)=>res.status(200).json(posts))
-};
-exports.getOnePOst=(req, res, next) =>{
+    Post.findAll()
+        .then ((posts)=>res.status(200).json(posts))
+        .catch(
+            (error)=>{
+                res.status(404).json({
+                    error:error
+                })
+            }
+        );
+    };
+exports.getOnePost=(req, res, next) =>{
     Post.findOne({
        where: {id:req.params.id}
-    }).then(
-        (post) =>{
-            res.status(200).json(post);
-        }).catch(
+    })
+        .then(
+            (post) =>{
+                res.status(200).json(post);
+            })
+        .catch(
             (error)=>{
                 res.status(404).json({
                     error:error
@@ -26,19 +53,19 @@ exports.getOnePOst=(req, res, next) =>{
         );
 };
 exports.ModifyAPost=(req, res, next) =>{
-    //checks if the sauce userId is the same as current user  
+    // checks if the post userId is the same as current user  
     
     if(req.body.userId==req.token.userId){
-
+        
         const PostObject = req.file? // if the requests contains a file parses the body of the request
         {
-            ...JSON.parse(req.body.post),
+            ...req.body,
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         }:{...req.body};// if not sends it as an object
     
-           Post.update({
-              where:{ _id: req.params.id}
-           }, {...PostObject, _id:req.params.id})//passes either one whether it contains a file or not
+           Post.update({...PostObject},{
+              where:{ id: req.params.id}
+           })//passes either one whether it contains a file or not
            .then(()=> res.status(200).json({ message: "Object modified !"}))
            .catch(
             (error) =>{
@@ -53,5 +80,18 @@ exports.ModifyAPost=(req, res, next) =>{
     }
 };
 exports.DeleteAPost=(req, res, next) =>{
-
+    if(req.body.userId==req.token.userId){
+    Post.destroy({where: {id:req.params.id}})
+    .then(() => res.status(200).json({ message: 'objet deleted'}))
+    .catch(
+        (error) =>{
+            res.status(400).json({
+                error:error
+            });
+        });
+    }else{
+        res.status(401).json({message:"unauthorized request"})
+    }
+    
+    
 };
