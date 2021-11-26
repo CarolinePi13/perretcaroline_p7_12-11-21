@@ -1,5 +1,7 @@
 const Post = require('../models/post');
+const Vote= require('../models/vote');
 const fs = require('fs');
+const User = require('../models/user');
 
 exports.CreateAPost=(req, res, next) =>{
 
@@ -7,13 +9,14 @@ exports.CreateAPost=(req, res, next) =>{
    Post.create({
         content:req.body.content,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        userId:req.userId
+        userId:req.body.userId
     })
     .then(
-        () => 
+        () => {
           res.status(201).json({
             message: 'Post created successfully!',
-          }))
+          })
+        })
     .catch(
             (error) => {
               res.status(400).json({
@@ -55,7 +58,7 @@ exports.getOnePost=(req, res, next) =>{
 exports.ModifyAPost=(req, res, next) =>{
     // checks if the post userId is the same as current user  
     
-    if(req.body.userId==req.token.userId){
+    // if(req.body.userId==req.token.userId){
         
         const PostObject = req.file? // if the requests contains a file parses the body of the request
         {
@@ -75,9 +78,9 @@ exports.ModifyAPost=(req, res, next) =>{
             }
         );
     
-    }else{
-        res.status(401).json({message:"unauthorized request"})
-    }
+    // }else{
+    //     res.status(401).json({message:"unauthorized request"})
+    // }
 };
 exports.DeleteAPost=(req, res, next) =>{
     if(req.body.userId==req.token.userId){
@@ -95,3 +98,18 @@ exports.DeleteAPost=(req, res, next) =>{
     
     
 };
+
+exports.votePost=(req, res, next)=>{
+    Vote.create({
+        userId:req.body.userId,
+        postId:req.body.postId,
+        vote:req.body.vote
+
+    })
+}
+exports.unVotePost=(req, res, next)=>{
+
+    Vote.destroy({
+        where:{id:req.body.voteid}
+    })
+}

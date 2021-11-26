@@ -11,11 +11,12 @@ const cors= require('cors')
 const postRoutes = require('./src/routes/post');
 const userRoutes = require('./src/routes/user');
 const commRoutes = require('./src/routes/comment');
-const sequelize = require('./src/config/config')
-const comment= require('./src/models/comment')
-const post= require('./src/models/post')
-const user= require('./src/models/user')
-const vote=require('./src/models/vote')
+const sequelize = require('./src/config/config');
+const comment= require('./src/models/comment');
+const post= require('./src/models/post');
+const user= require('./src/models/user');
+const vote= require('./src/models/vote');
+
 // connection to database//
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -34,13 +35,20 @@ user.hasMany(comment);
 post.hasMany(vote)
 user.hasMany(vote);
 
-sequelize.sync({force:true}).then(()=>{
-  console.log('this works');
-}).catch((err)=>{
-  console.log(err)
-});
+// use below code to reintianlize the db
+// ----------------------------------------
+
+// sequelize.sync({force:true}).then(()=>{
+//   console.log('this works');
+// }).catch((err)=>{
+//   console.log(err)
+// });
+// -------------------------------------------
 app.use('/api', userRoutes);
 app.use('/api/post', postRoutes);
 app.use('/api/post/:id/comment', commRoutes)
+// app.use("api/post/:id/vote")
+// app.use("api/comment/:id")
 app.use('/images',express.static(path.join(__dirname, 'src/images')) );
+
 module.exports = app;

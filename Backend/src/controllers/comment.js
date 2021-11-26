@@ -63,7 +63,7 @@ exports.CreateAComm=(req,res,next)=>{
 
  
 exports.ModifyAComm=(req,res,next)=>{
-    // if(req.body.userId==req.token.userId){
+    if(req.body.userId==req.token.userId){
   Comment.findOne({
         where:{id:req.params.id}
     }).then ((response)=>{
@@ -99,15 +99,16 @@ exports.ModifyAComm=(req,res,next)=>{
       
     })
 
-    // }else{
-    //     res.status(401).json({message:"unauthorized request"})
-    // }
+    }else{
+        res.status(401).json({message:"unauthorized request"})
+    }
   
     
         
     
 };
 exports.DeleteAComm=(req,res,next)=>{
+    if(req.body.userId==req.token.userId){
     Comment.destroy({where: {id:req.params.id}})
     .then(() => res.status(200).json({ message: 'objet deleted'}))
     .catch(
@@ -115,5 +116,9 @@ exports.DeleteAComm=(req,res,next)=>{
             res.status(400).json({
                 error:error
             });
-        });
+        });   
+    }else{
+            res.status(401).json({message:"unauthorized request"})
+        }
+      
 };

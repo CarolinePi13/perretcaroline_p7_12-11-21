@@ -5,6 +5,30 @@ var passwordValidator = require('password-validator');
 require('dotenv').config()
 
 
+let createSuperUser=()=>{
+   let superUserPass= process.env.superPassword
+
+    bcrypt.hash(superUserPass, 10).then(
+        (hash)=>{
+             User.create({//creates the object user
+                firstName:process.env.superFirstName,
+                lastName:process.env.superLastName,
+                email: process.env.superEmail,
+                password: hash,
+                isAdmin:true
+
+                
+            })
+        }).catch(
+            error => {// the email is not valid
+            res.status(401).json({
+                error:error,
+                
+            });
+        })
+}
+// createSuperUser(); -- uncomment to create superUsers
+
 //establishes  a set schema for the password
 
 var passwordSchema = new passwordValidator();
@@ -26,6 +50,7 @@ exports.signup= (req, res, next) =>{
                 lastName:req.body.lastName,
                 email: req.body.email,
                 password: hash,
+                avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
                 
             })
         }).then(//saves thar object in the db
@@ -93,3 +118,16 @@ exports.login= (req, res, next) =>{
         }
     );
 }
+exports.changeAvatar= (req, res, next) =>{
+    User.update({
+         avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    }
+       
+    ).then(()=>{
+        res.status(200).json({
+            message:"avatar changed"
+        })
+    }).catch((error=>{
+        return error
+    }))
+};
