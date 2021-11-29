@@ -1,9 +1,21 @@
 <template>
-  <router-view />
+  <navigation />
+  <Title />
+  <login />
 </template>
 
 <script>
-export default {};
+import navigation from "./components/nav.vue";
+import Title from "./components/Title.vue";
+import login from "./components/login.vue";
+export default {
+  name: "App",
+  components: {
+    navigation,
+    Title,
+    login,
+  },
+};
 </script>
 
 <style lang="scss">
@@ -11,7 +23,7 @@ export default {};
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+
   color: #2c3e50;
 }
 html {
@@ -25,7 +37,8 @@ body {
   background-image: url("assets/icon.png");
   background-position: center;
   background-attachment: fixed;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   opacity: 1;
 }
 #nav {
