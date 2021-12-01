@@ -1,20 +1,29 @@
 <template>
   <navigation />
+  <router-link :to="{ name: 'Wall' }"> wall</router-link>
+  <router-link :to="{ name: 'Login' }"> Login</router-link>
+  <router-link :to="{ name: 'SinglePost' }"> One Post</router-link>
+  <router-link :to="{ name: 'User' }"> user</router-link>
+  <router-link :to="{ name: 'CreatePost' }"> CreatePost</router-link>
   <Title />
-  <login />
+
+  <router-view />
 </template>
 
 <script>
-import navigation from "./components/nav.vue";
-import Title from "./components/Title.vue";
-import login from "./components/login.vue";
+import navigation from "./components/navigation.vue";
+import Title from "./components/AppTitle.vue";
+
 export default {
   name: "App",
   components: {
     navigation,
     Title,
-    login,
   },
+  data() {
+    return {};
+  },
+  methods: {},
 };
 </script>
 
@@ -24,7 +33,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  color: #2c3e50;
+  color: black;
 }
 html {
   height: 100%;

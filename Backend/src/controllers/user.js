@@ -118,8 +118,10 @@ exports.login= (req, res, next) =>{
         }
     );
 }
-exports.changeAvatar= (req, res, next) =>{
+exports.changeUserInfo= (req, res, next) =>{
     User.update({
+         firstName:req.body.firstName,
+         lastName:req.body.lastName,   
          avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     }
        
@@ -131,3 +133,17 @@ exports.changeAvatar= (req, res, next) =>{
         return error
     }))
 };
+exports.deleteUser= (req, res, next) =>{
+    if(req.body.userId==req.token.userId){
+        User.destroy({where: {id:req.params.id}})
+        .then(() => res.status(200).json({ message: 'user deleted'}))
+        .catch(
+            (error) =>{
+                res.status(400).json({
+                    error:error
+                });
+            });
+        }else{
+            res.status(401).json({message:"unauthorized request"})
+        }
+}
