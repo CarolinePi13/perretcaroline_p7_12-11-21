@@ -2,9 +2,9 @@
   <navigation />
   <router-link :to="{ name: 'Wall' }"> wall</router-link>
   <router-link :to="{ name: 'Login' }"> Login</router-link>
-  <router-link :to="{ name: 'SinglePost' }"> One Post</router-link>
+
   <router-link :to="{ name: 'User' }"> user</router-link>
-  <router-link :to="{ name: 'CreatePost' }"> CreatePost</router-link>
+
   <Title />
 
   <router-view />

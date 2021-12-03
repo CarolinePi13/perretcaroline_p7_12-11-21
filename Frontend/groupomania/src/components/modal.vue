@@ -1,25 +1,30 @@
 <template>
   <div class="alter_pop-up">
     <div class="alter_Btn alter_Btn--modify">Modifier</div>
-    <div class="alter_Btn alter_Btn--delete">supprimer</div>
+    <div class="alter_Btn alter_Btn--delete" @click="Deletefct">supprimer</div>
   </div>
-  <div class="confirm" v-if="showConfirm">
-    <p class="confirm_text">
-      Etes vous sur de vouloir supprimer ce {{ type }} ?
-    </p>
-    <button class="confirm_btn--supp">supprimer</button>
-    <button class="confirm_btn--cancel">annuler</button>
+  <div v-if="showConfirm">
+    <confirmDelete />
   </div>
 </template>
 
 <script>
+import confirmDelete from "./confirmDelete.vue";
 export default {
   name: "SuppModModule",
-  props: ["type"],
+
+  components: {
+    confirmDelete,
+  },
   data() {
     return {
       showConfirm: false,
     };
+  },
+  methods: {
+    Deletefct() {
+      this.$emit("deleteOrConfirm");
+    },
   },
 };
 </script>

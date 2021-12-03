@@ -7,7 +7,7 @@
         alt="user avatar"
         class="user-avatar"
       />
-      <p class="user-name">Joe Blow</p>
+      <p class="user-name">{{}}</p>
       <img
         src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
         alt=""
@@ -38,8 +38,9 @@
           @click="toggle"
         />
       </div>
-      <div class="comment-button">
-        <img src="../assets/commentmono_105952.svg" alt="" />Commenter
+      <div class="comment-button" @click="activeDisplayWriteNewComment">
+        <img src="../assets/commentmono_105952.svg" alt="click to comment" />
+        <p>Commenter</p>
       </div>
       <div class="likes">
         <img
@@ -49,10 +50,12 @@
         />
       </div>
     </div>
+    <CreateComment />
   </div>
 </template>
 <script>
-import SuppModModule from "../components/modal.vue";
+import SuppModModule from "./modal.vue";
+
 export default {
   name: "Post",
   components: {
@@ -64,6 +67,9 @@ export default {
     };
   },
   methods: {
+    activeDisplayWriteNewComment() {
+      this.$emit("toggleNewComment");
+    },
     toggle() {
       this.$emit("toggleComments");
     },

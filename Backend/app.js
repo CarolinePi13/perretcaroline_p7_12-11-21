@@ -1,6 +1,7 @@
-const { Sequelize } = require('sequelize');
+
 const express = require('express');
-require('dotenv').config()
+require('dotenv').config();
+
 const helmet = require("helmet");
 const app = express();
 const path =require('path');
@@ -17,7 +18,7 @@ const post= require('./src/models/post');
 const user= require('./src/models/user');
 const vote= require('./src/models/vote');
 
-// connection to database//
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -35,14 +36,14 @@ user.hasMany(comment);
 post.hasMany(vote)
 user.hasMany(vote);
 
-// use below code to reintianlize the db
+// use below code with 'force=true'to reintianlize the db
 // ----------------------------------------
 
-// sequelize.sync({force:true}).then(()=>{
-//   console.log('this works');
-// }).catch((err)=>{
-//   console.log(err)
-// });
+sequelize.sync().then(()=>{
+  console.log('this works');
+}).catch((err)=>{
+  console.log(err)
+});
 // -------------------------------------------
 app.use('/api', userRoutes);
 app.use('/api/post', postRoutes);
@@ -50,5 +51,6 @@ app.use('/api/post/:id/comment', commRoutes)
 // app.use("api/post/:id/vote")
 // app.use("api/comment/:id")
 app.use('/images',express.static(path.join(__dirname, 'src/images')) );
+app.use(express.static('images'));
 
 module.exports = app;

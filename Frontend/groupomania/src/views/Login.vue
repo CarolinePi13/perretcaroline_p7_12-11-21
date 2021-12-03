@@ -1,53 +1,73 @@
 <template>
   <div class="login-card">
     <div class="onglets">
-      <div class="onglet onglet--sign-up" @click="showCreateAccount()">
+      <div class="onglet onglet--sign-up" @click="showCreateAccount">
         <p>Créer un compte</p>
       </div>
 
-      <div class="onglet onglet--log-in" @click="showLogin()">
+      <div class="onglet onglet--log-in" @click="showLogin">
         <p>Connection</p>
       </div>
     </div>
 
     <div class="card" v-if="mode == 'login'">
-      <form action="sign-up" class="card_flex">
-        <div class="sign-up_email column">
+      <form action="login" class="card_flex" @submit.prevent="submitLogin">
+        <div class="login_email column">
           <label for="login-email">Email: </label>
           <input id="login-email" required type="email" />
         </div>
-        <div class="sign-up_password column">
+        <div class="login_password column">
           <label for="login-password">Mot de passe: </label>
           <input id="login-password" required type="password" />
         </div>
-        <input type="submit" id="sign-up" value="Connection" />
+        <input type="submit" id="login" value="Connection" />
       </form>
     </div>
     <div class="card card_sign-up" v-if="mode == 'create'">
-      <form action="login" class="card_flex">
+      <form action="sign-up" class="card_flex" @submit.prevent="createAccount">
         <div class="firstname column">
           <label for="firstname">Prénom: </label>
-          <input id="firstname" required type="text" />
+          <input
+            id="firstname"
+            required
+            type="text"
+            v-model="signupUserData.firstName"
+          />
         </div>
         <div class="lastname column">
           <label for="lastname">Nom: </label>
-          <input id="lastname" required type="text" />
+          <input
+            id="lastname"
+            required
+            type="text"
+            v-model="signupUserData.lastName"
+          />
         </div>
-        <div class="login-input column">
-          <label for="login-email">Email: </label>
-          <input id="login-email" required type="email" />
+        <div class="sign-up-input column">
+          <label for="sign-up-email">Email: </label>
+          <input
+            id="sign-up-email"
+            required
+            type="email"
+            v-model="signupUserData.email"
+          />
         </div>
         <div class="pass column">
-          <label for="login-password">Mot de passe: </label>
-          <input id="login-password" required type="password" />
+          <label for="sign-up-password">Mot de passe: </label>
+          <input
+            id="sign-up-password"
+            required
+            type="password"
+            v-model="signupUserData.password"
+          />
         </div>
         <div class="file column">
           <label for="avatar">Ajoutez une photo de profil:</label>
-          <input type="file" />
+          <input type="file" @change="addFile" />
         </div>
         <input
           type="submit"
-          @submit="checkForm"
+          @submit.prevent="checkForm"
           id="login"
           value="Créer un compte"
         />
@@ -56,11 +76,23 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   name: "login",
+
   data() {
     return {
       mode: "login",
+      signupUserData: [
+        {
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          avatar: "",
+        },
+      ],
     };
   },
   methods: {
@@ -70,7 +102,43 @@ export default {
     showLogin() {
       this.mode = "login";
     },
+    createAccount() {
+      let formData = new FormData();
+      formData.append("firstName", this.signupUserData.firstName);
+      formData.append("lastName", this.signupUserData.lastName);
+      formData.append("email", this.signupUserData.email);
+      formData.append("password", this.signupUserData.password);
+      formData.append("image", this.signupUserData.avatar);
+      for (var value of formData.values()) {
+        console.log(value);
+      }
+      var body = formData;
+      axios({
+        method: "POST",
+        url: "http://localhost:3000/api/signup",
+        data: body,
+        headers: {
+          Accept: "application/json",
+          "content-type": "multipart/form-data",
+        },
+      })
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
+    },
+    addFile(e) {
+      this.signupUserData.avatar = e.target.files[0];
+    },
+    submitLogin() {
+      console.log("form sub works");
+    },
   },
+  mounted() {},
 };
 </script>
 <style scoped lang="scss">

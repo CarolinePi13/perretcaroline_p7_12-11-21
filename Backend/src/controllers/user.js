@@ -5,31 +5,34 @@ var passwordValidator = require('password-validator');
 require('dotenv').config()
 
 
-let createSuperUser=()=>{
-   let superUserPass= process.env.superPassword
+// let createSuperUser=()=>{
+//    let superUserPass= process.env.superPassword
 
-    bcrypt.hash(superUserPass, 10).then(
-        (hash)=>{
-             User.create({//creates the object user
-                firstName:process.env.superFirstName,
-                lastName:process.env.superLastName,
-                email: process.env.superEmail,
-                password: hash,
-                isAdmin:true
+//     bcrypt.hash(superUserPass, 10).then(
+//         (hash)=>{
+//              User.create({//creates the object user
+
+//                 firstName:process.env.superFirstName,
+//                 lastName:process.env.superLastName,
+//                 email: process.env.superEmail,
+//                 password: hash,
+//                 isAdmin:true
 
                 
-            })
-        }).catch(
-            error => {// the email is not valid
-            res.status(401).json({
-                error:error,
+//             })
+//         }).catch(
+//             error => {
+//                 // the email is not valid
+//             res.status(401).json({
+//                 error:error,
                 
-            });
-        })
-}
-// createSuperUser(); -- uncomment to create superUsers
+//             });
+//         })
+// }
+// createSuperUser();
+//  -- uncomment to create superUsers
 
-//establishes  a set schema for the password
+// establishes  a set schema for the password
 
 var passwordSchema = new passwordValidator();
 passwordSchema
@@ -51,7 +54,7 @@ exports.signup= (req, res, next) =>{
                 email: req.body.email,
                 password: hash,
                 avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-                
+               
             })
         }).then(//saves thar object in the db
                 ()=>{
@@ -60,10 +63,9 @@ exports.signup= (req, res, next) =>{
                     });
                 }
             ).catch(
-                error => {// the email is not valid
-                res.status(401).json({
-                    error:error,
-                    message: 'This email adress is already used for an account'
+                error => {
+                res.status(400).json({
+                    error:error
                 });
             })
         }else{//the password does not match the password schema
@@ -96,7 +98,7 @@ exports.login= (req, res, next) =>{
                     
                 const token = jwt.sign({userId :user._id}, process.env.TOKEN_KEY,{expiresIn:'24h'});// a random token is created
                    res.status(200).json({
-                       userId : user._id,
+                       userId : user.id,
                        token:token
                    })
                 }
@@ -146,4 +148,29 @@ exports.deleteUser= (req, res, next) =>{
         }else{
             res.status(401).json({message:"unauthorized request"})
         }
+}
+exports.displayUser=(req,res,next) =>{
+    // if(req.body.userId==req.token.userId){
+    User.findOne({where: {id:req.params.id}}).then(
+        (user)=> {
+            if (!user) {
+                return res.status(404).send(new Error('user not found!'));
+              }
+              if(user.avatar=="account_avatar_face_man_people_profile_user_icon_123197.png"){
+                  user.avatar = req.protocol + '://' + req.get('host') + '/images/' + user.avatar;
+                  res.status(200).json(user); 
+              }
+              res.status(200).json(user); 
+        })
+        .catch(
+            (error) =>{
+                res.status(400).json({
+                    error:error
+                });
+            });
+          
+    // }
+    // else{
+    //     res.status(401).json({message:"unauthorized request"})
+    // }
 }

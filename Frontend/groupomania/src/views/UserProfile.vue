@@ -1,15 +1,11 @@
 <template>
   <div class="user-card shadow">
     <div class="user">
-      <img
-        src="../assets/655E3260-384A-41B1-BA96-A5E153DFB5A1_1_201_a.jpeg"
-        alt="user avatar"
-        class="user-avatar"
-      />
+      <img :src="userData.avatar" alt="user avatar" class="user-avatar" />
       <div class="user-data">
-        <p class="first-name">Prenom: Joe</p>
-        <p class="last-name">Nom: Joe</p>
-        <p class="email">Email:</p>
+        <p class="first-name">Prenom: {{ userData.firstName }}</p>
+        <p class="last-name">Nom: {{ userData.lastName }}</p>
+        <p class="email">Email: {{ userData.email }}</p>
         <p class="password">Mot-de-passe:</p>
       </div>
       <img
@@ -17,15 +13,47 @@
         alt=""
         class="three-dots"
       />
+      <SuppModModule
+        showConfirm="showConfirm"
+        @deleteOrConfirm="confirmDelete"
+      />
     </div>
   </div>
 </template>
 <script>
+import SuppModModule from "../components/modal.vue";
+import axios from "axios";
+
 export default {
   name: "user",
+  components: {
+    SuppModModule,
+  },
+
+  data() {
+    return {
+      type: "utilisateur",
+      showConfirm: false,
+      userData: {},
+    };
+  },
+  methods: {
+    confirmDelete() {
+      this.showConfirm = true;
+    },
+  },
+  beforeCreate() {
+    const displayUser = () => {
+      axios
+        .get("http://localhost:3000/api/1")
+        .then((response) => (this.userData = response.data))
+        .then(() => console.log(this.userData.avatar));
+    };
+    displayUser();
+  },
 };
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .user-card {
   width: 95%;
   height: fit-content;
@@ -52,6 +80,9 @@ img {
 }
 .user-data {
   margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .three-dots {
   position: absolute;

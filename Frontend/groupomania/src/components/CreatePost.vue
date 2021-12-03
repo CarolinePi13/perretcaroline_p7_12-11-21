@@ -4,18 +4,28 @@
       src="../assets/4115230-cancel-close-cross-delete_114048.svg"
       alt="close window"
       class="close"
+      v-if="writeIsClicked"
+      @click="toggleWriteAPost"
     />
-
-    <div class="createPost-user-data">
-      <img
-        src="../assets/655E3260-384A-41B1-BA96-A5E153DFB5A1_1_201_a.jpeg"
-        alt="user avatar"
-        class="user-avatar"
-      />
-      <p class="user-name">Joe Blow</p>
+    <div class="post-top">
+      <div class="createPost-user-data">
+        <img
+          src="../assets/655E3260-384A-41B1-BA96-A5E153DFB5A1_1_201_a.jpeg"
+          alt="user avatar"
+          class="user-avatar"
+        />
+        <p class="user-name">Joe Blow</p>
+      </div>
+      <div class="new-post" v-if="!writeIsClicked">
+        <img
+          src="../assets/write-smth.svg"
+          alt="click to write a post"
+          @click="toggleWriteAPost"
+        />
+      </div>
     </div>
 
-    <div class="post-text">
+    <div class="post-text" v-if="writeIsClicked">
       <form action="submit">
         <textarea
           class="to-publish"
@@ -26,7 +36,7 @@
       </form>
     </div>
 
-    <div class="upload-file">
+    <div class="upload-file" v-if="writeIsClicked">
       <img
         src="../assets/frame_gallery_image_images_photo_picture_pictures_icon_123209.svg"
         alt="down"
@@ -40,12 +50,19 @@
 </template>
 <script>
 export default {
-  name: "Post",
+  name: "CreatePost",
   components: {},
   data() {
-    return {};
+    return {
+      writeIsClicked: false,
+      postData: {},
+    };
   },
-  methods: {},
+  methods: {
+    toggleWriteAPost() {
+      this.writeIsClicked = !this.writeIsClicked;
+    },
+  },
 };
 </script>
 <style scoped lang="scss">
@@ -63,6 +80,7 @@ export default {
   justify-content: space-around;
   align-items: center;
   position: relative;
+  margin-bottom: 30px;
 }
 img {
   height: 30px;
@@ -129,15 +147,6 @@ form {
   margin-left: 5%;
 }
 
-.comment-count {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-}
-div.comment-count > p {
-  margin: 0 2% 1% 2%;
-}
 .to-publish {
   width: 100%;
   min-height: 250px;
@@ -158,5 +167,17 @@ div.comment-count > p {
 .add-img {
   margin-left: 10px;
   margin-right: 10px;
+}
+.new-post {
+  img {
+    height: 50px;
+    margin-right: 10px;
+  }
+}
+.post-top {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
 }
 </style>
