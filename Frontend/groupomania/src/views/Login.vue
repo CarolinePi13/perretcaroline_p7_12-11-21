@@ -14,11 +14,21 @@
       <form action="login" class="card_flex" @submit.prevent="submitLogin">
         <div class="login_email column">
           <label for="login-email">Email: </label>
-          <input id="login-email" required type="email" />
+          <input
+            id="login-email"
+            required
+            type="email"
+            v-model="loginUserData.email"
+          />
         </div>
         <div class="login_password column">
           <label for="login-password">Mot de passe: </label>
-          <input id="login-password" required type="password" />
+          <input
+            id="login-password"
+            required
+            type="password"
+            v-model="loginUserData.password"
+          />
         </div>
         <input type="submit" id="login" value="Connection" />
       </form>
@@ -93,6 +103,12 @@ export default {
           avatar: "",
         },
       ],
+      loginUserData: [
+        {
+          email: "",
+          password: "",
+        },
+      ],
     };
   },
   methods: {
@@ -112,7 +128,9 @@ export default {
       for (var value of formData.values()) {
         console.log(value);
       }
+
       var body = formData;
+
       axios({
         method: "POST",
         url: "http://localhost:3000/api/signup",
@@ -135,7 +153,28 @@ export default {
       this.signupUserData.avatar = e.target.files[0];
     },
     submitLogin() {
-      console.log("form sub works");
+      let body = {
+        email: this.loginUserData.email,
+        password: this.loginUserData.password,
+      };
+
+      axios({
+        method: "POST",
+        url: "http://localhost:3000/api/login",
+        data: body,
+
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
     },
   },
   mounted() {},
