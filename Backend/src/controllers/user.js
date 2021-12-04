@@ -48,15 +48,25 @@ exports.signup= (req, res, next) =>{
   if (passwordSchema.validate(req.body.password)){// checks for the password validity
     bcrypt.hash(req.body.password, 10).then(
         (hash)=>{
-             User.create({//creates the object user
-                firstName:req.body.firstName,
-                lastName:req.body.lastName,
-                email: req.body.email,
-                password: hash,
-                avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-               
+            if (req.file==undefined){
+                User.create({//creates the object user
+                    firstName:req.body.firstName,
+                    lastName:req.body.lastName,
+                    email: req.body.email,
+                    password: hash,
+                    // avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+                   
+                })
+            }else{
+                User.create({//creates the object user
+                    firstName:req.body.firstName,
+                    lastName:req.body.lastName,
+                    email: req.body.email,
+                    password: hash,
+                    avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
             })
-        }).then(//saves thar object in the db
+         
+        }}).then(//saves thar object in the db
                 ()=>{
                     res.status(201).json({
                         message: 'User added successfully!'
