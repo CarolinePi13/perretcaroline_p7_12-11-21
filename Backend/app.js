@@ -45,9 +45,9 @@ user.hasMany(vote);
 //   console.log(err)
 // });
 // -------------------------------------------
-app.use('/api', userRoutes);
-app.use('/api/post', postRoutes);
-app.use('/api/post/:id/comment', commRoutes)
+app.use('/api/user', userRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/posts/:id/comment', commRoutes)
 // app.use("api/post/:id/vote")
 // app.use("api/comment/:id")
 app.use('/images',express.static(path.join(__dirname, 'src/images')) );

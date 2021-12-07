@@ -12,12 +12,21 @@
         src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
         alt=""
         class="three-dots"
+        @click="toggleModule"
       />
-      <SuppModModule
-        showConfirm="showConfirm"
-        @deleteOrConfirm="confirmDelete"
-      />
+      <div class="" v-if="showModule">
+        <SuppModModule @deleteOrConfirm="confirmDelete" />
+      </div>
     </div>
+  </div>
+  <div class="confirm" v-if="showConfirm">
+    <p class="confirm_text">
+      Etes vous sur de vouloir supprimer cet utilisateur ?
+    </p>
+    <button class="confirm_btn--supp" @click="deleteUser">supprimer</button>
+    <button class="confirm_btn--cancel" @click="cancelDeleteUser">
+      annuler
+    </button>
   </div>
 </template>
 <script>
@@ -32,25 +41,80 @@ export default {
 
   data() {
     return {
-      type: "utilisateur",
       showConfirm: false,
       userData: {},
+      showModule: false,
+      token: "",
+      userId: "",
     };
   },
   methods: {
+    toggleModule() {
+      this.showModule = !this.showModule;
+    },
     confirmDelete() {
       this.showConfirm = true;
     },
+    cancelDeleteUser() {
+      this.showConfirm = false;
+    },
+    deleteUser() {
+      let token = localStorage.getItem("token");
+      this.token = token;
+      let userId = localStorage.getItem("userId");
+      this.userId = userId;
+      console.log(token);
+
+      axios({
+        method: "DELETE",
+        url: `http://localhost:3000/api/user/${userId}`,
+        headers: {
+          authorization: `Bearer ${token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch((error) => {
+          //handle error
+
+          console.log(error);
+        });
+    },
   },
   beforeCreate() {
+    let token = localStorage.getItem("token");
+    this.token = token;
+    let userId = localStorage.getItem("userId");
+    this.userId = userId;
+    console.log(userId);
+
     const displayUser = () => {
-      axios
-        .get("http://localhost:3000/api/1")
+      axios({
+        method: "GET",
+        url: `http://localhost:3000/api/user/${userId}`,
+        headers: {
+          authorization: `Bearer ${token}`,
+          "content-type": "application/json",
+        },
+      })
         .then((response) => (this.userData = response.data))
-        .then(() => console.log(this.userData.avatar));
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+
+          console.log(response);
+        });
     };
     displayUser();
   },
+
+  computed: {},
 };
 </script>
 <style scoped lang="scss">

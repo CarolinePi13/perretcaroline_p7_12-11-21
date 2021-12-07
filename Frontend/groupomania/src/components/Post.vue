@@ -1,80 +1,105 @@
 <template>
-  <div class="post-card shadow">
-    <SuppModModule v-if="showModule" />
-    <div class="user-data">
-      <img
-        src="../assets/655E3260-384A-41B1-BA96-A5E153DFB5A1_1_201_a.jpeg"
-        alt="user avatar"
-        class="user-avatar"
-      />
-      <p class="user-name">{{}}</p>
-      <img
-        src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
-        alt=""
-        class="three-dots"
-        @click="toggleModule"
-      />
-    </div>
+  <div>
+    <div class="post-card shadow">
+      <SuppModModule v-if="showModule" />
+      <div class="user-data">
+        <img
+          src="../assets/655E3260-384A-41B1-BA96-A5E153DFB5A1_1_201_a.jpeg"
+          alt="user avatar"
+          class="user-avatar"
+        />
+        <p class="user-name">{{}}</p>
+        <img
+          src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
+          alt=""
+          class="three-dots"
+          @click="toggleModule()"
+        />
+      </div>
+      <div class="post-content">
+        <div class="show-img" v-show="post.imageUrl !== null">
+          <img :src="post.imageUrl" alt="Post image" />
+        </div>
 
-    <div class="post-text">
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto ipsa
-        quibusdam tempore dolorem aliquid modi! Eveniet beatae consequuntur
-        temporibus reiciendis nobis, iure soluta alias sunt ipsa aperiam
-        molestias voluptatem? Natus.
-      </p>
-    </div>
-    <div class="comment-count">
-      <p>12 commentaires</p>
-      <p>12 j'aime</p>
-    </div>
-    <div class="post-actions">
-      <div class="unfold">
-        <img
-          src="../assets/downarrow_120663.png"
-          alt="down"
-          aria-label="afficher les commentaires"
-          class="down-arrow"
-          @click="toggle"
-        />
+        <div class="post-text">
+          <p>
+            {{ post.content }}
+          </p>
+        </div>
       </div>
-      <div class="comment-button" @click="activeDisplayWriteNewComment">
-        <img src="../assets/commentmono_105952.svg" alt="click to comment" />
-        <p>Commenter</p>
+      <div class="comment-count">
+        <p>12 commentaires</p>
+        <p>12 j'aime</p>
       </div>
-      <div class="likes">
-        <img
-          src="../assets/like-thumbs-up-hand-social-media_icon-icons.com_61429.png"
-          alt="like button"
-          class="like-button"
-        />
+      <div class="post-actions">
+        <div class="unfold">
+          <img
+            src="../assets/downarrow_120663.png"
+            alt="down"
+            aria-label="afficher les commentaires"
+            class="down-arrow"
+            @click="toggleComments()"
+          />
+        </div>
+        <div class="comment-button" @click="displayWriteNewComment">
+          <img src="../assets/commentmono_105952.svg" alt="click to comment" />
+          <p>Commenter</p>
+        </div>
+        <div class="likes">
+          <img
+            src="../assets/like-thumbs-up-hand-social-media_icon-icons.com_61429.png"
+            alt="like button"
+            class="like-button"
+          />
+        </div>
+      </div>
+      <div class="new-comment" v-if="writeComment">
+        <createComment @closeWriteComment="displayWriteNewComment" />
+      </div>
+      <div v-if="showComments">
+        <comments />
       </div>
     </div>
-    <CreateComment />
   </div>
 </template>
 <script>
 import SuppModModule from "./modal.vue";
 
+import createComment from "../components/CreateComment.vue";
+
+import comments from "../components/comment.vue";
 export default {
-  name: "Post",
+  name: "PostCard",
+  props: ["post"],
   components: {
     SuppModModule,
+    createComment,
+    comments,
   },
   data() {
     return {
+      showComments: false,
+      writeComment: false,
       showModule: false,
+
+      token: "",
+      userId: "",
     };
   },
   methods: {
-    activeDisplayWriteNewComment() {
-      this.$emit("toggleNewComment");
+    toggleComments() {
+      this.showComments = !this.showComments;
     },
-    toggle() {
-      this.$emit("toggleComments");
+    displayWriteNewComment() {
+      this.writeComment = !this.writeComment;
     },
+
     toggleModule() {
       this.showModule = !this.showModule;
+    },
+    getLocalStorage() {
+      this.userId = localStorage.getItem("userId");
+      this.token = localStorage.getItem("token");
     },
   },
 };
@@ -90,7 +115,7 @@ export default {
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  margin: auto;
+  margin: 15px auto;
   justify-content: space-around;
   align-items: center;
   position: relative;
@@ -160,10 +185,22 @@ button {
 div.comment-button > img {
   margin-right: 10px;
 }
+.post-content {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  align-items: center;
+  img {
+    width: 100%;
+    max-width: 250px;
+    max-height: 250px;
+    height: auto;
+  }
+}
 .post-text {
-  margin: 0 5%;
   text-align: justify;
   font-size: 14px;
+  width: 100%;
 }
 .three-dots {
   position: absolute;
@@ -172,8 +209,8 @@ div.comment-button > img {
   cursor: pointer;
 }
 .user-avatar {
-  height: 75px;
-  width: 75px;
+  height: 60px;
+  width: 60px;
   border-radius: 50%;
   overflow: hidden;
   object-fit: cover;

@@ -5,7 +5,7 @@
       alt="close window"
       class="close"
       v-if="writeIsClicked"
-      @click="toggleWriteAPost"
+      @click="close"
     />
     <div class="post-top">
       <div class="createPost-user-data">
@@ -26,41 +26,108 @@
     </div>
 
     <div class="post-text" v-if="writeIsClicked">
-      <form action="submit">
+      <img v-if="url" :src="url" alt="image du post" class="post-image" />
+      <form action="submit" @submit.prevent="createANewPost" ref="newPost">
         <textarea
+          v-model="postData.content"
           class="to-publish"
           type="text"
           placeholder="écrivez votre texte ici..."
+          ref="newPost"
         />
         <input type="submit" value="Publier" class="publier" />
       </form>
     </div>
 
     <div class="upload-file" v-if="writeIsClicked">
-      <img
-        src="../assets/frame_gallery_image_images_photo_picture_pictures_icon_123209.svg"
-        alt="down"
-        aria-label="afficher les commentaires"
-        class="add-img"
-      />
-
-      <p>Ajouter une image</p>
+      <label for="add-img" class="label-img">
+        <input
+          type="file"
+          id="add-img"
+          v-show="hideInputOn"
+          @change="addFile"
+        />
+        <img
+          src="../assets/frame_gallery_image_images_photo_picture_pictures_icon_123209.svg"
+          alt="down"
+          aria-label="afficher les commentaires"
+          class="add-img"
+        />
+        <span>Ajoutez une image</span>
+      </label>
     </div>
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "CreatePost",
   components: {},
   data() {
     return {
       writeIsClicked: false,
-      postData: {},
+      hideInputOn: false,
+      url: null,
+      postData: [
+        {
+          content: "",
+          image: "",
+          userId: "",
+        },
+      ],
+      token: "",
     };
   },
   methods: {
     toggleWriteAPost() {
       this.writeIsClicked = !this.writeIsClicked;
+    },
+    close() {
+      this.writeIsClicked = !this.writeIsClicked;
+      this.url = "";
+    },
+    getLocalStorage() {
+      this.postData.userId = localStorage.getItem("userId");
+      this.token = localStorage.getItem("token");
+    },
+    previewImg() {
+      const file = this.postData.image;
+      this.url = URL.createObjectURL(file);
+    },
+    addFile(e) {
+      this.postData.image = e.target.files[0];
+      this.previewImg();
+    },
+
+    createANewPost() {
+      this.getLocalStorage();
+      let formData = new FormData();
+      formData.append("content", this.postData.content);
+      formData.append("image", this.postData.image);
+      formData.append("userId", this.postData.userId);
+      for (var value of formData.values()) {
+        console.log(value);
+      }
+      var body = formData;
+      axios({
+        method: "POST",
+        url: "http://localhost:3000/api/posts",
+        data: body,
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          Accept: "application/json",
+          "content-type": "multipart/form-data",
+        },
+      })
+        .then(function (response) {
+          console.log(response);
+          document.location.reload();
+        })
+
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
     },
   },
 };
@@ -149,7 +216,8 @@ form {
 
 .to-publish {
   width: 100%;
-  min-height: 250px;
+  min-height: 50px;
+  max-height: 250px;
   margin-bottom: 10px;
   border-radius: 8px;
 }
@@ -179,5 +247,13 @@ form {
   justify-content: space-between;
   width: 100%;
   align-items: center;
+}
+.label-img {
+  display: flex;
+  align-items: center;
+}
+.post-image {
+  width: 100%;
+  height: auto;
 }
 </style>

@@ -9,13 +9,10 @@
 </template>
 
 <script>
-import confirmDelete from "./confirmDelete.vue";
 export default {
   name: "SuppModModule",
 
-  components: {
-    confirmDelete,
-  },
+  components: {},
   data() {
     return {
       showConfirm: false,

@@ -1,3 +1,4 @@
+
 const Sequelize = require('sequelize');
 
 const sequelize = require('../config/config')
@@ -24,9 +25,13 @@ const Post =sequelize.define('post',
           updatedAt: {
             type: Sequelize.DATE
           },
-
+       userId:{
+        type: Sequelize.INTEGER,
+        foreignKey:true,
+        onDelete:"cascade"
+       },
     },{
         freezeTableName: true
     });
-
+    
     module.exports= Post;

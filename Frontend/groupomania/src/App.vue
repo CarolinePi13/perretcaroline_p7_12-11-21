@@ -1,13 +1,11 @@
 <template>
-  <navigation />
-  <router-link :to="{ name: 'Wall' }"> wall</router-link>
-  <router-link :to="{ name: 'Login' }"> Login</router-link>
+  <div class="">
+    <navigation />
 
-  <router-link :to="{ name: 'User' }"> user</router-link>
+    <Title />
 
-  <Title />
-
-  <router-view />
+    <router-view />
+  </div>
 </template>
 
 <script>

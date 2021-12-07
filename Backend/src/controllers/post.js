@@ -1,23 +1,37 @@
 const Post = require('../models/post');
 const Vote= require('../models/vote');
 const fs = require('fs');
-const User = require('../models/user');
+
 
 exports.CreateAPost=(req, res, next) =>{
-
-
-   Post.create({
+   try{
+    if (req.file==undefined){
+        Post.create({//creates the object user
         content:req.body.content,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         userId:req.body.userId
-    })
-    .then(
-        () => {
-          res.status(201).json({
-            message: 'Post created successfully!',
-          })
-        })
-    .catch(
+           
+        }).then(
+            () => {
+              res.status(201).json({
+                message: 'Post created successfully!',
+              })
+            })
+    }else{
+        Post.create({//creates the object user
+            content:req.body.content,
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+            userId:req.body.userId
+            }).then(
+                () => {
+                  res.status(201).json({
+                    message: 'Post created successfully!',
+                  })
+                })
+
+        }
+    }
+    catch{(
             (error) => {
               res.status(400).json({
                 error: error,
@@ -26,35 +40,26 @@ exports.CreateAPost=(req, res, next) =>{
               });
             }
           );
-        
+        } 
 };
 exports.getAllPosts=(req, res, next) =>{
-    Post.findAll()
-        .then ((posts)=>res.status(200).json(posts))
-        .catch(
-            (error)=>{
-                res.status(404).json({
-                    error:error
-                })
-            }
-        );
-    };
-exports.getOnePost=(req, res, next) =>{
-    Post.findOne({
-       where: {id:req.params.id}
+    Post.findAll({order: [['updatedAt', "DESC"], ['createdAt', "DESC"]] })
+    .then(posts=>{
+        res.status(200).json(posts)
+        
     })
-        .then(
-            (post) =>{
-                res.status(200).json(post);
-            })
-        .catch(
-            (error)=>{
-                res.status(404).json({
-                    error:error
-                })
-            }
-        );
-};
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "erreur lors de la récupération des posts"
+      });
+    });
+
+    
+
+    }
+
+
 exports.ModifyAPost=(req, res, next) =>{
     // checks if the post userId is the same as current user  
     
@@ -83,19 +88,30 @@ exports.ModifyAPost=(req, res, next) =>{
     // }
 };
 exports.DeleteAPost=(req, res, next) =>{
-    if(req.body.userId==req.token.userId){
-    Post.destroy({where: {id:req.params.id}})
-    .then(() => res.status(200).json({ message: 'objet deleted'}))
-    .catch(
+    
+    Post.findOne({where: {id:req.params.id}}).then((post)=>{
+        if(post.userId==req.token.userId){
+            
+            const filename = post.imageUrl.split('/images/')[1];
+            fs.unlink("images/"+ filename,()=>{
+                Post.destroy({where: {id:req.params.id}})
+                .then(() => res.status(200).json({ message: 'objet deleted'}))
+                .catch(
+                    (error) =>{
+                        res.status(400).json({
+                            error:error
+                        });
+                    });
+            })
+    }}).catch(
         (error) =>{
-            res.status(400).json({
+            res.status(401).json({
                 error:error
             });
-        });
-    }else{
-        res.status(401).json({message:"unauthorized request"})
-    }
-    
+        }
+    );
+   
+  
     
 };
 

@@ -69,7 +69,7 @@ exports.signup= (req, res, next) =>{
         }}).then(//saves thar object in the db
                 ()=>{
                     res.status(201).json({
-                        message: 'User added successfully!'
+                        message: 'User added successfully!',
                     });
                 }
             ).catch(
@@ -101,15 +101,16 @@ exports.login= (req, res, next) =>{
                 (valid)=>{
                     if (!valid){// the password is incorrect
                         
-                      return res.status(401).json({
+                      return res.status(401).send({
                           message:"the password is incorrect"
                       })};
                         
                     
-                const token = jwt.sign({userId :user._id}, process.env.TOKEN_KEY,{expiresIn:'24h'});// a random token is created
+                const token = jwt.sign({userId :user.id}, process.env.TOKEN_KEY,{expiresIn:'24h'});// a random token is created
                    res.status(200).json({
                        userId : user.id,
-                       token:token
+                       token:token,
+                       message:"logged in"
                    })
                 }
             ).catch(
@@ -146,7 +147,8 @@ exports.changeUserInfo= (req, res, next) =>{
     }))
 };
 exports.deleteUser= (req, res, next) =>{
-    if(req.body.userId==req.token.userId){
+    console.log(req.params.id);
+    if(req.params.id==req.token.userId){
         User.destroy({where: {id:req.params.id}})
         .then(() => res.status(200).json({ message: 'user deleted'}))
         .catch(
@@ -160,17 +162,17 @@ exports.deleteUser= (req, res, next) =>{
         }
 }
 exports.displayUser=(req,res,next) =>{
-    // if(req.body.userId==req.token.userId){
+    
     User.findOne({where: {id:req.params.id}}).then(
         (user)=> {
             if (!user) {
                 return res.status(404).send(new Error('user not found!'));
-              }
-              if(user.avatar=="account_avatar_face_man_people_profile_user_icon_123197.png"){
+            }
+             else if(user.avatar=="account_avatar_face_man_people_profile_user_icon_123197.png"){
                   user.avatar = req.protocol + '://' + req.get('host') + '/images/' + user.avatar;
                   res.status(200).json(user); 
               }
-              res.status(200).json(user); 
+             
         })
         .catch(
             (error) =>{
@@ -179,8 +181,5 @@ exports.displayUser=(req,res,next) =>{
                 });
             });
           
-    // }
-    // else{
-    //     res.status(401).json({message:"unauthorized request"})
-    // }
-}
+    }
+   

@@ -42,6 +42,7 @@ const User =sequelize.define('user',
           updatedAt: {
             type: Sequelize.DATE
           },
+          
 
     },{
         freezeTableName: true

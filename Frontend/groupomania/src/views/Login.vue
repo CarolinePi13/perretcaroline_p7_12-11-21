@@ -30,6 +30,7 @@
             v-model="loginUserData.password"
           />
         </div>
+        <p class="error">{{ loginError }}</p>
         <input type="submit" id="login" value="Connection" />
       </form>
     </div>
@@ -75,25 +76,25 @@
           <label for="avatar">Ajoutez une photo de profil:</label>
           <input type="file" @change="addFile" />
         </div>
-        <input
-          type="submit"
-          @submit.prevent="checkForm"
-          id="login"
-          value="Créer un compte"
-        />
+        <input type="submit" id="login" value="Créer un compte" />
       </form>
     </div>
   </div>
+  <modalConnect v-if="showModal" @removeModal="closeModal" />
 </template>
 <script>
 import axios from "axios";
-
+import modalConnect from "../components/modalConnect.vue";
 export default {
+  emits: "loggesIn",
   name: "login",
-
+  components: {
+    modalConnect,
+  },
   data() {
     return {
       mode: "login",
+      loginError: "",
       signupUserData: [
         {
           firstName: "",
@@ -109,6 +110,7 @@ export default {
           password: "",
         },
       ],
+      showModal: false,
     };
   },
   methods: {
@@ -117,6 +119,9 @@ export default {
     },
     showLogin() {
       this.mode = "login";
+    },
+    closeModal() {
+      this.showModal = !this.showModal;
     },
     createAccount() {
       let formData = new FormData();
@@ -133,7 +138,7 @@ export default {
 
       axios({
         method: "POST",
-        url: "http://localhost:3000/api/signup",
+        url: "http://localhost:3000/api/user/signup",
         data: body,
         headers: {
           Accept: "application/json",
@@ -143,7 +148,11 @@ export default {
         .then(function (response) {
           //handle success
           console.log(response);
+          let userId = response.data.userId;
+          localStorage.setItem("userId", userId);
+          this.showModal = true;
         })
+
         .catch(function (response) {
           //handle error
           console.log(response);
@@ -152,7 +161,7 @@ export default {
     addFile(e) {
       this.signupUserData.avatar = e.target.files[0];
     },
-    submitLogin() {
+    loginRequest() {
       let body = {
         email: this.loginUserData.email,
         password: this.loginUserData.password,
@@ -160,21 +169,31 @@ export default {
 
       axios({
         method: "POST",
-        url: "http://localhost:3000/api/login",
+        url: "http://localhost:3000/api/user/login",
         data: body,
-
         headers: {
           "content-type": "application/json",
         },
       })
         .then(function (response) {
           //handle success
+          let token = response.data.token;
+          localStorage.setItem("token", token);
+          let userId = response.data.userId;
+          localStorage.setItem("userId", userId);
           console.log(response);
+        })
+        .then(() => {
+          this.$router.push("/wallposts");
         })
         .catch(function (response) {
           //handle error
           console.log(response);
         });
+    },
+
+    submitLogin() {
+      this.loginRequest();
     },
   },
   mounted() {},
@@ -185,6 +204,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .onglets {
@@ -265,5 +285,9 @@ label {
   height: 30px;
   width: 150px;
   padding: 5px;
+}
+.error {
+  color: red;
+  font-weight: bold;
 }
 </style>

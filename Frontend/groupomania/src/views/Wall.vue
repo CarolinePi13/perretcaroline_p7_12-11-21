@@ -1,45 +1,54 @@
 <template>
-  <createPost />
-  <post
-    @toggleComments="displayComments"
-    @toggleNewComment="displayWriteNewComment"
-  />
-  <div class="new-comment" v-if="writeComment">
-    <createComment @closeWriteComment="displayWriteNewComment" />
-  </div>
-
-  <div v-if="showComments">
-    <comments />
+  <div class="isLoggedIn">
+    <createPost />
+    <postCard v-for="post in Posts" :key="post.id" :post="post" />
   </div>
 </template>
 
 <script>
-import post from "../components/Post.vue";
-import comments from "../components/comment.vue";
 import createPost from "../components/CreatePost.vue";
-import createComment from "../components/CreateComment.vue";
+import postCard from "../components/Post.vue";
+import axios from "axios";
 export default {
   name: "Wall",
 
   data() {
     return {
-      showComments: false,
-      writeComment: false,
+      Posts: "",
     };
   },
   components: {
-    post,
-    comments,
+    postCard,
+
     createPost,
-    createComment,
   },
   methods: {
-    displayComments() {
-      this.showComments = !this.showComments;
+    logged() {
+      this.isLoggedIn = true;
     },
-    displayWriteNewComment() {
-      this.writeComment = !this.writeComment;
-    },
+  },
+  beforeMount() {
+    const getAllPosts = () => {
+      axios({
+        method: "GET",
+        url: `http://localhost:3000/api/posts`,
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "multipart/form-data",
+        },
+      })
+        .then((response) => (this.Posts = response.data))
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+
+          console.log(response);
+        });
+    };
+    getAllPosts();
   },
 };
 </script>
