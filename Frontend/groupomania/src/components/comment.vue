@@ -1,76 +1,48 @@
 <template>
-  <div class="comments-card shadow">
-    <div class="one_comment">
-      <img
-        src="../assets/account_avatar_face_man_people_profile_user_icon_123197.png"
-        alt="user avatar"
-        class="user-avatar--comment"
-      />
-      <div class="one_comment--text shadow">
-        <div class="user-data--comment">
-          <p class="user-name--comment">Joe Blow</p>
-          <img
-            src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
-            alt=""
-            class="three-dots smaller-dots"
-            @click="toggleModule"
-          />
-        </div>
-        <SuppModModule v-if="showModule" :type="type" />
-        <div class="comment-text">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto ipsa
-            quibusdam tempore dolorem aliquid modi! Eveniet beatae consequuntur
-            temporibus reiciendis nobis, iure soluta alias sunt ipsa aperiam
-            molestias voluptatem? Natus.
-          </p>
-        </div>
-
-        <div class="comment-likes">
-          <p class="like-count">12</p>
-          <img
-            src="../assets/like-thumbs-up-hand-social-media_icon-icons.com_61429.png"
-            alt="like button"
-            class="comment-like-button"
-          />
-        </div>
+  <div class="one_comment">
+    <img
+      src="../assets/account_avatar_face_man_people_profile_user_icon_123197.png"
+      alt="user avatar"
+      class="user-avatar--comment"
+    />
+    <div class="one_comment--text shadow">
+      <div class="user-data--comment">
+        <p class="user-name--comment">Joe Blow</p>
+        <img
+          src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
+          alt=""
+          class="three-dots smaller-dots"
+          @click="toggleModule"
+        />
       </div>
-    </div>
-    <div class="one_comment">
-      <img
-        src="../assets/655E3260-384A-41B1-BA96-A5E153DFB5A1_1_201_a.jpeg"
-        alt="user avatar"
-        class="user-avatar--comment"
+      <SuppModModule
+        v-if="showModule"
+        :type="type"
+        @deleteOrConfirm="deleteComment(comment.id)"
       />
-      <div class="one_comment--text shadow">
-        <div class="user-data--comment">
-          <p class="user-name--comment">Joe Blow</p>
-        </div>
-        <div class="comment-text">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto ipsa
-            quibusdam tempore dolorem aliquid modi! Eveniet beatae consequuntur
-            temporibus reiciendis nobis, iure soluta alias sunt ipsa aperiam
-            molestias voluptatem? Natus.
-          </p>
-        </div>
+      <div class="comment-text">
+        <p>
+          {{ comment.content }}
+        </p>
+      </div>
 
-        <div class="comment-likes">
-          <p class="like-count">12</p>
-          <img
-            src="../assets/like-thumbs-up-hand-social-media_icon-icons.com_61429.png"
-            alt="like button"
-            class="comment-like-button"
-          />
-        </div>
+      <div class="comment-likes">
+        <p class="like-count">12</p>
+        <img
+          src="../assets/like-thumbs-up-hand-social-media_icon-icons.com_61429.png"
+          alt="like button"
+          class="comment-like-button"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
 import SuppModModule from "../components/modal.vue";
+import axios from "axios";
 export default {
   name: "comment",
+  props: ["comment"],
   components: {
     SuppModModule,
   },
@@ -78,36 +50,57 @@ export default {
     return {
       showModule: false,
       type: "commentaire",
+      userId: "",
+      token: "",
     };
   },
   methods: {
     toggleModule() {
       this.showModule = !this.showModule;
     },
+    getLocalStorage() {
+      this.userId = localStorage.getItem("userId");
+      this.token = localStorage.getItem("token");
+    },
+    deleteComment(id) {
+      const self = this;
+      this.getLocalStorage();
+      console.log(id);
+
+      axios({
+        method: "DELETE",
+        url: `http://localhost:3000/api/comments/${id}`,
+
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then(function (response) {
+          //handle success
+
+          console.log(response);
+          self.$emit("reloadComms");
+        })
+
+        .catch((error) => {
+          //handle error
+
+          console.log(error);
+        });
+    },
   },
 };
 </script>
 <style lang="scss">
-.comments-card {
-  width: 90%;
-  height: fit-content;
-  border-bottom: 1px solid gray;
-  border-left: 1px solid gray;
-  border-right: 1px solid gray;
-  background-color: white;
-  border-radius: 0 0 15px 15px;
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  margin-top: 1.5px;
-}
 .one_comment {
   display: flex;
   margin: 3%;
   position: relative;
+  width: 95%;
 }
 .one_comment--text {
-  width: 90%;
+  width: 100%;
   border-radius: 15px;
   background-color: rgba(146, 154, 173, 0.5);
   border: 1px solid gray;

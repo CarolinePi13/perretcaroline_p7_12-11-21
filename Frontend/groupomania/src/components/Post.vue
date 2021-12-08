@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="post-card shadow">
-      <SuppModModule v-if="showModule" />
+      <SuppModModule v-if="showModule" @deleteOrConfirm="deletePost(post.id)" />
       <div class="user-data">
         <img
           src="../assets/655E3260-384A-41B1-BA96-A5E153DFB5A1_1_201_a.jpeg"
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="comment-count">
-        <p>12 commentaires</p>
+        <p>{{ numberOfComments }} commentaires</p>
         <p>12 j'aime</p>
       </div>
       <div class="post-actions">
@@ -54,17 +54,26 @@
         </div>
       </div>
       <div class="new-comment" v-if="writeComment">
-        <createComment @closeWriteComment="displayWriteNewComment" />
+        <createComment
+          @closeWriteComment="displayWriteNewComment"
+          :postId="postId"
+          @reloadComms="getAllComments"
+        />
       </div>
-      <div v-if="showComments">
-        <comments />
+      <div v-if="showComments" class="comments-card">
+        <comments
+          v-for="comment in comments"
+          :comment="comment"
+          :key="comment.id"
+          @reloadComms="getAllComments"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
 import SuppModModule from "./modal.vue";
-
+import axios from "axios";
 import createComment from "../components/CreateComment.vue";
 
 import comments from "../components/comment.vue";
@@ -81,9 +90,11 @@ export default {
       showComments: false,
       writeComment: false,
       showModule: false,
-
+      postId: this.post.id,
       token: "",
       userId: "",
+      comments: "",
+      numberOfComments: "",
     };
   },
   methods: {
@@ -101,6 +112,59 @@ export default {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
     },
+    deletePost(id) {
+      const self = this;
+      this.getLocalStorage();
+      console.log(id);
+
+      axios({
+        method: "DELETE",
+        url: `http://localhost:3000/api/posts/${id}`,
+
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then(function (response) {
+          //handle success
+
+          console.log(response);
+          self.$emit("reloadPosts");
+        })
+
+        .catch((error) => {
+          //handle error
+
+          console.log(error);
+        });
+    },
+    getAllComments() {
+      let self = this;
+      axios({
+        method: "GET",
+        url: `http://localhost:3000/api/comments/posts/${this.postId}`,
+
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "multipart/form-data",
+        },
+      })
+        .then((response) => (this.comments = response.data))
+        .then(function (response) {
+          //handle success
+          console.log(response);
+          self.numberOfComments = response.length;
+        })
+        .catch(function (response) {
+          //handle error
+
+          console.log(response);
+        });
+    },
+  },
+  mounted() {
+    this.getAllComments();
   },
 };
 </script>
@@ -156,6 +220,19 @@ button {
   align-items: center;
 
   margin-left: 3%;
+}
+.comments-card {
+  width: 100%;
+  height: fit-content;
+  border-bottom: 1px solid gray;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  background-color: white;
+  border-radius: 0 0 15px 15px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 1.5px;
 }
 .down-arrow {
   height: 20px;

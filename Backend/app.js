@@ -19,6 +19,7 @@ const user= require('./src/models/user');
 const vote= require('./src/models/vote');
 
 
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -45,9 +46,10 @@ user.hasMany(vote);
 //   console.log(err)
 // });
 // -------------------------------------------
+
 app.use('/api/user', userRoutes);
 app.use('/api/posts', postRoutes);
-app.use('/api/posts/:id/comment', commRoutes)
+app.use('/api/comments', commRoutes)
 // app.use("api/post/:id/vote")
 // app.use("api/comment/:id")
 app.use('/images',express.static(path.join(__dirname, 'src/images')) );

@@ -106,11 +106,11 @@ exports.login= (req, res, next) =>{
                       })};
                         
                     
-                const token = jwt.sign({userId :user.id}, process.env.TOKEN_KEY,{expiresIn:'24h'});// a random token is created
+                const token = jwt.sign({userId :user.id,isAdmin:user.isAdmin}, process.env.TOKEN_KEY,{expiresIn:'24h'});// a random token is created
                    res.status(200).json({
                        userId : user.id,
                        token:token,
-                       message:"logged in"
+                       
                    })
                 }
             ).catch(

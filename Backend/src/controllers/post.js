@@ -1,6 +1,8 @@
 const Post = require('../models/post');
 const Vote= require('../models/vote');
 const fs = require('fs');
+const { post } = require('../routes/user');
+const User = require('../models/user');
 
 
 exports.CreateAPost=(req, res, next) =>{
@@ -58,12 +60,30 @@ exports.getAllPosts=(req, res, next) =>{
     
 
     }
-
+    exports.getOnePost=(req, res, next) =>{
+        Post.findOne({where: {id:req.params.id}})
+        .then(post=>{
+            res.status(200).json(post)
+            
+        })
+        .catch(err => {
+          res.status(500).send({
+            message:
+              "le post est introuvable"
+          });
+        });
+    
+        
+    
+        }
+    
 
 exports.ModifyAPost=(req, res, next) =>{
     // checks if the post userId is the same as current user  
     
-    // if(req.body.userId==req.token.userId){
+    Post.findOne({where: {id:req.params.id}}).then((post)=>{
+       
+        if(post.userId==res.locals.user.id){
         
         const PostObject = req.file? // if the requests contains a file parses the body of the request
         {
@@ -73,7 +93,10 @@ exports.ModifyAPost=(req, res, next) =>{
     
            Post.update({...PostObject},{
               where:{ id: req.params.id}
-           })//passes either one whether it contains a file or not
+           })
+        }
+        
+    })//passes either one whether it contains a file or not
            .then(()=> res.status(200).json({ message: "Object modified !"}))
            .catch(
             (error) =>{
@@ -88,21 +111,36 @@ exports.ModifyAPost=(req, res, next) =>{
     // }
 };
 exports.DeleteAPost=(req, res, next) =>{
-    
+
     Post.findOne({where: {id:req.params.id}}).then((post)=>{
-        if(post.userId==req.token.userId){
-            
-            const filename = post.imageUrl.split('/images/')[1];
-            fs.unlink("images/"+ filename,()=>{
-                Post.destroy({where: {id:req.params.id}})
-                .then(() => res.status(200).json({ message: 'objet deleted'}))
-                .catch(
-                    (error) =>{
-                        res.status(400).json({
-                            error:error
+       
+        if(post.userId===res.user.id){
+            if (post.imageUrl!== null){
+                const filename = post.imageUrl.split('/images/')[1];
+                fs.unlink("images/"+ filename,()=>{
+                    Post.destroy({where: {id:req.params.id}})
+                    .then(() => res.status(200).json({ message: 'objet deleted'}))
+                    .catch(
+                        (error) =>{
+                            res.status(400).json({
+                                error:error
+                            });
                         });
-                    });
-            })
+                })
+
+            }else{
+                Post.destroy({where: {id:req.params.id}})
+                    .then(() => res.status(200).json({ message: 'objet deleted'}))
+                    .catch(
+                        (error) =>{
+                            res.status(400).json({
+                                error:error
+                            });
+                        });
+            }
+            
+    }else{
+        res.status(401).json({message:"unauthorized request"})
     }}).catch(
         (error) =>{
             res.status(401).json({

@@ -88,6 +88,7 @@ import modalConnect from "../components/modalConnect.vue";
 export default {
   emits: "loggesIn",
   name: "login",
+  props: ["loggedIn"],
   components: {
     modalConnect,
   },
@@ -95,6 +96,7 @@ export default {
     return {
       mode: "login",
       loginError: "",
+
       signupUserData: [
         {
           firstName: "",
@@ -196,6 +198,7 @@ export default {
       this.loginRequest();
     },
   },
+
   mounted() {},
 };
 </script>

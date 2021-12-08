@@ -8,31 +8,80 @@
     />
   </div>
   <div class="new-comment_text">
-    <form action="submit">
+    <form
+      action="submit"
+      @submit.prevent="
+        createANewComment();
+        closeComment();
+      "
+    >
       <textarea
         class="to-publish"
         type="text"
-        placeholder="écrivez votre texte ici..."
+        placeholder="écrivez votre texte
+      ici..."
         oninput='this.style.height = "";this.style.height =
       this.scrollHeight + "px"'
         rows:10
         max-length:1200
         min-length:1
+        v-model="content"
       />
       <input type="submit" value="Publier" class="publier" />
     </form>
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "CreateComment",
-  components: {},
+  props: ["postId"],
   data() {
-    return {};
+    return {
+      token: "",
+      userId: "",
+      content: "",
+    };
   },
   methods: {
     closeComment() {
       this.$emit("closeWriteComment");
+    },
+    getLocalStorage() {
+      this.userId = localStorage.getItem("userId");
+      this.token = localStorage.getItem("token");
+    },
+    createANewComment() {
+      this.getLocalStorage();
+      let userId = this.userId;
+      let postId = this.postId;
+      let content = this.content;
+      const self = this;
+      const body = {
+        userId,
+        postId,
+        content,
+      };
+
+      axios({
+        method: "POST",
+        url: "http://localhost:3000/api/comments",
+        data: body,
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          Accept: "application/json",
+          "content-type": "application/json",
+        },
+      })
+        .then(function (response) {
+          console.log(response);
+          self.$emit("reloadComms");
+        })
+
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
     },
   },
 };

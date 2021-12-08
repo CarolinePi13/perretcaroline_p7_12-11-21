@@ -4,8 +4,10 @@ const Comment = require('../models/comment');
 
 
 exports.getAllComms=(req,res,next)=>{
-    Comment.findAll({where:{
-        postId:req.body.postId
+    
+    Comment.findAll({
+        where:{
+        postId: req.params.postId
     }})
     .then ((comments)=>res.status(200).json(comments))
     .catch(
@@ -108,17 +110,21 @@ exports.ModifyAComm=(req,res,next)=>{
     
 };
 exports.DeleteAComm=(req,res,next)=>{
-    if(req.body.userId==req.token.userId){
-    Comment.destroy({where: {id:req.params.id}})
-    .then(() => res.status(200).json({ message: 'objet deleted'}))
-    .catch(
-        (error) =>{
-            res.status(400).json({
-                error:error
-            });
-        });   
-    }else{
-            res.status(401).json({message:"unauthorized request"})
-        }
+    // if(req.body.userId==req.token.userId){
+        Comment.findOne({where: {id:req.params.id}}).then(()=>{
+            Comment.destroy({where: {id:req.params.id}})
+            .then(() => res.status(200).json({ message: 'objet deleted'}))
+            .catch(
+                (error) =>{
+                    res.status(400).json({
+                        error:error
+                    });
+                });   
+
+        })
+    
+    // }else{
+    // //         res.status(401).json({message:"unauthorized request"})
+    //     }
       
 };

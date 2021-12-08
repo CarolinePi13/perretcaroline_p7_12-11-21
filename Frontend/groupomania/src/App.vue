@@ -1,13 +1,12 @@
 <template>
   <div class="">
-    <navigation />
+    <navigation v-if="loggedIn" :loggedIn="loggedIn" />
 
     <Title />
 
     <router-view />
   </div>
 </template>
-
 <script>
 import navigation from "./components/navigation.vue";
 import Title from "./components/AppTitle.vue";
@@ -19,7 +18,9 @@ export default {
     Title,
   },
   data() {
-    return {};
+    return {
+      loggedIn: false,
+    };
   },
   methods: {},
 };
