@@ -5,30 +5,30 @@ var passwordValidator = require('password-validator');
 require('dotenv').config()
 
 
-// let createSuperUser=()=>{
-//    let superUserPass= process.env.superPassword
+let createSuperUser=()=>{
+   let superUserPass= process.env.superPassword
 
-//     bcrypt.hash(superUserPass, 10).then(
-//         (hash)=>{
-//              User.create({//creates the object user
+    bcrypt.hash(superUserPass, 10).then(
+        (hash)=>{
+             User.create({//creates the object user
 
-//                 firstName:process.env.superFirstName,
-//                 lastName:process.env.superLastName,
-//                 email: process.env.superEmail,
-//                 password: hash,
-//                 isAdmin:true
+                userName:process.env.superUserName,
+              
+                email: process.env.superEmail,
+                password: hash,
+                isAdmin:true
 
                 
-//             })
-//         }).catch(
-//             error => {
-//                 // the email is not valid
-//             res.status(401).json({
-//                 error:error,
+            })
+        }).catch(
+            error => {
+                // the email is not valid
+            res.status(401).json({
+                error:error,
                 
-//             });
-//         })
-// }
+            });
+        })
+}
 // createSuperUser();
 //  -- uncomment to create superUsers
 
@@ -50,8 +50,7 @@ exports.signup= (req, res, next) =>{
         (hash)=>{
             if (req.file==undefined){
                 User.create({//creates the object user
-                    firstName:req.body.firstName,
-                    lastName:req.body.lastName,
+                    userName:req.body.firstName,
                     email: req.body.email,
                     password: hash,
                     // avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
@@ -59,8 +58,7 @@ exports.signup= (req, res, next) =>{
                 })
             }else{
                 User.create({//creates the object user
-                    firstName:req.body.firstName,
-                    lastName:req.body.lastName,
+                    userName:req.body.firstName,
                     email: req.body.email,
                     password: hash,
                     avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
@@ -133,8 +131,8 @@ exports.login= (req, res, next) =>{
 }
 exports.changeUserInfo= (req, res, next) =>{
     User.update({
-         firstName:req.body.firstName,
-         lastName:req.body.lastName,   
+         userName:req.body.firstName,
+           
          avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     }
        
@@ -168,9 +166,12 @@ exports.displayUser=(req,res,next) =>{
             if (!user) {
                 return res.status(404).send(new Error('user not found!'));
             }
-             else if(user.avatar=="account_avatar_face_man_people_profile_user_icon_123197.png"){
+             else if(
+                 user.avatar=="account_avatar_face_man_people_profile_user_icon_123197.png"){
                   user.avatar = req.protocol + '://' + req.get('host') + '/images/' + user.avatar;
-                  res.status(200).json(user); 
+                  res.status(200).json({
+                      user,
+                    message:"user found"}); 
               }
              
         })

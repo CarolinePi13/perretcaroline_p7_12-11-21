@@ -42,7 +42,7 @@ import SuppModModule from "../components/modal.vue";
 import axios from "axios";
 export default {
   name: "comment",
-  props: ["comment"],
+  props: ["comment", "userData"],
   components: {
     SuppModModule,
   },

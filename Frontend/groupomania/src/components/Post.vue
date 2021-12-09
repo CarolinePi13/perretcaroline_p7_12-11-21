@@ -1,14 +1,15 @@
 <template>
   <div>
     <div class="post-card shadow">
-      <SuppModModule v-if="showModule" @deleteOrConfirm="deletePost(post.id)" />
+      <SuppModModule
+        v-if="showModule"
+        @deleteOrConfirm="deletePost(post.id)"
+        @updateThis="gotToUpdate"
+      />
+
       <div class="user-data">
-        <img
-          src="../assets/655E3260-384A-41B1-BA96-A5E153DFB5A1_1_201_a.jpeg"
-          alt="user avatar"
-          class="user-avatar"
-        />
-        <p class="user-name">{{}}</p>
+        <img :src="userData.avatar" alt="user avatar" class="user-avatar" />
+        <p class="user-name">{{ userData.UserName }}</p>
         <img
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
           alt=""
@@ -66,6 +67,7 @@
           :comment="comment"
           :key="comment.id"
           @reloadComms="getAllComments"
+          :userData="userData"
         />
       </div>
     </div>
@@ -75,15 +77,16 @@
 import SuppModModule from "./modal.vue";
 import axios from "axios";
 import createComment from "../components/CreateComment.vue";
-
+// import modifyPost from "../components/modifyPost.vue";
 import comments from "../components/comment.vue";
 export default {
   name: "PostCard",
-  props: ["post"],
+  props: ["post", "currentUserData"],
   components: {
     SuppModModule,
     createComment,
     comments,
+    // modifyPost,
   },
   data() {
     return {
@@ -95,6 +98,8 @@ export default {
       userId: "",
       comments: "",
       numberOfComments: "",
+      modifyMode: false,
+      postUserData: "",
     };
   },
   methods: {
@@ -112,6 +117,10 @@ export default {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
     },
+    gotToUpdate() {
+      this.$router.push("/updatePost");
+    },
+
     deletePost(id) {
       const self = this;
       this.getLocalStorage();
@@ -139,6 +148,28 @@ export default {
           console.log(error);
         });
     },
+    getPostUserData() {
+      this.getLocalStorage();
+      let id = this.post.userId;
+      axios({
+        method: "GET",
+        url: `http://localhost:3000/api/user/${id}`,
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then((response) => (this.postUserData = response.data))
+        .then(function (response) {
+          //handle success
+          console.log(response.message);
+        })
+        .catch(function (response) {
+          //handle error
+
+          console.log(response);
+        });
+    },
     getAllComments() {
       let self = this;
       axios({
@@ -162,6 +193,9 @@ export default {
           console.log(response);
         });
     },
+  },
+  beforeMount() {
+    this.getPostUserData();
   },
   mounted() {
     this.getAllComments();

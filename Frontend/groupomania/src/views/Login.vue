@@ -80,11 +80,15 @@
       </form>
     </div>
   </div>
-  <modalConnect v-if="showModal" @removeModal="closeModal" />
+  <modalConnect
+    v-if="showModal"
+    @removeModal="closeModal"
+    :modalText="modalText"
+  />
 </template>
 <script>
 import axios from "axios";
-import modalConnect from "../components/modalConnect.vue";
+import modalConnect from "../components/basicModal.vue";
 export default {
   emits: "loggesIn",
   name: "login",
@@ -113,6 +117,7 @@ export default {
         },
       ],
       showModal: false,
+      modalText: "Compte créé vous pouvez vous connecter",
     };
   },
   methods: {

@@ -37,6 +37,10 @@ export default {
 html {
   height: 100%;
 }
+img {
+  height: 30px;
+}
+
 body {
   margin: 0;
   padding: 0;

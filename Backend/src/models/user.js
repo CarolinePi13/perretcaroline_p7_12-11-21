@@ -10,11 +10,7 @@ const User =sequelize.define('user',
             primaryKey: true,
             autoIncrement:true
         },
-        firstName:{
-            type:Sequelize.STRING,
-            allowNull:false
-        },
-        lastName:{
+        userName:{
             type:Sequelize.STRING,
             allowNull:false
         },
@@ -47,6 +43,6 @@ const User =sequelize.define('user',
     },{
         freezeTableName: true
     });
-   
+//  User.sync({force:true})  
    
 module.exports = User;

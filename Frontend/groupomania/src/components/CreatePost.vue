@@ -9,12 +9,8 @@
     />
     <div class="post-top">
       <div class="createPost-user-data">
-        <img
-          src="../assets/655E3260-384A-41B1-BA96-A5E153DFB5A1_1_201_a.jpeg"
-          alt="user avatar"
-          class="user-avatar"
-        />
-        <p class="user-name">Joe Blow</p>
+        <img :src="userData.avatar" alt="user avatar" class="user-avatar" />
+        <p class="user-name">{{ userData.UserName }}</p>
       </div>
       <div class="new-post" v-if="!writeIsClicked">
         <img
@@ -62,6 +58,7 @@
 import axios from "axios";
 export default {
   name: "CreatePost",
+  props: ["currentUserData"],
   components: {},
   data() {
     return {

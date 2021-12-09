@@ -19,14 +19,16 @@
       </div>
     </div>
   </div>
-  <div class="confirm" v-if="showConfirm">
-    <p class="confirm_text">
-      Etes vous sur de vouloir supprimer cet utilisateur ?
-    </p>
-    <button class="confirm_btn--supp" @click="deleteUser">supprimer</button>
-    <button class="confirm_btn--cancel" @click="cancelDeleteUser">
-      annuler
-    </button>
+  <div class="confirm modal-bg shadow" v-if="showConfirm">
+    <div class="modal-text">
+      <p>Etes vous sur de vouloir supprimer cet utilisateur ?</p>
+      <button class="confirm_btn confirm_btn--supp" @click="deleteUser">
+        supprimer
+      </button>
+      <button class="confirm_btn confirm_btn--cancel" @click="cancelDeleteUser">
+        annuler
+      </button>
+    </div>
   </div>
 </template>
 <script>
@@ -113,8 +115,6 @@ export default {
     };
     displayUser();
   },
-
-  computed: {},
 };
 </script>
 <style scoped lang="scss">
@@ -133,9 +133,6 @@ export default {
   align-items: center;
   position: relative;
 }
-img {
-  height: 30px;
-}
 
 .user {
   display: flex;
@@ -144,9 +141,14 @@ img {
 }
 .user-data {
   margin: 20px;
+  width: 50%;
+
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  p {
+    margin: 5px;
+  }
 }
 .three-dots {
   position: absolute;
@@ -168,5 +170,29 @@ img {
 }
 .shadow {
   box-shadow: 1px 1px 3px 1px rgb(94, 86, 86);
+}
+.modal-text {
+  width: 300px;
+  height: 150px;
+  background-color: white;
+  text-align: center;
+  border-radius: 15px;
+}
+.confirm_btn {
+  width: 80px;
+  margin: 5px;
+  &--supp {
+    background: linear-gradient(
+      120deg,
+      rgba(230, 45, 51, 0.9),
+      rgba(151, 13, 13, 0.9),
+      rgba(190, 12, 12, 0.9),
+      rgba(233, 14, 18, 0.9)
+    );
+    font-weight: 800;
+  }
+  &--cancel {
+    background: rgba(15, 31, 65, 0.7);
+  }
 }
 </style>

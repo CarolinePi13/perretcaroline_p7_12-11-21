@@ -1,11 +1,12 @@
 <template>
-  <div class="isLoggedIn">
-    <createPost />
+  <div class="isLoggedIn position">
+    <createPost :currentUserData="currentUserData" />
     <postCard
       v-for="post in Posts"
       :key="post.id"
       :post="post"
       @reloadPosts="updatePosts"
+      :currentUserData="currentUserData"
     />
   </div>
 </template>
@@ -22,6 +23,7 @@ export default {
       Posts: "",
       userId: "",
       token: "",
+      currentUserData: "",
     };
   },
   components: {
@@ -40,6 +42,27 @@ export default {
 
     updatePosts() {
       this.getAllPosts();
+    },
+    displayCurrentUser() {
+      this.getLocalStorage();
+      axios({
+        method: "GET",
+        url: `http://localhost:3000/api/user/${this.userId}`,
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then((response) => (this.currentUserData = response.data))
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+
+          console.log(response);
+        });
     },
     getAllPosts() {
       axios({
@@ -65,7 +88,12 @@ export default {
   },
   beforeMount() {
     this.getAllPosts();
+    this.displayCurrentUser();
   },
 };
 </script>
-<style lang=""></style>
+<style lang="scss">
+.position {
+  position: relative;
+}
+</style>

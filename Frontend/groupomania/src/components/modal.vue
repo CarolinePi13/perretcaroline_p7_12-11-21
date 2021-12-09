@@ -1,6 +1,8 @@
 <template>
   <div class="alter_pop-up">
-    <div class="alter_Btn alter_Btn--modify">Modifier</div>
+    <div class="alter_Btn alter_Btn--modify" @click="triggerModify">
+      Modifier
+    </div>
     <div class="alter_Btn alter_Btn--delete" @click="Deletefct">supprimer</div>
   </div>
   <div v-if="showConfirm">
@@ -21,6 +23,9 @@ export default {
   methods: {
     Deletefct() {
       this.$emit("deleteOrConfirm");
+    },
+    triggerModify() {
+      this.$emit("updateThis");
     },
   },
 };
@@ -43,7 +48,8 @@ export default {
 .alter_Btn {
   width: 100%;
   height: 30%;
-  margin-top: 3px;
+  margin-top: 8px;
+
   border-radius: 15px;
   background-color: rgba(15, 31, 65, 1);
   text-align: center;
@@ -53,6 +59,7 @@ export default {
   &:hover {
     background-color: lighten(rgba(15, 31, 65, 1), 10%);
   }
+
   cursor: pointer;
 }
 </style>
