@@ -8,8 +8,8 @@
       />
 
       <div class="user-data">
-        <img :src="userData.avatar" alt="user avatar" class="user-avatar" />
-        <p class="user-name">{{ userData.UserName }}</p>
+        <img :src="postUserData.avatar" alt="user avatar" class="user-avatar" />
+        <p class="user-name">{{ postUserData.userName }}</p>
         <img
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
           alt=""
@@ -67,7 +67,7 @@
           :comment="comment"
           :key="comment.id"
           @reloadComms="getAllComments"
-          :userData="userData"
+          :currentUserData="currentUserData"
         />
       </div>
     </div>
@@ -94,6 +94,7 @@ export default {
       writeComment: false,
       showModule: false,
       postId: this.post.id,
+      postUserId: this.post.userId,
       token: "",
       userId: "",
       comments: "",
@@ -150,7 +151,8 @@ export default {
     },
     getPostUserData() {
       this.getLocalStorage();
-      let id = this.post.userId;
+      const id = this.postUserId;
+
       axios({
         method: "GET",
         url: `http://localhost:3000/api/user/${id}`,
@@ -159,10 +161,10 @@ export default {
           "content-type": "application/json",
         },
       })
-        .then((response) => (this.postUserData = response.data))
+        .then((response) => (this.postUserData = response.data.user))
         .then(function (response) {
           //handle success
-          console.log(response.message);
+          console.log(response);
         })
         .catch(function (response) {
           //handle error
@@ -194,7 +196,7 @@ export default {
         });
     },
   },
-  beforeMount() {
+  created() {
     this.getPostUserData();
   },
   mounted() {

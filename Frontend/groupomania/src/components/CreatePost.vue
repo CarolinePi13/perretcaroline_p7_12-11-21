@@ -9,8 +9,12 @@
     />
     <div class="post-top">
       <div class="createPost-user-data">
-        <img :src="userData.avatar" alt="user avatar" class="user-avatar" />
-        <p class="user-name">{{ userData.UserName }}</p>
+        <img
+          :src="currentUserData.avatar"
+          alt="user avatar"
+          class="user-avatar"
+        />
+        <p class="user-name">{{ currentUserData.userName }}</p>
       </div>
       <div class="new-post" v-if="!writeIsClicked">
         <img

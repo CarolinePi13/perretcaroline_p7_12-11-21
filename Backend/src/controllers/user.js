@@ -50,7 +50,7 @@ exports.signup= (req, res, next) =>{
         (hash)=>{
             if (req.file==undefined){
                 User.create({//creates the object user
-                    userName:req.body.firstName,
+                    userName:req.body.userName,
                     email: req.body.email,
                     password: hash,
                     // avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
@@ -58,7 +58,7 @@ exports.signup= (req, res, next) =>{
                 })
             }else{
                 User.create({//creates the object user
-                    userName:req.body.firstName,
+                    userName:req.body.userName,
                     email: req.body.email,
                     password: hash,
                     avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
@@ -93,9 +93,7 @@ exports.login= (req, res, next) =>{
                 message:"user unknown"
                 
             })};
-
-              
-              bcrypt.compare(req.body.password, user.password).then(
+                bcrypt.compare(req.body.password, user.password).then(
                 (valid)=>{
                     if (!valid){// the password is incorrect
                         
@@ -109,15 +107,15 @@ exports.login= (req, res, next) =>{
                        userId : user.id,
                        token:token,
                        
-                   })
+                   }).catch(
+                    (error)=>{
+                        res.status(500).json({
+                            error:error
+                        });
+                    }
+                );
                 }
-            ).catch(
-                (error)=>{
-                    res.status(500).json({
-                        error:error
-                    });
-                }
-            );
+            )
             
             
         }
@@ -169,12 +167,12 @@ exports.displayUser=(req,res,next) =>{
              else if(
                  user.avatar=="account_avatar_face_man_people_profile_user_icon_123197.png"){
                   user.avatar = req.protocol + '://' + req.get('host') + '/images/' + user.avatar;
-                  res.status(200).json({
-                      user,
-                    message:"user found"}); 
+                  res.status(200).json({user}); 
+              }else{
+                res.status(200).json({user}); 
               }
              
-        })
+        }) 
         .catch(
             (error) =>{
                 res.status(400).json({

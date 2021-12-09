@@ -11,7 +11,7 @@
     </div>
 
     <div class="card" v-if="mode == 'login'">
-      <form action="login" class="card_flex" @submit.prevent="submitLogin">
+      <form action="login" class="card_flex" @submit.prevent="loginRequest">
         <div class="login_email column">
           <label for="login-email">Email: </label>
           <input
@@ -36,24 +36,16 @@
     </div>
     <div class="card card_sign-up" v-if="mode == 'create'">
       <form action="sign-up" class="card_flex" @submit.prevent="createAccount">
-        <div class="firstname column">
-          <label for="firstname">Prénom: </label>
+        <div class="userName column">
+          <label for="userName">Pseudo: </label>
           <input
-            id="firstname"
+            id="userName"
             required
             type="text"
-            v-model="signupUserData.firstName"
+            v-model="signupUserData.userName"
           />
         </div>
-        <div class="lastname column">
-          <label for="lastname">Nom: </label>
-          <input
-            id="lastname"
-            required
-            type="text"
-            v-model="signupUserData.lastName"
-          />
-        </div>
+
         <div class="sign-up-input column">
           <label for="sign-up-email">Email: </label>
           <input
@@ -80,11 +72,9 @@
       </form>
     </div>
   </div>
-  <modalConnect
-    v-if="showModal"
-    @removeModal="closeModal"
-    :modalText="modalText"
-  />
+  <div class="modal" v-if="showModal">
+    <modalConnect @removeModal="closeModal" :modalText="modalText" />
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -103,8 +93,7 @@ export default {
 
       signupUserData: [
         {
-          firstName: "",
-          lastName: "",
+          userName: "",
           email: "",
           password: "",
           avatar: "",
@@ -129,18 +118,20 @@ export default {
     },
     closeModal() {
       this.showModal = !this.showModal;
+      document.location.reload();
     },
+
     createAccount() {
       let formData = new FormData();
-      formData.append("firstName", this.signupUserData.firstName);
-      formData.append("lastName", this.signupUserData.lastName);
+
+      formData.append("userName", this.signupUserData.userName);
       formData.append("email", this.signupUserData.email);
       formData.append("password", this.signupUserData.password);
       formData.append("image", this.signupUserData.avatar);
       for (var value of formData.values()) {
         console.log(value);
       }
-
+      let self = this;
       var body = formData;
 
       axios({
@@ -157,7 +148,7 @@ export default {
           console.log(response);
           let userId = response.data.userId;
           localStorage.setItem("userId", userId);
-          this.showModal = true;
+          self.showModal = true;
         })
 
         .catch(function (response) {
@@ -197,10 +188,6 @@ export default {
           //handle error
           console.log(response);
         });
-    },
-
-    submitLogin() {
-      this.loginRequest();
     },
   },
 

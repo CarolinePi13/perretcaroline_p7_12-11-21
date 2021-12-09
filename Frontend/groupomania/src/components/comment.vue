@@ -1,13 +1,13 @@
 <template>
   <div class="one_comment">
     <img
-      src="../assets/account_avatar_face_man_people_profile_user_icon_123197.png"
+      :src="commentUserData.avatar"
       alt="user avatar"
       class="user-avatar--comment"
     />
     <div class="one_comment--text shadow">
       <div class="user-data--comment">
-        <p class="user-name--comment">Joe Blow</p>
+        <p class="user-name--comment">{{ commentUserData.userName }}</p>
         <img
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
           alt=""
@@ -42,7 +42,7 @@ import SuppModModule from "../components/modal.vue";
 import axios from "axios";
 export default {
   name: "comment",
-  props: ["comment", "userData"],
+  props: ["comment"],
   components: {
     SuppModModule,
   },
@@ -52,6 +52,8 @@ export default {
       type: "commentaire",
       userId: "",
       token: "",
+      commentUserData: "",
+      commentUserId: this.comment.userId,
     };
   },
   methods: {
@@ -61,6 +63,30 @@ export default {
     getLocalStorage() {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
+    },
+    getCommentUserData() {
+      this.getLocalStorage();
+      const id = this.commentUserId;
+      console.log(id);
+
+      axios({
+        method: "GET",
+        url: `http://localhost:3000/api/user/${id}`,
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then((response) => (this.commentUserData = response.data.user))
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+
+          console.log(response);
+        });
     },
     deleteComment(id) {
       const self = this;
@@ -89,6 +115,9 @@ export default {
           console.log(error);
         });
     },
+  },
+  created() {
+    this.getCommentUserData();
   },
 };
 </script>
