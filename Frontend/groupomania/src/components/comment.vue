@@ -12,13 +12,15 @@
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
           alt=""
           class="three-dots smaller-dots"
-          @click="toggleModule"
+          @click="showIfAllowed()"
         />
       </div>
       <SuppModModule
         v-if="showModule"
         :type="type"
+        @updateThis="toggleUpdateComment"
         @deleteOrConfirm="deleteComment(comment.id)"
+        :key="comment.id"
       />
       <div class="comment-text">
         <p>
@@ -36,15 +38,26 @@
       </div>
     </div>
   </div>
+  <teleport to="#modals">
+    <modifyComment
+      v-if="modifyCommentShow"
+      :comment="comment"
+      :key="comment.id"
+      @cancelUpdate="toggleUpdateComment()"
+    />
+  </teleport>
 </template>
 <script>
+import modifyComment from "../components/modifyComment.vue";
 import SuppModModule from "../components/modal.vue";
 import axios from "axios";
 export default {
   name: "comment",
   props: ["comment"],
+  emits: ["reloadComms"],
   components: {
     SuppModModule,
+    modifyComment,
   },
   data() {
     return {
@@ -54,12 +67,21 @@ export default {
       token: "",
       commentUserData: "",
       commentUserId: this.comment.userId,
+      modifyCommentShow: false,
     };
   },
   methods: {
-    toggleModule() {
-      this.showModule = !this.showModule;
+    showIfAllowed() {
+      if ((this.showModule == false) & (this.userId == this.comment.userId)) {
+        return (this.showModule = true);
+      } else {
+        return (this.showModule = false);
+      }
     },
+    toggleUpdateComment() {
+      this.modifyCommentShow = !this.modifyCommentShow;
+    },
+
     getLocalStorage() {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");

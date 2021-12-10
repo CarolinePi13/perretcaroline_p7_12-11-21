@@ -10,6 +10,7 @@
 export default {
   nom: "modalConnect",
   props: ["modalText"],
+  emits: ["removeModal"],
   data() {
     return {};
   },

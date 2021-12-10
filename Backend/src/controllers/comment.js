@@ -65,12 +65,10 @@ exports.CreateAComm=(req,res,next)=>{
 
  
 exports.ModifyAComm=(req,res,next)=>{
-    if(req.body.userId==req.token.userId){
-  Comment.findOne({
-        where:{id:req.params.id}
-    }).then ((response)=>{
-        
-        if(response==null){
+   
+  Comment.findOne({where:{id:req.params.id}}).then((comment)=>{
+    if(comment.userId===res.user.id){
+        if(comment==null){
             {
                 res.status(500).json(
                 {
@@ -78,16 +76,13 @@ exports.ModifyAComm=(req,res,next)=>{
                 }
                 )
             }}else{
-                Comment.update(
-                {
-                        content: req.body.content,
-                        postId:req.body.postId,
-                        userId:req.body.userId
-                    },{
-                        where:{id:req.params.id}
-                    }
-            
-                ).then(()=> res.status(200).json({ message: "Object modified !"}))
+
+                
+                Comment.update({content:req.body.content},{
+                    where:{ id: req.params.id}
+                 })
+                
+                .then(()=> res.status(200).json({ message: "Object modified !"}))
                 .catch(
                  (error) =>{
                      res.status(400).json({
@@ -97,18 +92,15 @@ exports.ModifyAComm=(req,res,next)=>{
 
 
             }
-            
-      
-    })
-
-    }else{
-        res.status(401).json({message:"unauthorized request"})
-    }
-  
-    
         
+    }}).catch((error)=>{
+        res.status(401).json({
+           error:error, 
+            message:"unauthorized request"})
+    })
+ };
+
     
-};
 exports.DeleteAComm=(req,res,next)=>{
     // if(req.body.userId==req.token.userId){
         Comment.findOne({where: {id:req.params.id}}).then(()=>{

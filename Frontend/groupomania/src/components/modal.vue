@@ -5,15 +5,12 @@
     </div>
     <div class="alter_Btn alter_Btn--delete" @click="Deletefct">supprimer</div>
   </div>
-  <div v-if="showConfirm">
-    <confirmDelete />
-  </div>
 </template>
 
 <script>
 export default {
   name: "SuppModModule",
-
+  emits: ["deleteOrConfirm", "updateThis"],
   components: {},
   data() {
     return {

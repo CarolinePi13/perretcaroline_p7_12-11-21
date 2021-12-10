@@ -36,6 +36,7 @@ import axios from "axios";
 export default {
   name: "CreateComment",
   props: ["postId"],
+  emits: ["reloadComms", "closeWriteComment"],
   data() {
     return {
       token: "",

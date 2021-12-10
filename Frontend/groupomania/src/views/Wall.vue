@@ -9,6 +9,7 @@
       :currentUserData="currentUserData"
     />
   </div>
+  <div id="modals"></div>
 </template>
 
 <script>

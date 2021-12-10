@@ -4,7 +4,8 @@
       <SuppModModule
         v-if="showModule"
         @deleteOrConfirm="deletePost(post.id)"
-        @updateThis="gotToUpdate"
+        @updateThis="toggleUpdatePost"
+        :key="post.id"
       />
 
       <div class="user-data">
@@ -14,7 +15,7 @@
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
           alt=""
           class="three-dots"
-          @click="toggleModule()"
+          @click="showIfAllowed()"
         />
       </div>
       <div class="post-content">
@@ -67,26 +68,34 @@
           :comment="comment"
           :key="comment.id"
           @reloadComms="getAllComments"
-          :currentUserData="currentUserData"
         />
       </div>
     </div>
   </div>
+  <teleport to="#modals">
+    <modifyPost
+      :post="post"
+      v-if="modifyPostShow"
+      @cancelUpdate="modifyPostShow = false"
+    />
+  </teleport>
 </template>
 <script>
 import SuppModModule from "./modal.vue";
 import axios from "axios";
 import createComment from "../components/CreateComment.vue";
-// import modifyPost from "../components/modifyPost.vue";
+import modifyPost from "../components/modifyPost.vue";
+
 import comments from "../components/comment.vue";
 export default {
   name: "PostCard",
   props: ["post", "currentUserData"],
+  emits: ["reloadPosts"],
   components: {
     SuppModModule,
     createComment,
     comments,
-    // modifyPost,
+    modifyPost,
   },
   data() {
     return {
@@ -101,6 +110,8 @@ export default {
       numberOfComments: "",
       modifyMode: false,
       postUserData: "",
+
+      modifyPostShow: false,
     };
   },
   methods: {
@@ -111,15 +122,12 @@ export default {
       this.writeComment = !this.writeComment;
     },
 
-    toggleModule() {
-      this.showModule = !this.showModule;
-    },
     getLocalStorage() {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
     },
-    gotToUpdate() {
-      this.$router.push("/updatePost");
+    toggleUpdatePost() {
+      this.modifyPostShow = !this.modifyPostShow;
     },
 
     deletePost(id) {
@@ -195,6 +203,13 @@ export default {
           console.log(response);
         });
     },
+    showIfAllowed() {
+      if ((this.showModule == false) & (this.userId == this.post.userId)) {
+        return (this.showModule = true);
+      } else {
+        return (this.showModule = false);
+      }
+    },
   },
   created() {
     this.getPostUserData();
@@ -202,6 +217,7 @@ export default {
   mounted() {
     this.getAllComments();
   },
+  computed: {},
 };
 </script>
 <style lang="scss">
@@ -347,5 +363,8 @@ div.comment-button > img {
 }
 div.comment-count > p {
   margin: 0 2% 1% 2%;
+}
+.modals {
+  width: 100%;
 }
 </style>

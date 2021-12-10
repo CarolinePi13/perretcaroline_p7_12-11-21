@@ -83,7 +83,7 @@ exports.ModifyAPost=(req, res, next) =>{
     
     Post.findOne({where: {id:req.params.id}}).then((post)=>{
        
-        if(post.userId==res.locals.user.id){
+        if(post.userId==res.user.id){
         
         const PostObject = req.file? // if the requests contains a file parses the body of the request
         {
