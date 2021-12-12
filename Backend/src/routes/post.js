@@ -6,10 +6,12 @@ const multer = require('../middleware/multer.config');
 
 router.get('/', postCtrl.getAllPosts);
 router.get('/:id',postCtrl.getOnePost)
-router.post('/', multer, postCtrl.CreateAPost);
+router.post('/',auth.checkUser, multer, postCtrl.CreateAPost);
 router.put('/:id',auth.checkUser, multer, postCtrl.ModifyAPost);
 router.delete('/:id',auth.checkUser, postCtrl.DeleteAPost);
-router.patch('/vote-post/:id', postCtrl.votePost);
-router.patch('/unVote-post/:id', postCtrl.unVotePost);
+router.post('/vote-post',auth.checkUser, postCtrl.votePost);
+router.delete('/vote-post/:id',auth.checkUser, postCtrl.unVotePost);
+router.get('/all-votes-post/:PostId', auth.checkUser,postCtrl.getPostsVotes );
+
 
 module.exports = router;

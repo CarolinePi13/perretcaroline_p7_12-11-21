@@ -20,6 +20,16 @@ const Comment =sequelize.define('comment',
           updatedAt: {
             type: Sequelize.DATE
           },
+          userId:{
+            type: Sequelize.INTEGER,
+            foreignKey:true,
+            onDelete:"cascade"
+           },
+           postId:{
+            type: Sequelize.INTEGER,
+            foreignKey:true,
+            onDelete:"cascade"
+           },
 
     },{
         freezeTableName: true

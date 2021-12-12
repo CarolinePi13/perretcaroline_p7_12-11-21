@@ -65,19 +65,17 @@ exports.CreateAComm=(req,res,next)=>{
 
  
 exports.ModifyAComm=(req,res,next)=>{
-   
+   //modifier un commentaire
+   console.log(req.body.content);
   Comment.findOne({where:{id:req.params.id}}).then((comment)=>{
-    if(comment.userId===res.user.id){
+    if(comment.userId==res.user.id){// checks if userid is the same as the user who created the comment
         if(comment==null){
             {
-                res.status(500).json(
-                {
+                res.status(500).json({
                     message:"the commentId does not exist"
-                }
-                )
+                })
             }}else{
-
-                
+               
                 Comment.update({content:req.body.content},{
                     where:{ id: req.params.id}
                  })

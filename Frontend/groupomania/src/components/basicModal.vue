@@ -36,7 +36,7 @@ export default {
 }
 .modal-text {
   width: 250px;
-  height: 90px;
+  height: 110px;
   background-color: white;
   text-align: center;
 }

@@ -21,7 +21,7 @@ const routes = [
     component: user,
     props: true
   },
- 
+
   
 ]
 

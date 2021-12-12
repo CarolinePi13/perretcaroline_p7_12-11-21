@@ -14,7 +14,7 @@ const Vote= sequelize.define('postsVotes',
         },
         vote:{
             type:INTEGER,
-            allowNull:true
+            allowNull:false
         },
         createdAt: {
             type: Sequelize.DATE
@@ -22,6 +22,16 @@ const Vote= sequelize.define('postsVotes',
           updatedAt: {
             type: Sequelize.DATE
           },
+          userId:{
+            type: Sequelize.INTEGER,
+            foreignKey:true,
+            onDelete:"cascade"
+           }, 
+          postId:{
+            type: Sequelize.INTEGER,
+            foreignKey:true,
+            onDelete:"cascade"
+           },
 
     },{
         freezeTableName: true

@@ -30,8 +30,8 @@
         </div>
       </div>
       <div class="comment-count">
-        <p>{{ numberOfComments }} commentaires</p>
-        <p>12 j'aime</p>
+        <p>{{ numberOfComments }} commentaire(s)</p>
+        <p>{{ totalLikes }} j'aime(s)</p>
       </div>
       <div class="post-actions">
         <div class="unfold">
@@ -48,11 +48,17 @@
           <p>Commenter</p>
         </div>
         <div class="likes">
-          <img
-            src="../assets/like-thumbs-up-hand-social-media_icon-icons.com_61429.png"
-            alt="like button"
-            class="like-button"
-          />
+          <i
+            class="fas fa-thumbs-up like-button like-button--plein"
+            v-if="thisUserliked"
+            @click="unlikePost()"
+          ></i>
+
+          <i
+            class="far fa-thumbs-up like-button like-button--vide"
+            @click="likePost()"
+            v-if="!thisUserliked"
+          ></i>
         </div>
       </div>
       <div class="new-comment" v-if="writeComment">
@@ -110,8 +116,10 @@ export default {
       numberOfComments: "",
       modifyMode: false,
       postUserData: "",
-
+      totalLikes: 0,
       modifyPostShow: false,
+      thisUserliked: false,
+      thisVoteId: "",
     };
   },
   methods: {
@@ -129,7 +137,98 @@ export default {
     toggleUpdatePost() {
       this.modifyPostShow = !this.modifyPostShow;
     },
+    likePost() {
+      let body = {
+        userId: this.userId,
+        vote: 1,
+        postId: this.postId,
+      };
+      axios({
+        method: "POST",
+        url: `http://localhost:3000/api/posts/vote-post`,
+        data: body,
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then((res) => {
+          this.thisUserliked = !this.thisUserliked;
 
+          console.log(res);
+        })
+        .then(() => {
+          this.getThisPostsVotes();
+        })
+
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getThisVoteId() {
+      let postId = this.postId;
+      axios({
+        method: "GET",
+        url: `http://localhost:3000/api/posts/vote-post/${postId}`,
+
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then((res) => {
+          // this.thisVoteId = res.data.id;
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getThisPostsVotes() {
+      let PostId = this.postId;
+
+      axios({
+        method: "GET",
+        url: `http://localhost:3000/api/posts/all-votes-post/${PostId}`,
+
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then((res) => {
+          this.totalLikes = res.data.length;
+
+          console.log(res);
+        })
+
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    unlikePost() {
+      let id = this.postId;
+      axios({
+        method: "DELETE",
+        url: `http://localhost:3000/api/posts/vote-post/${id}`,
+
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then((res) => {
+          this.thisUserliked = false;
+          console.log(res);
+        })
+        .then(() => {
+          this.getThisPostsVotes();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     deletePost(id) {
       const self = this;
       this.getLocalStorage();
@@ -213,6 +312,7 @@ export default {
   },
   created() {
     this.getPostUserData();
+    this.getThisPostsVotes();
   },
   mounted() {
     this.getAllComments();
@@ -299,6 +399,7 @@ button {
 }
 .like-button {
   height: 30px;
+  font-size: 1.8em;
   cursor: pointer;
 }
 .like-button:hover {
@@ -364,7 +465,8 @@ div.comment-button > img {
 div.comment-count > p {
   margin: 0 2% 1% 2%;
 }
-.modals {
+#modals {
   width: 100%;
+  height: 100vh;
 }
 </style>

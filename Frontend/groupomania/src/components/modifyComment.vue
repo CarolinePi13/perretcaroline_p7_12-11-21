@@ -56,10 +56,16 @@ export default {
       let id = this.commentId;
 
       let content = this.content;
+
+      let body = {
+        content: content,
+      };
+      console.log(body);
+
       axios({
         method: "PUT",
         url: `http://localhost:3000/api/comments/${id}`,
-        body: content,
+        data: body,
         headers: {
           authorization: `Bearer ${this.token}`,
 
@@ -99,8 +105,6 @@ export default {
   align-items: center;
   justify-content: center;
   background-color: rgba(168, 140, 141, 1);
-  img {
-  }
 }
 .to-publish {
   width: 90%;

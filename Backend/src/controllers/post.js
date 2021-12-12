@@ -1,8 +1,9 @@
 const Post = require('../models/post');
 const Vote= require('../models/vote');
 const fs = require('fs');
-const { post } = require('../routes/user');
+
 const User = require('../models/user');
+
 
 
 exports.CreateAPost=(req, res, next) =>{
@@ -154,16 +155,48 @@ exports.DeleteAPost=(req, res, next) =>{
 };
 
 exports.votePost=(req, res, next)=>{
-    Vote.create({
-        userId:req.body.userId,
-        postId:req.body.postId,
-        vote:req.body.vote
-
+    Vote.findOne({where:{postId:req.body.postId,userId:req.body.userId}})
+    .then((vote)=>{
+        if (vote){
+            
+        }else{
+            Vote.create({
+                userId:req.body.userId,
+                postId:req.body.postId,
+                vote:req.body.vote
+        
+            }).then(()=>{
+                res.status(201).json({message:"vote registred"})
+            })
+        }
+    }).catch(()=>{
+        res.status(401).json({message:"already voted!"})
     })
-}
+    
+} 
 exports.unVotePost=(req, res, next)=>{
-
-    Vote.destroy({
-        where:{id:req.body.voteid}
-    })
+    
+        Vote.destroy({where:{postId:req.params.id, userId:res.user.id
+        }}).then(()=>{
+            res.status(200).json({message:"unvoted"})
+        }).catch(
+            (error) =>{
+                res.status(404).json({
+                    error:error
+                });
+            }
+        );
+    
+  
+}
+exports.getPostsVotes=(req, res, next)=>{
+    Vote.findAll({where:{postId:req.params.PostId}}).then((votes)=>{
+    res.status(200).json(votes)
+}).catch(
+    (error) =>{
+        res.status(404).json({
+            error:error
+        });
+    }
+);
 }

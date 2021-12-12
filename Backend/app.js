@@ -40,11 +40,11 @@ user.hasMany(vote);
 // use below code with 'force=true'to reintianlize the db
 // ----------------------------------------
 
-// sequelize.sync().then(()=>{
-//   console.log('this works');
-// }).catch((err)=>{
-//   console.log(err)
-// });
+sequelize.sync().then(()=>{
+  console.log('this works');
+}).catch((err)=>{
+  console.log(err)
+});
 // -------------------------------------------
 
 app.use('/api/user', userRoutes);

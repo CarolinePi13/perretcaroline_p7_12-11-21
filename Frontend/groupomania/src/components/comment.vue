@@ -31,7 +31,7 @@
       <div class="comment-likes">
         <p class="like-count">12</p>
         <img
-          src="../assets/like-thumbs-up-hand-social-media_icon-icons.com_61429.png"
+          src="../assets/like_thumb_up_icon_empty.svg"
           alt="like button"
           class="comment-like-button"
         />
@@ -89,7 +89,6 @@ export default {
     getCommentUserData() {
       this.getLocalStorage();
       const id = this.commentUserId;
-      console.log(id);
 
       axios({
         method: "GET",
@@ -113,7 +112,6 @@ export default {
     deleteComment(id) {
       const self = this;
       this.getLocalStorage();
-      console.log(id);
 
       axios({
         method: "DELETE",
