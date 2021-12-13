@@ -1,5 +1,5 @@
 <template>
-  <div class="isLoggedIn">
+  <div class="isLoggedIn wall">
     <createPost :currentUserData="currentUserData" />
     <postCard
       v-for="post in Posts"
@@ -9,7 +9,7 @@
       :currentUserData="currentUserData"
     />
   </div>
-  <div id="modals"></div>
+  <div id="modals" autofocus></div>
 </template>
 
 <script>

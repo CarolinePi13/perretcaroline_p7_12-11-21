@@ -1,57 +1,63 @@
 <template>
   <div class="modify-bg">
-    <div class="mod-card shadow">
-      <img
-        src="../assets/4115230-cancel-close-cross-delete_114048.svg"
-        alt="close window"
-        class="close"
-        @click="close"
-      />
-      <div class="post-content">
-        <form
-          action="submit"
-          @submit.prevent="updateAPost"
-          class="form-content"
-        >
-          <div class="show-img" v-if="newPostData.image">
-            <img :src="previewPostUrl" alt="image du post" class="post-image" />
-          </div>
-
-          <textarea
-            class="to-publish"
-            type="text"
-            oninput='this.style.height = "";this.style.height =
-                this.scrollHeight + "px"'
-            rows:10
-            max-length:1200
-            min-length:1
-            v-model="newPostData.content"
-          />
-
-          <div class="form-bottom">
-            <div class="upload-file">
-              <label for="add-img" class="label-img">
-                <input
-                  type="file"
-                  id="add-img"
-                  v-show="hideInputOn"
-                  @change="addFile"
-                />
-                <img
-                  src="../assets/frame_gallery_image_images_photo_picture_pictures_icon_123209.svg"
-                  alt="down"
-                  aria-label="afficher les commentaires"
-                  class="add-img"
-                />
-                <span v-if="newPostData.image">Modifiez l'image</span>
-                <span v-else>Ajoutez une Image</span>
-              </label>
+    <transition name="slide" appear>
+      <div class="mod-card shadow">
+        <img
+          src="../assets/4115230-cancel-close-cross-delete_114048.svg"
+          alt="close window"
+          class="close"
+          @click="close"
+        />
+        <div class="post-content">
+          <form
+            action="submit"
+            @submit.prevent="updateAPost"
+            class="form-content"
+          >
+            <div class="show-img" v-if="newPostData.image">
+              <img
+                :src="previewPostUrl"
+                alt="image du post"
+                class="post-image"
+              />
             </div>
-            <button type="submit">publier</button>
-          </div>
-        </form>
+
+            <textarea
+              class="to-publish"
+              type="text"
+              oninput='this.style.height = "";this.style.height =
+                this.scrollHeight + "px"'
+              rows:10
+              max-length:1200
+              min-length:1
+              v-model="newPostData.content"
+            />
+
+            <div class="form-bottom">
+              <div class="upload-file">
+                <label for="add-img" class="label-img">
+                  <input
+                    type="file"
+                    id="add-img"
+                    v-show="hideInputOn"
+                    @change="addFile"
+                  />
+                  <img
+                    src="../assets/frame_gallery_image_images_photo_picture_pictures_icon_123209.svg"
+                    alt="down"
+                    aria-label="afficher les commentaires"
+                    class="add-img"
+                  />
+                  <span v-if="newPostData.image">Modifiez l'image</span>
+                  <span v-else>Ajoutez une Image</span>
+                </label>
+              </div>
+              <button type="submit" class="button">publier</button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 <script>
@@ -126,12 +132,19 @@ export default {
 .mod-card {
   width: 95%;
   height: 450px;
-  background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
   flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 97;
+  max-width: 400px;
+  background-color: #fff;
+  border-radius: 16px;
 }
 .post-text {
   height: 80%;
@@ -147,14 +160,14 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
-  width: 100%;
+  right: 0;
+  bottom: 0;
+  z-index: 98;
+  background-color: rgba(168, 140, 141, 0.4);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(168, 140, 141, 1);
-  img {
-  }
 }
 form {
   height: 100%;
@@ -192,5 +205,14 @@ form {
 .close {
   align-self: flex-end;
   margin: 1px;
+}
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.5s;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateY(-50%) translateX(100vw);
 }
 </style>

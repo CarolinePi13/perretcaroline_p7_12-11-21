@@ -35,7 +35,7 @@
           placeholder="écrivez votre texte ici..."
           ref="newPost"
         />
-        <input type="submit" value="Publier" class="publier" />
+        <input type="submit" value="Publier" class="publier button" />
       </form>
     </div>
 
@@ -175,7 +175,7 @@ img {
 input {
   border-radius: 8px;
 }
-button {
+.button {
   height: 30px;
   border-radius: 8px;
   background: linear-gradient(
@@ -185,6 +185,17 @@ button {
     rgba(238, 236, 236, 0.65),
     rgba(175, 90, 93, 0.65)
   );
+  padding: 5px;
+
+  color: black;
+  cursor: pointer;
+
+  box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
+  transition: 0.4s ease-out;
+
+  &:hover {
+    box-shadow: 6px 6px rgba(0, 0, 0, 0.6);
+  }
 }
 
 .post-text {

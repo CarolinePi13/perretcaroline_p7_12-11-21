@@ -18,7 +18,7 @@
           @click="showIfAllowed()"
         />
       </div>
-      <div class="post-content">
+      <div class="post-content" @click="closeSuppModModule()">
         <div class="show-img" v-show="post.imageUrl !== null">
           <img :src="post.imageUrl" alt="Post image" />
         </div>
@@ -78,13 +78,13 @@
       </div>
     </div>
   </div>
-  <teleport to="#modals">
+  <transition name="fade" appear>
     <modifyPost
       :post="post"
       v-if="modifyPostShow"
       @cancelUpdate="modifyPostShow = false"
     />
-  </teleport>
+  </transition>
 </template>
 <script>
 import SuppModModule from "./modal.vue";
@@ -136,6 +136,17 @@ export default {
     },
     toggleUpdatePost() {
       this.modifyPostShow = !this.modifyPostShow;
+      this.showModule = false;
+    },
+    closeSuppModModule() {
+      this.showModule = false;
+    },
+    showIfAllowed() {
+      if ((this.showModule == false) & (this.userId == this.post.userId)) {
+        return (this.showModule = true);
+      } else {
+        return (this.showModule = false);
+      }
     },
     likePost() {
       let body = {
@@ -302,13 +313,6 @@ export default {
           console.log(response);
         });
     },
-    showIfAllowed() {
-      if ((this.showModule == false) & (this.userId == this.post.userId)) {
-        return (this.showModule = true);
-      } else {
-        return (this.showModule = false);
-      }
-    },
   },
   created() {
     this.getPostUserData();
@@ -356,16 +360,28 @@ img {
 input {
   border-radius: 8px;
 }
-button {
-  height: 30px;
+.button {
+  appearance: none;
+  outline: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  display: inline-block;
+  padding: 10px;
+  background-image: linear-gradient(to right, #cc5a5a, #c26666);
   border-radius: 8px;
-  background: linear-gradient(
-    120deg,
-    rgba(205, 120, 123, 0.65),
-    rgba(216, 174, 174, 0.65),
-    rgba(238, 236, 236, 0.65),
-    rgba(175, 90, 93, 0.65)
-  );
+
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+
+  box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
+  transition: 0.4s ease-out;
+
+  &:hover {
+    box-shadow: 6px 6px rgba(0, 0, 0, 0.6);
+  }
 }
 .unfold {
   display: flex;
@@ -465,8 +481,16 @@ div.comment-button > img {
 div.comment-count > p {
   margin: 0 2% 1% 2%;
 }
-#modals {
-  width: 100%;
-  height: 100vh;
+.fade-leave-to,
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-leave-from,
+.fade-enter-to {
+  opactity: 1;
+}
+.fade-leave-active,
+.fade-enter-active {
+  transition: all 1s ease;
 }
 </style>

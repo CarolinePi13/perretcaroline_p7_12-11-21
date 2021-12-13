@@ -22,30 +22,31 @@
         @deleteOrConfirm="deleteComment(comment.id)"
         :key="comment.id"
       />
-      <div class="comment-text">
+      <div class="comment-text" @click="closeSuppModModule()">
         <p>
           {{ comment.content }}
         </p>
       </div>
 
-      <div class="comment-likes">
+      <!--  <div class="comment-likes">
         <p class="like-count">12</p>
         <img
           src="../assets/like_thumb_up_icon_empty.svg"
           alt="like button"
           class="comment-like-button"
         />
-      </div>
+      </div>-->
     </div>
   </div>
-  <teleport to="#modals">
+
+  <transition name="fade" appear>
     <modifyComment
       v-if="modifyCommentShow"
       :comment="comment"
       :key="comment.id"
       @cancelUpdate="toggleUpdateComment()"
     />
-  </teleport>
+  </transition>
 </template>
 <script>
 import modifyComment from "../components/modifyComment.vue";
@@ -71,6 +72,9 @@ export default {
     };
   },
   methods: {
+    closeSuppModModule() {
+      this.showModule = false;
+    },
     showIfAllowed() {
       if ((this.showModule == false) & (this.userId == this.comment.userId)) {
         return (this.showModule = true);
@@ -80,6 +84,7 @@ export default {
     },
     toggleUpdateComment() {
       this.modifyCommentShow = !this.modifyCommentShow;
+      this.showModule = false;
     },
 
     getLocalStorage() {
@@ -157,6 +162,7 @@ export default {
 }
 .comment-text {
   font-size: 0.8em;
+  margin: 10px;
 }
 p.user-name--comment {
   margin: 2%;
