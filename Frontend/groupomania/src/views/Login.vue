@@ -28,6 +28,7 @@
             required
             type="password"
             v-model="loginUserData.password"
+            autocomplete="current-password"
           />
         </div>
         <p class="error">{{ loginError }}</p>
@@ -37,12 +38,21 @@
     <div class="card card_sign-up" v-if="mode == 'create'">
       <form action="sign-up" class="card_flex" @submit.prevent="createAccount">
         <div class="userName column">
-          <label for="userName">Pseudo: </label>
+          <label for="userName">Nom et Prenom: </label>
           <input
             id="userName"
             required
             type="text"
             v-model="signupUserData.userName"
+          />
+        </div>
+        <div class="jobTitle column">
+          <label for="jobTitle">Poste: </label>
+          <input
+            id="jobTitle"
+            required
+            type="text"
+            v-model="signupUserData.jobTitle"
           />
         </div>
 
@@ -97,6 +107,7 @@ export default {
           email: "",
           password: "",
           avatar: "",
+          jobTitle: "",
         },
       ],
       loginUserData: [
@@ -125,6 +136,7 @@ export default {
       let formData = new FormData();
 
       formData.append("userName", this.signupUserData.userName);
+      formData.append("jobTitle", this.signupUserData.jobTitle);
       formData.append("email", this.signupUserData.email);
       formData.append("password", this.signupUserData.password);
       formData.append("image", this.signupUserData.avatar);
@@ -164,7 +176,7 @@ export default {
         email: this.loginUserData.email,
         password: this.loginUserData.password,
       };
-
+      let isLoggedIn = true;
       axios({
         method: "POST",
         url: "http://localhost:3000/api/user/login",
@@ -179,6 +191,8 @@ export default {
           localStorage.setItem("token", token);
           let userId = response.data.userId;
           localStorage.setItem("userId", userId);
+          console.log(response);
+          localStorage.setItem("loggedIn", isLoggedIn);
           console.log(response);
         })
         .then(() => {

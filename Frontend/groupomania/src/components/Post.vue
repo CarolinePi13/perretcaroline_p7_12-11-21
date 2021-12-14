@@ -24,7 +24,7 @@
         </div>
 
         <div class="post-text">
-          <p>
+          <p v-if="post.content !== 'undefined'">
             {{ post.content }}
           </p>
         </div>
@@ -118,7 +118,7 @@ export default {
       postUserData: "",
       totalLikes: 0,
       modifyPostShow: false,
-      thisUserliked: false,
+      thisUserliked: "",
       thisVoteId: "",
     };
   },
@@ -176,25 +176,6 @@ export default {
           console.log(err);
         });
     },
-    getThisVoteId() {
-      let postId = this.postId;
-      axios({
-        method: "GET",
-        url: `http://localhost:3000/api/posts/vote-post/${postId}`,
-
-        headers: {
-          authorization: `Bearer ${this.token}`,
-          "content-type": "application/json",
-        },
-      })
-        .then((res) => {
-          // this.thisVoteId = res.data.id;
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     getThisPostsVotes() {
       let PostId = this.postId;
 
@@ -209,8 +190,32 @@ export default {
       })
         .then((res) => {
           this.totalLikes = res.data.length;
+          this.allLikes = res.data;
+        })
 
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getOneVote() {
+      let id = this.postId;
+
+      axios({
+        method: "GET",
+        url: `http://localhost:3000/api/posts/one-vote/${id}`,
+
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then((res) => {
           console.log(res);
+          if (res.data.id) {
+            this.thisUserliked = true;
+          } else {
+            this.thisUserliked = false;
+          }
         })
 
         .catch((err) => {
@@ -243,7 +248,6 @@ export default {
     deletePost(id) {
       const self = this;
       this.getLocalStorage();
-      console.log(id);
 
       axios({
         method: "DELETE",
@@ -313,6 +317,9 @@ export default {
           console.log(response);
         });
     },
+  },
+  beforeMount() {
+    this.getOneVote();
   },
   created() {
     this.getPostUserData();
@@ -434,8 +441,10 @@ div.comment-button > img {
 .post-content {
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 80%;
   align-items: center;
+  margin-top: 10px;
+
   img {
     width: 100%;
     max-width: 250px;
@@ -447,6 +456,15 @@ div.comment-button > img {
   text-align: justify;
   font-size: 14px;
   width: 100%;
+  font-size: 1.2em;
+  margin-bottom: 30px;
+  margin-top: 10px;
+  p {
+    margin: 0;
+    background-color: lighten(rgba(204, 90, 90, 0.65), 30%);
+    border-radius: 15px;
+    padding: 20px;
+  }
 }
 .three-dots {
   position: absolute;

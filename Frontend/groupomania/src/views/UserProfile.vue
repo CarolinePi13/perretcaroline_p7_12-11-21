@@ -3,10 +3,8 @@
     <div class="user">
       <img :src="userData.avatar" alt="user avatar" class="user-avatar" />
       <div class="user-data">
-        <p class="first-name">Prenom: {{ userData.firstName }}</p>
-        <p class="last-name">Nom: {{ userData.lastName }}</p>
-        <p class="email">Email: {{ userData.email }}</p>
-        <p class="password">Mot-de-passe:</p>
+        <p class="userName">{{ userData.userName }}</p>
+        <p class="jobTitle">{{ userData.jobTitle }}</p>
       </div>
       <img
         src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
@@ -15,7 +13,10 @@
         @click="toggleModule"
       />
       <div class="" v-if="showModule">
-        <SuppModModule @deleteOrConfirm="confirmDelete" />
+        <SuppModModule
+          @deleteOrConfirm="confirmDelete()"
+          @updateThis="showModify()"
+        />
       </div>
     </div>
   </div>
@@ -30,27 +31,39 @@
       </button>
     </div>
   </div>
+  <transition name="fade" appear>
+    <modifyUserData
+      v-if="modifyMode"
+      :userData="userData"
+      @cancelUpdate="modifyMode = false"
+    />
+  </transition>
 </template>
 <script>
 import SuppModModule from "../components/modal.vue";
 import axios from "axios";
-
+import modifyUserData from "../components/modifyUserData";
 export default {
   name: "user",
   components: {
     SuppModModule,
+    modifyUserData,
   },
 
   data() {
     return {
       showConfirm: false,
-      userData: {},
+      userData: "",
       showModule: false,
       token: "",
       userId: "",
+      modifyMode: false,
     };
   },
   methods: {
+    showModify() {
+      this.modifyMode = true;
+    },
     toggleModule() {
       this.showModule = !this.showModule;
     },
@@ -85,15 +98,13 @@ export default {
           console.log(error);
         });
     },
-  },
-  beforeCreate() {
-    let token = localStorage.getItem("token");
-    this.token = token;
-    let userId = localStorage.getItem("userId");
-    this.userId = userId;
-    console.log(userId);
+    displayUser() {
+      let token = localStorage.getItem("token");
+      this.token = token;
+      let userId = localStorage.getItem("userId");
+      this.userId = userId;
+      console.log(userId);
 
-    const displayUser = () => {
       axios({
         method: "GET",
         url: `http://localhost:3000/api/user/${userId}`,
@@ -102,7 +113,7 @@ export default {
           "content-type": "application/json",
         },
       })
-        .then((response) => (this.userData = response.data))
+        .then((response) => (this.userData = response.data.user))
         .then(function (response) {
           //handle success
           console.log(response);
@@ -112,15 +123,17 @@ export default {
 
           console.log(response);
         });
-    };
-    displayUser();
+    },
+  },
+  created() {
+    this.displayUser();
   },
 };
 </script>
 <style scoped lang="scss">
 .user-card {
   width: 95%;
-  height: fit-content;
+  height: 500px;
   border-bottom: 1px solid gray;
   border-left: 1px solid gray;
   border-right: 1px solid gray;
@@ -136,16 +149,25 @@ export default {
 
 .user {
   display: flex;
+  flex-direction: column;
   align-items: center;
   width: 90%;
 }
 .user-data {
-  margin: 20px;
-  width: 50%;
+  margin: 10px;
+  width: 90%;
 
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  font-weight: bold;
+  font-size: 2em;
+
+  border-radius: 15px;
+  padding: 10px;
+  background-color: rgba(149, 55, 58, 0.5);
+
+  border: 1px solid rgb(94, 86, 86);
   p {
     margin: 5px;
   }
@@ -156,8 +178,8 @@ export default {
   top: 5px;
 }
 .user-avatar {
-  height: 75px;
-  width: 75px;
+  height: 120px;
+  width: 120px;
   border-radius: 50%;
   overflow: hidden;
   object-fit: cover;
@@ -194,5 +216,17 @@ export default {
   &--cancel {
     background: rgba(15, 31, 65, 0.7);
   }
+}
+.fade-leave-to,
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-leave-from,
+.fade-enter-to {
+  opactity: 1;
+}
+.fade-leave-active,
+.fade-enter-active {
+  transition: all 1s ease;
 }
 </style>

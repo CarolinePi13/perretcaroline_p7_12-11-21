@@ -12,6 +12,7 @@ router.delete('/:id',auth.checkUser, postCtrl.DeleteAPost);
 router.post('/vote-post',auth.checkUser, postCtrl.votePost);
 router.delete('/vote-post/:id',auth.checkUser, postCtrl.unVotePost);
 router.get('/all-votes-post/:PostId', auth.checkUser,postCtrl.getPostsVotes );
+router.get('/one-vote/:id',auth.checkUser, postCtrl.getOneVote);
 
 
 module.exports = router;

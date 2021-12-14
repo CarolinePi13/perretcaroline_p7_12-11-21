@@ -44,7 +44,7 @@
                   />
                   <img
                     src="../assets/frame_gallery_image_images_photo_picture_pictures_icon_123209.svg"
-                    alt="down"
+                    alt=" add a file"
                     aria-label="afficher les commentaires"
                     class="add-img"
                   />
@@ -131,7 +131,8 @@ export default {
 <style scoped lang="scss">
 .mod-card {
   width: 95%;
-  height: 450px;
+  height: fit-content;
+  min-height: 450px;
   display: flex;
   align-items: center;
   justify-content: center;

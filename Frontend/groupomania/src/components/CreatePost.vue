@@ -49,8 +49,7 @@
         />
         <img
           src="../assets/frame_gallery_image_images_photo_picture_pictures_icon_123209.svg"
-          alt="down"
-          aria-label="afficher les commentaires"
+          alt="ajouter une image"
           class="add-img"
         />
         <span>Ajoutez une image</span>
@@ -200,6 +199,9 @@ input {
 
 .post-text {
   width: 95%;
+  textarea {
+    font-size: 1.2em;
+  }
 }
 .three-dots {
   position: absolute;

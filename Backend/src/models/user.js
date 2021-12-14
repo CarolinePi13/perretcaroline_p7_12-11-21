@@ -19,6 +19,11 @@ const User =sequelize.define('user',
             allowNull:false,
             unique:true
         },
+        jobTitle:{
+            type:Sequelize.STRING,
+            allowNull:true,
+           
+        },
         password:{
             type:Sequelize.STRING,
             allowNull:false,

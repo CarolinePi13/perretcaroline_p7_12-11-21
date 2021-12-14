@@ -5,7 +5,7 @@ require('dotenv').config();
 const helmet = require("helmet");
 const app = express();
 const path =require('path');
-const fs =require('fs');
+
 const cors= require('cors')
 //routes and models
 
@@ -27,24 +27,39 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(helmet())
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 
-user.hasMany(post);
-post.hasMany(comment);
-user.hasMany(comment);
-post.hasMany(vote)
-user.hasMany(vote);
+user.hasMany(post,{
+
+  onDelete: 'CASCADE'
+});
+post.hasMany(comment,{
+
+  onDelete: 'CASCADE'
+});
+user.hasMany(comment,{
+
+  onDelete: 'CASCADE'
+});
+post.hasMany(vote,{
+
+  onDelete: 'CASCADE'
+})
+user.hasMany(vote,{
+
+  onDelete: 'CASCADE'
+});
 
 // use below code with 'force=true'to reintianlize the db
 // ----------------------------------------
 
-sequelize.sync().then(()=>{
-  console.log('this works');
-}).catch((err)=>{
-  console.log(err)
-});
+// sequelize.sync().then(()=>{
+//   console.log('this works');
+// }).catch((err)=>{
+//   console.log(err)
+// });
 // -------------------------------------------
 
 app.use('/api/user', userRoutes);

@@ -13,7 +13,7 @@ let createSuperUser=()=>{
              User.create({//creates the object user
 
                 userName:process.env.superUserName,
-              
+                jobTitle:"DRH",
                 email: process.env.superEmail,
                 password: hash,
                 isAdmin:true
@@ -53,6 +53,7 @@ exports.signup= (req, res, next) =>{
                     userName:req.body.userName,
                     email: req.body.email,
                     password: hash,
+                    jobTitle:req.body.jobTitle,
                     // avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
                    
                 })
@@ -61,6 +62,7 @@ exports.signup= (req, res, next) =>{
                     userName:req.body.userName,
                     email: req.body.email,
                     password: hash,
+                    jobTitle:req.body.jobTitle,
                     avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
             })
          
@@ -129,7 +131,7 @@ exports.login= (req, res, next) =>{
 }
 exports.changeUserInfo= (req, res, next) =>{
     User.update({
-         userName:req.body.firstName,
+        jobTitle:req.body.jobTitle,
            
          avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     }
@@ -144,7 +146,7 @@ exports.changeUserInfo= (req, res, next) =>{
 };
 exports.deleteUser= (req, res, next) =>{
     console.log(req.params.id);
-    if(req.params.id==req.token.userId){
+    if(req.params.id==res.user.id){
         User.destroy({where: {id:req.params.id}})
         .then(() => res.status(200).json({ message: 'user deleted'}))
         .catch(

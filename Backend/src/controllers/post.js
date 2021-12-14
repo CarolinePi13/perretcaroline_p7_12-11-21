@@ -200,3 +200,15 @@ exports.getPostsVotes=(req, res, next)=>{
     }
 );
 }
+exports.getOneVote=(req,res,next)=>{
+    Vote.findOne({where:{postId:req.params.id, userId:res.user.id
+    }}).then((vote)=>{
+        res.status(200).json(vote)
+    }).catch(
+        (error) =>{
+            res.status(404).json({
+                error:error
+            });
+        }
+    );
+}
