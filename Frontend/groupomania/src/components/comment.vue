@@ -69,6 +69,7 @@ export default {
       commentUserData: "",
       commentUserId: this.comment.userId,
       modifyCommentShow: false,
+      isAdmin: "",
     };
   },
   methods: {
@@ -77,6 +78,8 @@ export default {
     },
     showIfAllowed() {
       if ((this.showModule == false) & (this.userId == this.comment.userId)) {
+        return (this.showModule = true);
+      } else if ((this.showModule == false) & (this.isAdmin == "true")) {
         return (this.showModule = true);
       } else {
         return (this.showModule = false);
@@ -90,6 +93,7 @@ export default {
     getLocalStorage() {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
+      this.isAdmin = localStorage.getItem("isAdmin");
     },
     getCommentUserData() {
       this.getLocalStorage();

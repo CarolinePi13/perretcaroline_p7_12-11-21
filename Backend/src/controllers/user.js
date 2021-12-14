@@ -108,6 +108,7 @@ exports.login= (req, res, next) =>{
                    res.status(200).json({
                        userId : user.id,
                        token:token,
+                       isAdmin:user.isAdmin
                        
                    }).catch(
                     (error)=>{
@@ -130,19 +131,30 @@ exports.login= (req, res, next) =>{
     );
 }
 exports.changeUserInfo= (req, res, next) =>{
-    User.update({
-        jobTitle:req.body.jobTitle,
-           
-         avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    }
-       
-    ).then(()=>{
-        res.status(200).json({
-            message:"avatar changed"
-        })
-    }).catch((error=>{
-        return error
-    }))
+    
+    User.findOne({where :{ userId: req.params.id}}).then(()=>{
+
+       const avatarUpdate= {avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`};
+        User.update(avatarUpdate
+       ,{where :{ userId: req.params.id}}
+          
+       ).then(()=>{
+           res.status(200).json({
+               message:"avatar changed"
+           })  
+        }).catch((error=>{
+            res.status(404).json({
+                error:error,
+                message:"update failed"
+            })
+        }))
+    }).catch(()=>{
+res.status(404).json({
+    message:"could not find user"
+})
+    })
+ 
+  
 };
 exports.deleteUser= (req, res, next) =>{
     console.log(req.params.id);
@@ -184,3 +196,20 @@ exports.displayUser=(req,res,next) =>{
           
     }
    
+exports.displayAllUsers=(req, res, next)=>{
+User.findAll.then((users)=>{
+    if (!users) {
+        return res.status(404).send(new Error('users not found!'));
+    }else if(users.avatar=="account_avatar_face_man_people_profile_user_icon_123197.png"){
+        users.avatar = req.protocol + '://' + req.get('host') + '/images/' + user.avatar;
+        res.status(200).json({user}); 
+    }else{
+      res.status(200).json({user}); 
+    }
+})   .catch(
+    (error) =>{
+        res.status(400).json({
+            error:error
+        });
+    });
+}

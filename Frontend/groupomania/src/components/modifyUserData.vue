@@ -9,7 +9,7 @@
           @click="close"
         />
         <div class="user">
-          <form action="submit">
+          <form action="submit" @submit.prevent="updateUser()">
             <div class="user-avatar-change">
               <img
                 :src="previewAvatarUrl"
@@ -25,11 +25,7 @@
               <p class="userName">{{ userData.userName }}</p>
               <p class="jobTitle">{{ userData.jobTitle }}</p>
             </div>
-            <input
-              type="submit"
-              class="button margin-button"
-              @submit.prevent="updateUser()"
-            />
+            <input type="submit" class="button margin-button" />
           </form>
         </div>
       </div>
@@ -37,6 +33,7 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "modifyUserData",
   props: ["userData"],
@@ -64,7 +61,39 @@ export default {
       const file = this.newUserData.avatar;
       this.previewAvatarUrl = URL.createObjectURL(file);
     },
-    updateUser() {},
+    getLocalStorage() {
+      this.token = localStorage.getItem("token");
+      this.userId = localStorage.getItem("userId");
+    },
+    updateUser() {
+      this.getLocalStorage();
+      let id = this.userId;
+      let formData = new FormData();
+      formData.append("avatar", this.newUserData.avatar);
+
+      for (var value of formData.values()) {
+        console.log(value);
+      }
+
+      axios({
+        method: "PATCH",
+        url: `http://localhost:3000/api/user/${id}`,
+        data: formData,
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          Accept: "application/json",
+          "content-type": "multipart/form-data",
+        },
+      })
+        .then(function (response) {
+          console.log(response);
+        })
+
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
+    },
   },
 };
 </script>

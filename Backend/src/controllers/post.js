@@ -86,7 +86,7 @@ exports.ModifyAPost=(req, res, next) =>{
        
         if(post.userId==res.user.id){
         
-        const PostObject = req.file? // if the requests contains a file parses the body of the request
+        const PostObject = req.file? //if the reequest contains a file
         {
             ...req.body,
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -94,11 +94,7 @@ exports.ModifyAPost=(req, res, next) =>{
     
            Post.update({...PostObject},{
               where:{ id: req.params.id}
-           })
-        }
-        
-    })//passes either one whether it contains a file or not
-           .then(()=> res.status(200).json({ message: "Object modified !"}))
+           })      .then(()=> res.status(200).json({ message: "Object modified !"}))
            .catch(
             (error) =>{
                 res.status(400).json({
@@ -106,16 +102,19 @@ exports.ModifyAPost=(req, res, next) =>{
                 });
             }
         );
-    
-    // }else{
-    //     res.status(401).json({message:"unauthorized request"})
-    // }
+   
+         
+        }else{
+        res.status(401).json({message:"unauthorized request"})
+        }
+        
+    })
+     
 };
 exports.DeleteAPost=(req, res, next) =>{
 
     Post.findOne({where: {id:req.params.id}}).then((post)=>{
-       
-        if(post.userId===res.user.id){
+       if ((post.userId == res.user.id)||(res.user.isAdmin)){
             if (post.imageUrl!== null){
                 const filename = post.imageUrl.split('/images/')[1];
                 fs.unlink("images/"+ filename,()=>{

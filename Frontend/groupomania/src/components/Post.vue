@@ -120,6 +120,7 @@ export default {
       modifyPostShow: false,
       thisUserliked: "",
       thisVoteId: "",
+      isAdmin: "",
     };
   },
   methods: {
@@ -133,6 +134,7 @@ export default {
     getLocalStorage() {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
+      this.isAdmin = localStorage.getItem("isAdmin");
     },
     toggleUpdatePost() {
       this.modifyPostShow = !this.modifyPostShow;
@@ -143,6 +145,8 @@ export default {
     },
     showIfAllowed() {
       if ((this.showModule == false) & (this.userId == this.post.userId)) {
+        return (this.showModule = true);
+      } else if ((this.showModule == false) & (this.isAdmin == "true")) {
         return (this.showModule = true);
       } else {
         return (this.showModule = false);
