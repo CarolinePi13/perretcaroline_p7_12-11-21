@@ -197,7 +197,7 @@ export default {
           localStorage.setItem("isAdmin", response.data.isAdmin);
         })
         .then(() => {
-          // this.$router.push("/wallposts");
+          this.$router.push("/wallposts");
         })
         .catch(function (response) {
           //handle error

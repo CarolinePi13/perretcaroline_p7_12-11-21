@@ -2,7 +2,7 @@
   <header>
     <nav class="Mon-compte">
       <router-link :to="{ name: 'Wall' }"> Fil d'actu</router-link>
-
+      <router-link :to="{ name: 'admin' }"> admin</router-link>
       <router-link :to="{ name: 'User' }">
         <img src="../assets/user_account_icon_145918.png" />
         <span>Mon compte</span></router-link

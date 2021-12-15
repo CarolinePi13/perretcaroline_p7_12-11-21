@@ -30,7 +30,8 @@ const User =sequelize.define('user',
         },
         avatar:{
             type:Sequelize.STRING,
-            defaultValue:"account_avatar_face_man_people_profile_user_icon_123197.png",
+               defaultValue:"account_avatar_face_man_people_profile_user_icon_123197.png",
+            // defaultValue:"http://localhost:3000/images/account_avatar_face_man_people_profile_user_icon_123197.png",
             allowNull:true
         },
         isAdmin:{

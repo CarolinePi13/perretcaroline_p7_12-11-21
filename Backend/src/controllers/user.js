@@ -132,26 +132,35 @@ exports.login= (req, res, next) =>{
 }
 exports.changeUserInfo= (req, res, next) =>{
     
-    User.findOne({where :{ userId: req.params.id}}).then(()=>{
+    User.findOne({where :{ id: req.params.id}}).then((user)=>{
 
-       const avatarUpdate= {avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`};
-        User.update(avatarUpdate
-       ,{where :{ userId: req.params.id}}
-          
-       ).then(()=>{
-           res.status(200).json({
-               message:"avatar changed"
-           })  
-        }).catch((error=>{
-            res.status(404).json({
-                error:error,
-                message:"update failed"
-            })
-        }))
+        if(user.id==res.user.id){
+        
+            const UserObject = req.file? //if the request contains a file
+            {
+                ...req.body,
+                avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+            }:{...req.body};// if not sends it as an object
+        
+               User.update({...UserObject},{
+                  where:{ id: req.params.id}
+               })      .then(()=> res.status(200).json({ message: "Object modified !"}))
+               .catch(
+                (error) =>{
+                    res.status(400).json({
+                        error:error
+                    });
+                }
+            );
+       
+             
+            }else{
+            res.status(401).json({message:"unauthorized request"})
+            }
     }).catch(()=>{
-res.status(404).json({
-    message:"could not find user"
-})
+        res.status(404).json({
+            message:"could not find user"
+        })
     })
  
   
@@ -178,11 +187,7 @@ exports.displayUser=(req,res,next) =>{
             if (!user) {
                 return res.status(404).send(new Error('user not found!'));
             }
-             else if(
-                 user.avatar=="account_avatar_face_man_people_profile_user_icon_123197.png"){
-                  user.avatar = req.protocol + '://' + req.get('host') + '/images/' + user.avatar;
-                  res.status(200).json({user}); 
-              }else{
+            else{
                 res.status(200).json({user}); 
               }
              
@@ -197,14 +202,12 @@ exports.displayUser=(req,res,next) =>{
     }
    
 exports.displayAllUsers=(req, res, next)=>{
-User.findAll.then((users)=>{
+User.findAll().then((users)=>{
+    
     if (!users) {
         return res.status(404).send(new Error('users not found!'));
-    }else if(users.avatar=="account_avatar_face_man_people_profile_user_icon_123197.png"){
-        users.avatar = req.protocol + '://' + req.get('host') + '/images/' + user.avatar;
-        res.status(200).json({user}); 
     }else{
-      res.status(200).json({user}); 
+      res.status(200).json({users}); 
     }
 })   .catch(
     (error) =>{

@@ -22,8 +22,16 @@
               </label>
             </div>
             <div class="user-data">
-              <p class="userName">{{ userData.userName }}</p>
-              <p class="jobTitle">{{ userData.jobTitle }}</p>
+              <input
+                class="userName"
+                type="text"
+                v-model="newUserData.userName"
+              />
+              <input
+                class="jobTitle"
+                type="text"
+                v-model="newUserData.jobTitle"
+              />
             </div>
             <input type="submit" class="button margin-button" />
           </form>
@@ -46,6 +54,8 @@ export default {
         avatar: this.userData.avatar,
       },
       previewAvatarUrl: this.userData.avatar,
+      token: "",
+      userId: "",
     };
   },
   methods: {
@@ -69,14 +79,15 @@ export default {
       this.getLocalStorage();
       let id = this.userId;
       let formData = new FormData();
-      formData.append("avatar", this.newUserData.avatar);
-
+      formData.append("image", this.newUserData.avatar);
+      formData.append("userName", this.newUserData.userName);
+      formData.append("jobTitle", this.newUserData.jobTitle);
       for (var value of formData.values()) {
         console.log(value);
       }
 
       axios({
-        method: "PATCH",
+        method: "PUT",
         url: `http://localhost:3000/api/user/${id}`,
         data: formData,
         headers: {
@@ -135,7 +146,7 @@ export default {
   background-color: rgba(149, 55, 58, 0.5);
 
   border: 1px solid rgb(94, 86, 86);
-  p {
+  input {
     margin: 5px;
   }
 }

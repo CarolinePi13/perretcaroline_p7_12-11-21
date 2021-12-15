@@ -200,6 +200,7 @@ exports.getPostsVotes=(req, res, next)=>{
 );
 }
 exports.getOneVote=(req,res,next)=>{
+    console.log(req.params.id);
     Vote.findOne({where:{postId:req.params.id, userId:res.user.id
     }}).then((vote)=>{
         res.status(200).json(vote)

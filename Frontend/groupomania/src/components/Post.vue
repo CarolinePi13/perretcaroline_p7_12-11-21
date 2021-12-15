@@ -322,15 +322,15 @@ export default {
         });
     },
   },
-  beforeMount() {
-    this.getOneVote();
-  },
+
   created() {
+    this.getLocalStorage();
     this.getPostUserData();
     this.getThisPostsVotes();
   },
   mounted() {
     this.getAllComments();
+    this.getOneVote();
   },
   computed: {},
 };
