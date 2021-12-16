@@ -1,29 +1,42 @@
 <template>
   <header>
-    <nav class="Mon-compte">
-      <router-link :to="{ name: 'Wall' }"> Fil d'actu</router-link>
-      <router-link :to="{ name: 'admin' }"> admin</router-link>
+    <nav class="shadow">
+      <router-link :to="{ name: 'Wall' }">
+        <img class="mon-compte" src="../assets/snall-icone-coupe.png"
+      /></router-link>
+      <router-link :to="{ name: 'admin' }" v-if="!isAdmin"> admin</router-link>
       <router-link :to="{ name: 'User' }">
         <img src="../assets/user_account_icon_145918.png" />
-        <span>Mon compte</span></router-link
-      >
+      </router-link>
+      <img
+        src="../assets/log_out_icon_197724.png"
+        alt="logout"
+        @click="logout"
+      />
     </nav>
-
-    <img src="../assets/log_out_icon_197724.png" alt="logout" @click="logout" />
   </header>
 </template>
 
 <script>
 export default {
   name: "navigation",
+
   data() {
-    return {};
+    return {
+      isAdmin: "",
+    };
   },
   methods: {
+    getLocalStorage() {
+      this.isAdmin = localStorage.getItem("isAdmin");
+    },
     logout() {
       localStorage.clear();
       this.$router.push("/");
     },
+  },
+  created() {
+    this.getLocalStorage();
   },
 };
 </script>
@@ -41,7 +54,20 @@ p {
   color: black;
 }
 
-.Mon-compte {
+nav {
   display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: center;
+
+  a {
+    text-decoration: none;
+    color: black;
+    font-size: 1.4em;
+    display: flex;
+    align-items: center;
+  }
+  background-color: rgba(204, 90, 90, 1);
 }
 </style>

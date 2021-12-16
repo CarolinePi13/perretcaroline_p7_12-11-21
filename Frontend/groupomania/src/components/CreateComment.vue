@@ -27,7 +27,7 @@
         min-length:1
         v-model="content"
       />
-      <input type="submit" value="Publier" class="publier" />
+      <input type="submit" value="Publier" class="button" />
     </form>
   </div>
 </template>
@@ -89,7 +89,7 @@ export default {
 </script>
 <style lang="scss">
 .new-comment {
-  width: 90%;
+  width: 100%;
   height: fit-content;
   border-bottom: 1px solid gray;
   border-left: 1px solid gray;
@@ -99,7 +99,6 @@ export default {
   display: flex;
   flex-direction: column;
   margin: auto;
-  margin-top: 1.5px;
 }
 .to-publish {
   width: 90%;

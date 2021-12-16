@@ -17,6 +17,7 @@
           <input
             id="login-email"
             required
+            class="type-input"
             type="email"
             v-model="loginUserData.email"
           />
@@ -26,13 +27,14 @@
           <input
             id="login-password"
             required
+            class="type-input"
             type="password"
             v-model="loginUserData.password"
             autocomplete="current-password"
           />
         </div>
         <p class="error">{{ loginError }}</p>
-        <input type="submit" id="login" value="Connection" class="button" />
+        <input type="submit" id="login" class="button" value="Connection" />
       </form>
     </div>
     <div class="card card_sign-up" v-if="mode == 'create'">
@@ -43,6 +45,7 @@
             id="userName"
             required
             type="text"
+            class="type-input"
             v-model="signupUserData.userName"
           />
         </div>
@@ -51,6 +54,7 @@
           <input
             id="jobTitle"
             required
+            class="type-input"
             type="text"
             v-model="signupUserData.jobTitle"
           />
@@ -61,6 +65,7 @@
           <input
             id="sign-up-email"
             required
+            class="type-input"
             type="email"
             v-model="signupUserData.email"
           />
@@ -70,6 +75,7 @@
           <input
             id="sign-up-password"
             required
+            class="type-input"
             type="password"
             v-model="signupUserData.password"
           />
@@ -220,6 +226,7 @@ export default {
   flex-direction: column;
   align-items: center;
   position: relative;
+  height: fit-content;
 }
 
 .onglets {
@@ -235,10 +242,16 @@ export default {
 }
 .onglet {
   color: white;
-  font-size: 1.2em;
+  font-size: 1.2rem;
   font-weight: 600;
 
   cursor: pointer;
+  @media (min-width: 620px) {
+    font-size: 1.4rem;
+  }
+  @media (min-width: 1600px) {
+    font-size: 1.6rem;
+  }
 }
 
 .onglet--sign-up {
@@ -251,7 +264,7 @@ export default {
 }
 .card {
   width: 90%;
-  height: 250px;
+
   border-bottom: 1px solid gray;
   border-left: 1px solid gray;
   border-right: 1px solid gray;
@@ -266,7 +279,7 @@ export default {
 .card_flex {
   display: flex;
   flex-direction: column;
-  height: 100px;
+
   justify-content: center;
   align-content: center;
   align-items: center;
@@ -280,29 +293,45 @@ export default {
 .sign-up_password {
   margin-top: 10px;
 }
-input {
+.type-input {
   height: 25px;
   width: 250px;
+  font-size: 0.9rem;
   border-radius: 8px;
+  @media (min-width: 620px) {
+    width: 400px;
+    height: 30px;
+    font-size: 1.1rem;
+  }
+  @media (min-width: 1600px) {
+    width: 700px;
+    height: 40px;
+    font-size: 1.3rem;
+  }
 }
 label {
   margin-top: 5px;
   font-size: 1.1em;
   color: black;
   font-weight: 900;
+  @media (min-width: 620px) {
+    font-size: 1.4rem;
+  }
+  @media (min-width: 1600px) {
+    font-size: 1.6rem;
+  }
 }
 .card_sign-up {
-  height: 450px;
+  min-height: 450px;
+  height: fit-content;
   background-color: rgba(205, 120, 123, 0.65);
 }
-#sign-up,
-#login {
-  height: 30px;
-  width: 150px;
-  padding: 5px;
-}
+
 .error {
   color: red;
   font-weight: bold;
+}
+.file {
+  margin: 10px;
 }
 </style>

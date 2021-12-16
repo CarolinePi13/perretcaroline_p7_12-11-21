@@ -38,15 +38,15 @@
       </div>-->
     </div>
   </div>
-
-  <transition name="fade" appear>
-    <modifyComment
-      v-if="modifyCommentShow"
-      :comment="comment"
-      :key="comment.id"
-      @cancelUpdate="toggleUpdateComment()"
-    />
-  </transition>
+  <teleport to="#modals" v-if="modifyCommentShow">
+    <transition name="fade" appear>
+      <modifyComment
+        :comment="comment"
+        :key="comment.id"
+        @cancelUpdate="toggleUpdateComment()"
+      />
+    </transition>
+  </teleport>
 </template>
 <script>
 import modifyComment from "../components/modifyComment.vue";
@@ -206,11 +206,15 @@ p.like-count {
   box-shadow: 1px 1px 3px 1px rgb(94, 86, 86);
 }
 .smaller-dots {
-  height: 15px;
-  width: 15px;
+  height: 20px;
+  width: 20px;
   @media (min-width: 620px) {
     height: 30px;
     width: 30px;
+    font-size: 1.1em;
+  }
+  @media (min-width: 1600px) {
+    font-size: 1.2em;
   }
 }
 </style>

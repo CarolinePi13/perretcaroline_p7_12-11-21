@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <navigation v-if="loggedIn" :loggedIn="loggedIn" />
+    <navigation v-if="!['Login'].includes($route.name)" />
 
     <Title />
 
@@ -103,11 +103,10 @@ body {
 }
 .mod-card {
   width: 80%;
-  min-height: 450px;
-
+  min-height: 350px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   border-radius: 15px;
   flex-direction: column;
   position: fixed;
@@ -126,10 +125,17 @@ body {
   }
 }
 .user-name {
-  font-size: 1.2em;
+  font-size: 1.3rem;
   margin-left: 5%;
+  @media (min-width: 620px) {
+    font-size: 1.6rem;
+  }
+  @media (min-width: 1600px) {
+    font-size: 1.7rem;
+  }
 }
 .app-container {
+  min-height: 100vh;
   width: 100%;
   @media (min-width: 620px) {
     width: 680px;
@@ -147,7 +153,7 @@ body {
   cursor: pointer;
   margin-bottom: 10px;
   display: inline-block;
-  padding: 10px;
+  padding: 8px;
   background-image: linear-gradient(to right, #cc5a5a, #c26666);
   border-radius: 8px;
 
@@ -163,12 +169,17 @@ body {
   }
   @media (min-width: 620px) {
     font-size: 1.3em;
+    padding: 10px;
   }
   @media (min-width: 1600px) {
+    margin: 15px;
     font-size: 1.4em;
+    padding: 15px 25px 15px 25px;
   }
 }
-
+.shadow {
+  box-shadow: 1px 1px 3px 1px rgb(94, 86, 86);
+}
 //transitions and animations
 
 .fade-leave-to,
@@ -177,10 +188,14 @@ body {
 }
 .fade-leave-from,
 .fade-enter-to {
-  opactity: 1;
+  opacity: 1;
 }
 .fade-leave-active,
 .fade-enter-active {
   transition: all 1s ease;
+}
+.close {
+  align-self: flex-end;
+  margin: 1px;
 }
 </style>

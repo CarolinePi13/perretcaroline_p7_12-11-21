@@ -21,9 +21,7 @@ export default {
     getAllUsers() {
       let token = localStorage.getItem("token");
       this.token = token;
-      let userId = localStorage.getItem("userId");
-      this.userId = userId;
-      console.log(userId);
+
       let self = this;
       axios({
         method: "GET",

@@ -9,7 +9,6 @@
       :currentUserData="currentUserData"
     />
   </div>
-  <div id="modals" autofocus></div>
 </template>
 
 <script>

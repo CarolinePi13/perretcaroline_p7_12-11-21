@@ -61,18 +61,19 @@
           ></i>
         </div>
       </div>
-      <div class="new-comment" v-if="writeComment">
-        <createComment
-          @closeWriteComment="displayWriteNewComment"
-          :postId="postId"
-          @reloadComms="getAllComments"
-        />
-      </div>
+
       <div v-if="showComments" class="comments-card">
         <comments
           v-for="comment in comments"
           :comment="comment"
           :key="comment.id"
+          @reloadComms="getAllComments"
+        />
+      </div>
+      <div class="new-comment" v-if="writeComment">
+        <createComment
+          @closeWriteComment="displayWriteNewComment"
+          :postId="postId"
           @reloadComms="getAllComments"
         />
       </div>
@@ -85,6 +86,7 @@
       @cancelUpdate="modifyPostShow = false"
     />
   </transition>
+  <div id="modals"></div>
 </template>
 <script>
 import SuppModModule from "./modal.vue";
@@ -458,9 +460,15 @@ div.comment-button > img {
   text-align: justify;
   font-size: 14px;
   width: 100%;
-  font-size: 1.2em;
+  font-size: 1.1em;
   margin-bottom: 30px;
   margin-top: 10px;
+  @media (min-width: 620px) {
+    font-size: 1.4em;
+  }
+  @media (min-width: 1600px) {
+    font-size: 1.6em;
+  }
   p {
     margin: 0;
     background-color: lighten(rgba(204, 90, 90, 0.65), 30%);

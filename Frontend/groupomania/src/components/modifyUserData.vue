@@ -97,6 +97,7 @@ export default {
         },
       })
         .then(function (response) {
+          document.location.reload();
           console.log(response);
         })
 
@@ -155,10 +156,7 @@ export default {
   right: 10px;
   top: 5px;
 }
-.close {
-  align-self: flex-end;
-  margin: 1px;
-}
+
 .user-avatar-change {
   display: flex;
   flex-direction: column;

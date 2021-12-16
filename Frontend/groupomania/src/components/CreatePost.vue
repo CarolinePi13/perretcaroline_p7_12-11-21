@@ -32,6 +32,8 @@
           v-model="postData.content"
           class="to-publish"
           type="text"
+          oninput='this.style.height = "";this.style.height =
+                this.scrollHeight + "px"'
           placeholder="écrivez votre texte ici..."
           ref="newPost"
         />
@@ -149,9 +151,7 @@ export default {
   position: relative;
   margin-bottom: 30px;
 }
-img {
-  height: 30px;
-}
+
 .upload-file {
   display: flex;
   width: 100%;
@@ -164,6 +164,12 @@ img {
     cursor: pointer;
     color: black;
   }
+  @media (min-width: 620px) {
+    height: 50px;
+  }
+  @media (min-width: 1600px) {
+    height: 60px;
+  }
 }
 .createPost-user-data {
   margin: 10px;
@@ -174,33 +180,15 @@ img {
 input {
   border-radius: 8px;
 }
-.button {
-  height: 30px;
-  border-radius: 8px;
-  background: linear-gradient(
-    120deg,
-    rgba(205, 120, 123, 0.65),
-    rgba(216, 174, 174, 0.65),
-    rgba(238, 236, 236, 0.65),
-    rgba(175, 90, 93, 0.65)
-  );
-  padding: 5px;
-
-  color: black;
-  cursor: pointer;
-
-  box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
-  transition: 0.4s ease-out;
-
-  &:hover {
-    box-shadow: 6px 6px rgba(0, 0, 0, 0.6);
-  }
-}
 
 .post-text {
   width: 95%;
   textarea {
+    height: fit-content;
     font-size: 1.2em;
+    @media (min-width: 1600px) {
+      font-size: 1.6em;
+    }
   }
 }
 .three-dots {
@@ -232,18 +220,19 @@ form {
   flex-direction: column;
 }
 
-// .to-publish {
-//   width: 100%;
-//   min-height: 50px;
-//   max-height: 250px;
-//   margin-bottom: 10px;
-//   border-radius: 8px;
-// }
-.publier {
+.to-publish {
+  width: 100%;
+
+  min-height: 60px;
+  max-height: 250px;
   margin-bottom: 10px;
-  width: 70px;
-  height: 30px;
+  border-radius: 8px;
+  @media (min-width: 620px) {
+    min-height: 90px;
+    max-height: 250px;
+  }
 }
+
 .close {
   position: absolute;
   top: 10px;

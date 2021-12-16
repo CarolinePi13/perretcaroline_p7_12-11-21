@@ -97,6 +97,7 @@ export default {
     },
     updateAPost() {
       this.getLocalStorage();
+      // let self = this;
       let id = this.postId;
       let formData = new FormData();
       formData.append("content", this.newPostData.content);
@@ -117,6 +118,7 @@ export default {
         },
       })
         .then(function (response) {
+          document.location.reload();
           console.log(response);
         })
 
@@ -130,9 +132,10 @@ export default {
 </script>
 <style scoped lang="scss">
 .to-publish {
-  min-height: 50px;
   max-height: 200px;
   border-radius: 8px;
+  flex-grow: 1;
+  font-size: 1.2em;
   @media (min-width: 620px) {
     min-height: 100px;
     max-height: 300px;
@@ -172,6 +175,7 @@ form {
 }
 .form-content {
   justify-content: space-between;
+  min-height: 300px;
 }
 .post-image {
   margin-top: 5px;

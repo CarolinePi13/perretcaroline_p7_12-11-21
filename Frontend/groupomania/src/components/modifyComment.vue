@@ -1,7 +1,7 @@
 <template>
   <div class="modify-bg">
     <transition name="slide" appear>
-      <div class="mod-card">
+      <div class="mod-card shadow">
         <div class="supp">
           <img
             src="../assets/4115230-cancel-close-cross-delete_114048.svg"
@@ -24,7 +24,7 @@
               min-length:1
               v-model="content"
             />
-            <input type="submit" value="Publier" class="publier" />
+            <input type="submit" class="button" value="Publier" />
           </form>
         </div>
       </div>
@@ -75,6 +75,7 @@ export default {
         },
       })
         .then(function (response) {
+          document.location.reload();
           console.log(response);
         })
 
@@ -88,12 +89,11 @@ export default {
 </script>
 <style scoped lang="scss">
 .to-publish {
-  width: 90%;
-  height: 90%;
+  min-height: 350px;
+  max-height: 600px;
 }
 .new-comment_text {
   width: 100%;
-  height: inherit;
 }
 .supp {
   align-self: flex-end;
@@ -112,17 +112,5 @@ export default {
 .slide-enter-from,
 .slide-leave-to {
   transform: translateY(-50%) translateX(100vw);
-}
-.fade-leave-to,
-.fade-enter-from {
-  opacity: 0;
-}
-.fade-leave-from,
-.fade-enter-to {
-  opactity: 1;
-}
-.fade-leave-active,
-.fade-enter-active {
-  transition: all 1s ease;
 }
 </style>

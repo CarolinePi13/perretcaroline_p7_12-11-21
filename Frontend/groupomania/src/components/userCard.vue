@@ -71,6 +71,8 @@ export default {
   justify-content: space-around;
   align-items: center;
   position: relative;
+
+  margin-top: 50px;
 }
 
 .user {
@@ -116,9 +118,7 @@ export default {
   font-size: 1.2em;
   margin-left: 5%;
 }
-.shadow {
-  box-shadow: 1px 1px 3px 1px rgb(94, 86, 86);
-}
+
 .modal-text {
   width: 300px;
   height: 150px;
