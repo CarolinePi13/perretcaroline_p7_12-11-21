@@ -335,7 +335,7 @@ export default {
   computed: {},
 };
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .post-card {
   width: 95%;
   height: fit-content;
@@ -351,9 +351,7 @@ export default {
   align-items: center;
   position: relative;
 }
-img {
-  height: 30px;
-}
+
 .post-actions {
   display: flex;
   width: 100%;
@@ -362,38 +360,26 @@ img {
   height: 40px;
   background-color: rgba(204, 90, 90, 0.65);
   border-radius: 0 0 15px 15px;
+  @media (min-width: 620px) {
+    height: 50px;
+  }
+  @media (min-width: 1600px) {
+    height: 60px;
+  }
 }
 .user-data {
   display: flex;
   align-items: center;
   width: 90%;
-}
-input {
-  border-radius: 8px;
-}
-.button {
-  appearance: none;
-  outline: none;
-  border: none;
-  background: none;
-  cursor: pointer;
-
-  display: inline-block;
-  padding: 10px;
-  background-image: linear-gradient(to right, #cc5a5a, #c26666);
-  border-radius: 8px;
-
-  color: #fff;
-  font-size: 18px;
-  font-weight: 700;
-
-  box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
-  transition: 0.4s ease-out;
-
-  &:hover {
-    box-shadow: 6px 6px rgba(0, 0, 0, 0.6);
+  @media (min-width: 620px) {
+    font-size: 1.3em;
+    margin-top: 10px;
+  }
+  @media (min-width: 1600px) {
+    margin-top: 20px;
   }
 }
+
 .unfold {
   display: flex;
   align-items: center;
@@ -454,6 +440,18 @@ div.comment-button > img {
     max-width: 250px;
     max-height: 250px;
     height: auto;
+    @media (min-width: 620px) {
+      min-width: 350px;
+      min-height: auto;
+      max-width: 450px;
+      max-height: 450px;
+    }
+    @media (min-width: 1600px) {
+      min-width: 450px;
+      min-height: auto;
+      max-width: 550px;
+      max-height: 550px;
+    }
   }
 }
 .post-text {
@@ -470,12 +468,7 @@ div.comment-button > img {
     padding: 20px;
   }
 }
-.three-dots {
-  position: absolute;
-  right: 10px;
-  top: 5px;
-  cursor: pointer;
-}
+
 .user-avatar {
   height: 60px;
   width: 60px;
@@ -483,36 +476,26 @@ div.comment-button > img {
   overflow: hidden;
   object-fit: cover;
   margin-top: 5px;
+  @media (min-width: 620px) {
+    height: 70px;
+    width: 70px;
+  }
+  @media (min-width: 1600px) {
+    height: 90px;
+    width: 90px;
+  }
 }
 
-.user-name {
-  font-size: 1.2em;
-  margin-left: 5%;
-}
-.separation {
-  width: 100%;
-  border-bottom: 1px solid black;
-  box-shadow: 0 1px gray;
-}
 .comment-count {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 0.9em;
+  @media (min-width: 620px) {
+    font-size: 1.1em;
+  }
 }
 div.comment-count > p {
   margin: 0 2% 1% 2%;
-}
-.fade-leave-to,
-.fade-enter-from {
-  opacity: 0;
-}
-.fade-leave-from,
-.fade-enter-to {
-  opactity: 1;
-}
-.fade-leave-active,
-.fade-enter-active {
-  transition: all 1s ease;
 }
 </style>

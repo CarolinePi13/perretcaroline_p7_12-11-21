@@ -216,6 +216,14 @@ input {
   overflow: hidden;
   object-fit: cover;
   margin-top: 5px;
+  @media (min-width: 620px) {
+    height: 70px;
+    width: 70px;
+  }
+  @media (min-width: 1600px) {
+    height: 90px;
+    width: 90px;
+  }
 }
 form {
   width: 100%;
@@ -223,18 +231,14 @@ form {
   align-items: center;
   flex-direction: column;
 }
-.user-name {
-  font-size: 1.2em;
-  margin-left: 5%;
-}
 
-.to-publish {
-  width: 100%;
-  min-height: 50px;
-  max-height: 250px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-}
+// .to-publish {
+//   width: 100%;
+//   min-height: 50px;
+//   max-height: 250px;
+//   margin-bottom: 10px;
+//   border-radius: 8px;
+// }
 .publier {
   margin-bottom: 10px;
   width: 70px;

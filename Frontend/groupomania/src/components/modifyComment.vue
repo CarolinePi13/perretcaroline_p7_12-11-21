@@ -87,36 +87,6 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.mod-card {
-  width: 95%;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 15px;
-  flex-direction: column;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 99;
-  max-width: 400px;
-  background-color: #fff;
-  border-radius: 16px;
-}
-.modify-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 99;
-  background-color: rgba(168, 140, 141, 0.4);
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .to-publish {
   width: 90%;
   height: 90%;

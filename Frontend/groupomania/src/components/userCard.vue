@@ -8,8 +8,8 @@
         <p class="createdAt">{{}}</p>
       </div>
 
-      <button>Modifier</button>
-      <button>Supprimer</button>
+      <button class="button" @click="modifyMode = true">Modifier</button>
+      <button class="button" @click="showConfirm = true">Supprimer</button>
     </div>
   </div>
   <div class="confirm modal-bg shadow" v-if="showConfirm">
@@ -23,27 +23,36 @@
       </button>
     </div>
   </div>
-  <!--<transition name="fade" appear>
-   <modifyUserData
+  <transition name="fade" appear>
+    <modifyUserData
       v-if="modifyMode"
-      :userData="userData"
+      :eachUser="eachUser"
       @cancelUpdate="modifyMode = false"
     />
-  </transition>-->
+  </transition>
 </template>
 <script>
+import modifyUserData from "../components/modifyUserData";
 export default {
   name: "userCard",
   props: ["user"],
-  components: {},
+  components: {
+    modifyUserData,
+  },
   data() {
     return {
-      showModule: "",
-      showConfirm: "",
+      showConfirm: false,
+      modifyMode: false,
+      eachUser: this.user,
     };
   },
   methods: {
-    confirmDelete() {},
+    confirmDelete() {
+      this.showConfirm = true;
+    },
+    cancelDeleteUser() {
+      this.showConfirm = false;
+    },
   },
 };
 </script>
@@ -133,6 +142,9 @@ export default {
   &--cancel {
     background: rgba(15, 31, 65, 0.7);
   }
+}
+.button {
+  margin-top: 10px;
 }
 .fade-leave-to,
 .fade-enter-from {

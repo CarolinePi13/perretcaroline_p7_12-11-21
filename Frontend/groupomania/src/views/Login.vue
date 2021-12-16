@@ -32,7 +32,7 @@
           />
         </div>
         <p class="error">{{ loginError }}</p>
-        <input type="submit" id="login" value="Connection" />
+        <input type="submit" id="login" value="Connection" class="button" />
       </form>
     </div>
     <div class="card card_sign-up" v-if="mode == 'create'">
@@ -78,7 +78,12 @@
           <label for="avatar">Ajoutez une photo de profil:</label>
           <input type="file" @change="addFile" />
         </div>
-        <input type="submit" id="login" value="Créer un compte" />
+        <input
+          type="submit"
+          id="login"
+          value="Créer un compte"
+          class="button"
+        />
       </form>
     </div>
   </div>

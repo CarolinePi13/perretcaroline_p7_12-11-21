@@ -150,7 +150,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .one_comment {
   display: flex;
   margin: 3%;
@@ -164,16 +164,16 @@ export default {
   border: 1px solid gray;
   margin: auto;
 }
-.comment-text {
-  font-size: 0.8em;
-  margin: 10px;
-}
+
 p.user-name--comment {
   margin: 2%;
 }
 .user-data--comment {
   display: flex;
   align-items: center;
+  @media (min-width: 620px) {
+    font-size: 1.2em;
+  }
 }
 .user-avatar--comment {
   height: 40px;
@@ -183,8 +183,12 @@ p.user-name--comment {
   object-fit: cover;
   margin: 2%;
 }
-div.comment-text > p {
-  margin: 5px;
+.comment-text > p {
+  margin: 10px;
+  font-size: 0.9em;
+  @media (min-width: 620px) {
+    font-size: 1.1em;
+  }
 }
 .comment-likes {
   display: flex;
@@ -204,5 +208,9 @@ p.like-count {
 .smaller-dots {
   height: 15px;
   width: 15px;
+  @media (min-width: 620px) {
+    height: 30px;
+    width: 30px;
+  }
 }
 </style>

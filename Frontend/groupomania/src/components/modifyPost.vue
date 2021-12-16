@@ -129,47 +129,22 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.mod-card {
-  width: 95%;
-  height: fit-content;
-  min-height: 450px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 15px;
-  flex-direction: column;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 97;
-  max-width: 400px;
-  background-color: #fff;
-  border-radius: 16px;
-}
-.post-text {
-  height: 80%;
-  margin: 5px;
-}
 .to-publish {
-  height: 100%;
   min-height: 50px;
   max-height: 200px;
   border-radius: 8px;
+  @media (min-width: 620px) {
+    min-height: 100px;
+    max-height: 300px;
+    font-size: 1.1em;
+  }
+  @media (min-width: 1600px) {
+    min-height: 250px;
+    max-height: 500px;
+    font-size: 1.3em;
+  }
 }
-.modify-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 98;
-  background-color: rgba(168, 140, 141, 0.4);
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 form {
   height: 100%;
 }
@@ -180,9 +155,6 @@ form {
   padding: 2%;
   justify-content: space-around;
   text-align: center;
-  img {
-    width: 30px;
-  }
 }
 .upload-file {
   width: 50%;
@@ -190,6 +162,9 @@ form {
 .label-img {
   display: flex;
   align-items: center;
+  @media (min-width: 620px) {
+    font-size: 1.2em;
+  }
 }
 .post-content {
   width: 100%;
@@ -199,9 +174,24 @@ form {
   justify-content: space-between;
 }
 .post-image {
-  width: 100%;
-  height: auto;
   margin-top: 5px;
+
+  width: 95%;
+  max-width: 250px;
+  max-height: 250px;
+  height: auto;
+  @media (min-width: 620px) {
+    min-width: 350px;
+    min-height: auto;
+    max-width: 450px;
+    max-height: 450px;
+  }
+  @media (min-width: 1600px) {
+    min-width: 450px;
+    min-height: auto;
+    max-width: 550px;
+    max-height: 550px;
+  }
 }
 .close {
   align-self: flex-end;
