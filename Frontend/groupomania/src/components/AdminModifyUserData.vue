@@ -45,16 +45,16 @@
 import axios from "axios";
 export default {
   name: "modifyUserData",
-  props: ["userData"],
+  props: ["eachUser"],
   emits: ["cancelUpdate"],
   data() {
     return {
       newUserData: {
-        userName: this.userData.userName,
-        jobTitle: this.userData.jobTitle,
-        avatar: this.userData.avatar,
+        userName: this.eachUser.userName,
+        jobTitle: this.eachUser.jobTitle,
+        avatar: this.eachUser.avatar,
       },
-      previewAvatarUrl: this.userData.avatar,
+      previewAvatarUrl: this.eachUser.avatar,
       token: "",
       userId: "",
     };

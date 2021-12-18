@@ -94,7 +94,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 98;
+  z-index: 90;
   background-color: rgba(168, 140, 141, 0.4);
 
   display: flex;
@@ -113,7 +113,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 97;
+  z-index: 91;
   max-width: 400px;
   background-color: #fff;
   border-radius: 16px;

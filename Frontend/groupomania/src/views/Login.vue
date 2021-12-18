@@ -9,7 +9,7 @@
         <p>Connection</p>
       </div>
     </div>
-
+    <!--login after sign-up-->
     <div class="card" v-if="mode == 'login'">
       <form action="login" class="card_flex" @submit.prevent="loginRequest">
         <div class="login_email column">
@@ -20,6 +20,7 @@
             class="type-input"
             type="email"
             v-model="loginUserData.email"
+            @input="errorMessage = false"
           />
         </div>
         <div class="login_password column">
@@ -31,12 +32,14 @@
             type="password"
             v-model="loginUserData.password"
             autocomplete="current-password"
+            @input="errorMessage = false"
           />
         </div>
-        <p class="error">{{ loginError }}</p>
+        <span v-if="errorMessage" class="error">{{ errorMessage }}</span>
         <input type="submit" id="login" class="button" value="Connection" />
       </form>
     </div>
+    <!-- create an account-->
     <div class="card card_sign-up" v-if="mode == 'create'">
       <form action="sign-up" class="card_flex" @submit.prevent="createAccount">
         <div class="userName column">
@@ -68,6 +71,7 @@
             class="type-input"
             type="email"
             v-model="signupUserData.email"
+            @input="errorMessage = false"
           />
         </div>
         <div class="pass column">
@@ -78,12 +82,14 @@
             class="type-input"
             type="password"
             v-model="signupUserData.password"
+            @input="errorMessage = false"
           />
         </div>
         <div class="file column">
           <label for="avatar">Ajoutez une photo de profil:</label>
           <input type="file" @change="addFile" />
         </div>
+        <span v-if="errorMessage" class="error">{{ errorMessage }}</span>
         <input
           type="submit"
           id="login"
@@ -101,16 +107,14 @@
 import axios from "axios";
 import modalConnect from "../components/basicModal.vue";
 export default {
-  emits: "loggesIn",
   name: "login",
-  props: ["loggedIn"],
+
   components: {
     modalConnect,
   },
   data() {
     return {
       mode: "login",
-      loginError: "",
 
       signupUserData: [
         {
@@ -129,6 +133,7 @@ export default {
       ],
       showModal: false,
       modalText: "Compte créé vous pouvez vous connecter",
+      errorMessage: "",
     };
   },
   methods: {
@@ -145,7 +150,7 @@ export default {
 
     createAccount() {
       let formData = new FormData();
-
+      let self = this;
       formData.append("userName", this.signupUserData.userName);
       formData.append("jobTitle", this.signupUserData.jobTitle);
       formData.append("email", this.signupUserData.email);
@@ -154,7 +159,7 @@ export default {
       for (var value of formData.values()) {
         console.log(value);
       }
-      let self = this;
+
       var body = formData;
 
       axios({
@@ -174,15 +179,27 @@ export default {
           self.showModal = true;
         })
 
-        .catch(function (response) {
-          //handle error
-          console.log(response);
+        .catch(function (error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            self.errorMessage = error.response.data.message;
+            console.log(error.response.data);
+          } else if (error.request) {
+            // The request was made but no response was received
+
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
         });
     },
     addFile(e) {
       this.signupUserData.avatar = e.target.files[0];
     },
     loginRequest() {
+      let self = this;
       let body = {
         email: this.loginUserData.email,
         password: this.loginUserData.password,
@@ -210,9 +227,20 @@ export default {
         .then(() => {
           this.$router.push("/wallposts");
         })
-        .catch(function (response) {
-          //handle error
-          console.log(response);
+        .catch(function (error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            self.errorMessage = error.response.data.message;
+            console.log(error.response.data);
+          } else if (error.request) {
+            // The request was made but no response was received
+
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
         });
     },
   },
@@ -333,5 +361,16 @@ label {
 }
 .file {
   margin: 10px;
+}
+.error {
+  color: darken(red, 20%);
+  font-size: 1.4em;
+  font-weight: bold;
+  margin: 15px;
+  text-align: justify;
+  height: 20px;
+}
+.button {
+  margin: 20px;
 }
 </style>

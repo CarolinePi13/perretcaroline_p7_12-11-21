@@ -15,16 +15,19 @@
   <div class="confirm modal-bg shadow" v-if="showConfirm">
     <div class="modal-text">
       <p>Etes vous sur de vouloir supprimer cet utilisateur ?</p>
-      <button class="confirm_btn confirm_btn--supp" @click="deleteUser">
-        supprimer
+      <button class="confirm_btn confirm_btn--supp button" @click="deleteUser">
+        SUPPRIMER
       </button>
-      <button class="confirm_btn confirm_btn--cancel" @click="cancelDeleteUser">
-        annuler
+      <button
+        class="confirm_btn confirm_btn--cancel button"
+        @click="cancelDeleteUser"
+      >
+        ANNULER
       </button>
     </div>
   </div>
   <transition name="fade" appear>
-    <modifyUserData
+    <AdminModifyUserData
       v-if="modifyMode"
       :eachUser="eachUser"
       @cancelUpdate="modifyMode = false"
@@ -32,12 +35,13 @@
   </transition>
 </template>
 <script>
-import modifyUserData from "../components/modifyUserData";
+import AdminModifyUserData from "../components/AdminModifyUserData";
+import axios from "axios";
 export default {
   name: "userCard",
   props: ["user"],
   components: {
-    modifyUserData,
+    AdminModifyUserData,
   },
   data() {
     return {
@@ -52,6 +56,62 @@ export default {
     },
     cancelDeleteUser() {
       this.showConfirm = false;
+    },
+    updateUser() {
+      this.getLocalStorage();
+      let id = this.eachUser.id;
+      let formData = new FormData();
+      formData.append("image", this.newUserData.avatar);
+      formData.append("userName", this.newUserData.userName);
+      formData.append("jobTitle", this.newUserData.jobTitle);
+      for (var value of formData.values()) {
+        console.log(value);
+      }
+
+      axios({
+        method: "PUT",
+        url: `http://localhost:3000/api/user/${id}`,
+        data: formData,
+        headers: {
+          authorization: `Bearer ${this.token}`,
+          Accept: "application/json",
+          "content-type": "multipart/form-data",
+        },
+      })
+        .then(function (response) {
+          document.location.reload();
+          console.log(response);
+        })
+
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
+    },
+    deleteUser() {
+      let token = localStorage.getItem("token");
+      this.token = token;
+      let id = this.user.id;
+      console.log(token);
+
+      axios({
+        method: "DELETE",
+        url: `http://localhost:3000/api/user/${id}`,
+        headers: {
+          authorization: `Bearer ${token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then(function (response) {
+          //handle success
+          console.log(response);
+          document.location.reload();
+        })
+        .catch((error) => {
+          //handle error
+
+          console.log(error);
+        });
     },
   },
 };
@@ -120,15 +180,16 @@ export default {
 }
 
 .modal-text {
-  width: 300px;
+  width: 70%;
   height: 150px;
   background-color: white;
   text-align: center;
   border-radius: 15px;
+  font-weight: 1.2em;
+  z-index: 97;
 }
 .confirm_btn {
-  width: 80px;
-  margin: 5px;
+  font-size: 1em;
   &--supp {
     background: linear-gradient(
       120deg,
@@ -144,7 +205,7 @@ export default {
   }
 }
 .button {
-  margin-top: 10px;
+  margin: 10px;
 }
 .fade-leave-to,
 .fade-enter-from {

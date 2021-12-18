@@ -56,6 +56,17 @@ exports.signup= (req, res, next) =>{
                     jobTitle:req.body.jobTitle,
                     // avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
                    
+                }).then(//saves thar object in the db
+                    ()=>{
+                        res.status(201).json({
+                            message: 'User added successfully!',
+                        });
+                    }
+                ).catch(
+                    error => {
+                    res.status(400).json({
+                        message:"cet email correspond a un compte deja existant"
+                    });
                 })
             }else{
                 User.create({//creates the object user
@@ -64,9 +75,7 @@ exports.signup= (req, res, next) =>{
                     password: hash,
                     jobTitle:req.body.jobTitle,
                     avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-            })
-         
-        }}).then(//saves thar object in the db
+            }).then(//saves thar object in the db
                 ()=>{
                     res.status(201).json({
                         message: 'User added successfully!',
@@ -75,12 +84,14 @@ exports.signup= (req, res, next) =>{
             ).catch(
                 error => {
                 res.status(400).json({
-                    error:error
+                    message:"Cet email correspond a un compte deja existant"
                 });
             })
+         
+        }})
         }else{//the password does not match the password schema
     return res.status(400).json({
-      message:'le mot de passe doit contenir au moins une majuscule, une minuscule, et un chiffre, il doit faire entre 8 et 20 caracteres'})}
+      message:'Le mot de passe doit contenir au moins une majuscule, une minuscule, et un chiffre, il doit faire entre 8 et 20 caracteres'})}
   
     
 };
@@ -100,7 +111,7 @@ exports.login= (req, res, next) =>{
                     if (!valid){// the password is incorrect
                         
                       return res.status(401).send({
-                          message:"the password is incorrect"
+                          message:"Le mot de passe est incorrect"
                       })};
                         
                     
@@ -167,7 +178,7 @@ exports.changeUserInfo= (req, res, next) =>{
 };
 exports.deleteUser= (req, res, next) =>{
     console.log(req.params.id);
-    if(req.params.id==res.user.id){
+    if((req.params.id==res.user.id)||(res.user.isAdmin)){
         User.destroy({where: {id:req.params.id}})
         .then(() => res.status(200).json({ message: 'user deleted'}))
         .catch(

@@ -194,7 +194,7 @@ export default {
   box-shadow: 1px 1px 3px 1px rgb(94, 86, 86);
 }
 .modal-text {
-  width: 300px;
+  // width: 300px;
   height: 150px;
   background-color: white;
   text-align: center;

@@ -1,3 +1,4 @@
+<!-- admin user control-->
 <template>
   <userCard :user="user" v-for="user in users" :key="user.id" />
 </template>

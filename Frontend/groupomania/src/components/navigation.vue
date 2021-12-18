@@ -1,13 +1,19 @@
 <template>
   <header>
     <nav class="shadow">
-      <router-link :to="{ name: 'Wall' }">
-        <img class="mon-compte" src="../assets/snall-icone-coupe.png"
-      /></router-link>
-      <router-link :to="{ name: 'admin' }" v-if="!isAdmin"> admin</router-link>
       <router-link :to="{ name: 'User' }">
         <img src="../assets/user_account_icon_145918.png" />
       </router-link>
+      <span v-if="hover"></span>
+
+      <router-link :to="{ name: 'admin' }" v-if="isAdmin == 'true'">
+        Admin</router-link
+      >
+      <span class="pop"></span>
+      <router-link :to="{ name: 'Wall' }">
+        <img class="mon-compte" src="../assets/snall-icone-coupe.png" />
+      </router-link>
+      <span class="pop"></span>
       <img
         src="../assets/log_out_icon_197724.png"
         alt="logout"
@@ -24,6 +30,7 @@ export default {
   data() {
     return {
       isAdmin: "",
+      hover: false,
     };
   },
   methods: {
@@ -35,7 +42,7 @@ export default {
       this.$router.push("/");
     },
   },
-  created() {
+  beforeMount() {
     this.getLocalStorage();
   },
 };
@@ -67,6 +74,8 @@ nav {
     font-size: 1.4em;
     display: flex;
     align-items: center;
+    &:hover {
+    }
   }
   background-color: rgba(204, 90, 90, 1);
 }
