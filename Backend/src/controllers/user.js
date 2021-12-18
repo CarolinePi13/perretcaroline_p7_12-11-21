@@ -103,7 +103,7 @@ exports.login= (req, res, next) =>{
        
             if(!user){// the email does not match a registered email in the db
               return res.status(401).json({
-                message:"user unknown"
+                message:"Utilisateur inconnu, verifiez votre adresse e-mail"
                 
             })};
                 bcrypt.compare(req.body.password, user.password).then(

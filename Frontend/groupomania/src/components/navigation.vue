@@ -11,7 +11,7 @@
       >
       <span class="pop"></span>
       <router-link :to="{ name: 'Wall' }">
-        <img class="mon-compte" src="../assets/snall-icone-coupe.png" />
+        <img class="mon-compte" src="../assets/small-icone-coupe.png" />
       </router-link>
       <span class="pop"></span>
       <img

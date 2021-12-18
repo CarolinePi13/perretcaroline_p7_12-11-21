@@ -153,7 +153,7 @@ body {
   cursor: pointer;
   margin-bottom: 10px;
   display: inline-block;
-  padding: 8px;
+  padding: 5px;
   background-image: linear-gradient(to right, #cc5a5a, #c26666);
   border-radius: 8px;
 

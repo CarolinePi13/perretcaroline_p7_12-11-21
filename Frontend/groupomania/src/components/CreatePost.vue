@@ -184,6 +184,7 @@ input {
 .post-text {
   width: 95%;
   textarea {
+    font-family: "Murecho", sans-serif;
     height: fit-content;
     font-size: 1.2em;
     @media (min-width: 1600px) {

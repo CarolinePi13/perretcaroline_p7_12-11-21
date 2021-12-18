@@ -1,11 +1,17 @@
 <template>
   <div class="login-card">
     <div class="onglets">
-      <div class="onglet onglet--sign-up" @click="showCreateAccount">
+      <div
+        class="onglet onglet--sign-up"
+        @click="showCreateAccount(), (errorMessage = false)"
+      >
         <p>Créer un compte</p>
       </div>
 
-      <div class="onglet onglet--log-in" @click="showLogin">
+      <div
+        class="onglet onglet--log-in"
+        @click="showLogin(), (errorMessage = false)"
+      >
         <p>Connection</p>
       </div>
     </div>
@@ -35,7 +41,7 @@
             @input="errorMessage = false"
           />
         </div>
-        <span v-if="errorMessage" class="error">{{ errorMessage }}</span>
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         <input type="submit" id="login" class="button" value="Connection" />
       </form>
     </div>
@@ -50,6 +56,7 @@
             type="text"
             class="type-input"
             v-model="signupUserData.userName"
+            @input="errorMessage = false"
           />
         </div>
         <div class="jobTitle column">
@@ -60,6 +67,7 @@
             class="type-input"
             type="text"
             v-model="signupUserData.jobTitle"
+            @input="errorMessage = false"
           />
         </div>
 
@@ -86,10 +94,10 @@
           />
         </div>
         <div class="file column">
-          <label for="avatar">Ajoutez une photo de profil:</label>
+          <label for="avatar">Ajouter une photo de profil:</label>
           <input type="file" @change="addFile" />
         </div>
-        <span v-if="errorMessage" class="error">{{ errorMessage }}</span>
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         <input
           type="submit"
           id="login"
@@ -355,22 +363,20 @@ label {
   background-color: rgba(205, 120, 123, 0.65);
 }
 
-.error {
-  color: red;
-  font-weight: bold;
-}
 .file {
   margin: 10px;
 }
 .error {
   color: darken(red, 20%);
-  font-size: 1.4em;
+  font-size: 1.1em;
   font-weight: bold;
-  margin: 15px;
-  text-align: justify;
-  height: 20px;
+  margin: 4px;
+  text-align: center;
+  height: fit-content;
+  width: 50%;
 }
 .button {
-  margin: 20px;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 </style>

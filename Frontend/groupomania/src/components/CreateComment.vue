@@ -118,6 +118,7 @@ export default {
 }
 textarea {
   resize: none;
+  font-family: "Murecho", sans-serif;
 }
 form {
   width: 100%;

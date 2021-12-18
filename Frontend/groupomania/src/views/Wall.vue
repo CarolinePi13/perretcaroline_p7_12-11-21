@@ -66,6 +66,8 @@ export default {
         });
     },
     getAllPosts() {
+      this.getLocalStorage();
+
       axios({
         method: "GET",
         url: `http://localhost:3000/api/posts`,

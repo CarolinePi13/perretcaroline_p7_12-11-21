@@ -464,16 +464,17 @@ div.comment-button > img {
   margin-bottom: 30px;
   margin-top: 10px;
   @media (min-width: 620px) {
-    font-size: 1.4em;
+    font-size: 1.3em;
   }
   @media (min-width: 1600px) {
     font-size: 1.6em;
   }
   p {
     margin: 0;
-    background-color: lighten(rgba(204, 90, 90, 0.65), 30%);
-    border-radius: 15px;
-    padding: 20px;
+    background-color: lighten(rgba(204, 90, 90, 0.65), 40%);
+    box-shadow: 1px 1px 3px 1px rgba(0.4, 0.4, 0.4, 0.4);
+    border-radius: 8px;
+    padding: 15px;
   }
 }
 

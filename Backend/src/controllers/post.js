@@ -2,9 +2,6 @@ const Post = require('../models/post');
 const Vote= require('../models/vote');
 const fs = require('fs');
 
-const User = require('../models/user');
-
-
 
 exports.CreateAPost=(req, res, next) =>{
    try{
@@ -45,7 +42,10 @@ exports.CreateAPost=(req, res, next) =>{
           );
         } 
 };
+
 exports.getAllPosts=(req, res, next) =>{
+ 
+    if(res.user){
     Post.findAll({order: [['updatedAt', "DESC"], ['createdAt', "DESC"]] })
     .then(posts=>{
         res.status(200).json(posts)
@@ -59,22 +59,27 @@ exports.getAllPosts=(req, res, next) =>{
     });
 
     
-
+    }else{
+        res.status(401).json({message:"unauthorized request"})
     }
+};
+
     exports.getOnePost=(req, res, next) =>{
-        Post.findOne({where: {id:req.params.id}})
-        .then(post=>{
-            res.status(200).json(post)
-            
-        })
-        .catch(err => {
-          res.status(500).send({
-            message:
-              "le post est introuvable"
-          });
-        });
-    
-        
+        if(res.user){
+            Post.findOne({where: {id:req.params.id}})
+            .then(post=>{
+                res.status(200).json(post)
+                
+            })
+            .catch(err => {
+              res.status(500).send({
+                message:
+                  "le post est introuvable"
+              });
+            });
+        }else{
+            res.status(401).json({message:"unauthorized request"})
+        }
     
         }
     
@@ -111,6 +116,7 @@ exports.ModifyAPost=(req, res, next) =>{
     })
      
 };
+
 exports.DeleteAPost=(req, res, next) =>{
 
     Post.findOne({where: {id:req.params.id}}).then((post)=>{
@@ -148,9 +154,7 @@ exports.DeleteAPost=(req, res, next) =>{
             });
         }
     );
-   
-  
-    
+ 
 };
 
 exports.votePost=(req, res, next)=>{
@@ -172,7 +176,8 @@ exports.votePost=(req, res, next)=>{
         res.status(401).json({message:"already voted!"})
     })
     
-} 
+};
+
 exports.unVotePost=(req, res, next)=>{
     
         Vote.destroy({where:{postId:req.params.id, userId:res.user.id
@@ -185,9 +190,9 @@ exports.unVotePost=(req, res, next)=>{
                 });
             }
         );
-    
-  
-}
+ 
+};
+
 exports.getPostsVotes=(req, res, next)=>{
     Vote.findAll({where:{postId:req.params.PostId}}).then((votes)=>{
     res.status(200).json(votes)
@@ -198,7 +203,8 @@ exports.getPostsVotes=(req, res, next)=>{
         });
     }
 );
-}
+};
+
 exports.getOneVote=(req,res,next)=>{
     console.log(req.params.id);
     Vote.findOne({where:{postId:req.params.id, userId:res.user.id
@@ -211,4 +217,4 @@ exports.getOneVote=(req,res,next)=>{
             });
         }
     );
-}
+};
