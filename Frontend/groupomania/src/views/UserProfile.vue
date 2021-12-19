@@ -1,6 +1,7 @@
 <template>
   <div class="user-card shadow">
     <div class="user">
+      <p>Bienvenue sur votre profil!</p>
       <img :src="userData.avatar" alt="user avatar" class="user-avatar" />
       <div class="user-data">
         <p class="userName">{{ userData.userName }}</p>
@@ -133,7 +134,7 @@ export default {
 <style scoped lang="scss">
 .user-card {
   width: 95%;
-  height: 500px;
+  height: 400px;
   border-bottom: 1px solid gray;
   border-left: 1px solid gray;
   border-right: 1px solid gray;
@@ -145,6 +146,7 @@ export default {
   justify-content: space-around;
   align-items: center;
   position: relative;
+  margin-bottom: 100px;
 }
 
 .user {

@@ -27,11 +27,15 @@
                 class="userName"
                 type="text"
                 v-model="newUserData.userName"
+                oninput='this.style.width = "";this.style.width =
+                this.scrollWidth + "px"'
               />
               <input
                 class="jobTitle"
                 type="text"
                 v-model="newUserData.jobTitle"
+                oninput='this.style.width = "";this.style.width =
+                this.scrollWidth + "px"'
               />
             </div>
             <input type="submit" class="button margin-button" />
@@ -126,6 +130,12 @@ export default {
   justify-content: space-around;
   align-items: center;
   position: relative;
+  @media (min-width: 620px) {
+    width: 500px;
+  }
+  @media (min-width: 1600px) {
+    width: 800px;
+  }
 }
 
 .user {
@@ -150,6 +160,8 @@ export default {
   border: 1px solid rgb(94, 86, 86);
   input {
     margin: 5px;
+    width: 250px;
+    height: 25px;
   }
 }
 .three-dots {

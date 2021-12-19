@@ -119,7 +119,7 @@ export default {
 <style scoped lang="scss">
 .user-card {
   width: 95%;
-  height: 500px;
+  height: 400px;
   border-bottom: 1px solid gray;
   border-left: 1px solid gray;
   border-right: 1px solid gray;

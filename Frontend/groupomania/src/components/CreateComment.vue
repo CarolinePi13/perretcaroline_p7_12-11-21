@@ -18,8 +18,7 @@
       <textarea
         class="to-publish"
         type="text"
-        placeholder="écrivez votre texte
-      ici..."
+        placeholder="écrivez votre texte ici..."
         oninput='this.style.height = "";this.style.height =
       this.scrollHeight + "px"'
         rows:10
@@ -119,6 +118,12 @@ export default {
 textarea {
   resize: none;
   font-family: "Murecho", sans-serif;
+  @media (min-width: 620px) {
+    font-size: 1.1em;
+  }
+  @media (min-width: 1600px) {
+    font-size: 1.2em;
+  }
 }
 form {
   width: 100%;

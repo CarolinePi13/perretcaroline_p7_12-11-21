@@ -1,25 +1,40 @@
 <template>
   <header>
     <nav class="shadow">
-      <router-link :to="{ name: 'User' }">
+      <router-link
+        :to="{ name: 'User' }"
+        @mouseover="myAccountShow = true"
+        @mouseleave="myAccountShow = false"
+      >
         <img src="../assets/user_account_icon_145918.png" />
       </router-link>
-      <span v-if="hover"></span>
 
       <router-link :to="{ name: 'admin' }" v-if="isAdmin == 'true'">
         Admin</router-link
       >
-      <span class="pop"></span>
-      <router-link :to="{ name: 'Wall' }">
+
+      <router-link
+        :to="{ name: 'Wall' }"
+        @mouseover="myWallShow = true"
+        @mouseleave="myWallShow = false"
+      >
         <img class="mon-compte" src="../assets/small-icone-coupe.png" />
       </router-link>
-      <span class="pop"></span>
+
       <img
         src="../assets/log_out_icon_197724.png"
         alt="logout"
+        class="logout"
         @click="logout"
+        @mouseover="myLogoutShow = true"
+        @mouseleave="myLogoutShow = false"
       />
     </nav>
+    <div class="pop-up_nav">
+      <div class="pop-up_mon-compte" v-show="myAccountShow">Mon Compte</div>
+      <div class="pop-up_wall" v-show="myWallShow">Mur</div>
+      <div class="pop-up_disconnect" v-show="myLogoutShow">Se déconnecter</div>
+    </div>
   </header>
 </template>
 
@@ -31,6 +46,9 @@ export default {
     return {
       isAdmin: "",
       hover: false,
+      myAccountShow: false,
+      myWallShow: false,
+      myLogoutShow: false,
     };
   },
   methods: {
@@ -49,11 +67,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 img,
 p {
   height: 50px;
@@ -63,7 +76,7 @@ p {
 
 nav {
   display: flex;
-  width: 100%;
+
   justify-content: space-between;
   padding: 10px;
   align-items: center;
@@ -78,5 +91,16 @@ nav {
     }
   }
   background-color: rgba(204, 90, 90, 1);
+}
+.pop-up_nav {
+  height: 20px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: center;
+}
+.logout {
+  cursor: pointer;
 }
 </style>

@@ -20,9 +20,25 @@ export default {
   data() {
     return {
       loggedIn: true,
+      isLoggedIn: false,
     };
   },
-  methods: {},
+  methods: {
+    getLocalStorage() {
+      this.isLoggedIn = localStorage.getItem("loggedIn");
+    },
+    checkIfIsLoggedIn() {
+      this.getLocalStorage();
+      if (this.isLoggedIn) {
+        this.$router.push("/wallposts");
+      } else {
+        this.$router.push("/");
+      }
+    },
+  },
+  beforeMount() {
+    this.checkIfIsLoggedIn();
+  },
 };
 </script>
 //all generall css that applies to the entire project is down here

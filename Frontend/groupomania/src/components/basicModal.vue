@@ -2,7 +2,7 @@
   <div class="modal-bg">
     <div class="modal-text">
       <p>{{ modalText }}</p>
-      <div class="ok-Btn" @click="closeModalConfim">ok</div>
+      <div class="ok-Btn button" @click="closeModalConfim">ok</div>
     </div>
   </div>
 </template>
@@ -39,6 +39,8 @@ export default {
   height: 110px;
   background-color: white;
   text-align: center;
+  border-radius: 8px;
+  font-size: 1.1em;
 }
 .ok-Btn {
   cursor: pointer;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <article>
     <div class="post-card shadow">
       <SuppModModule
         v-if="showModule"
@@ -78,7 +78,7 @@
         />
       </div>
     </div>
-  </div>
+  </article>
   <transition name="fade" appear>
     <modifyPost
       :post="post"

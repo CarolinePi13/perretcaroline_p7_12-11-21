@@ -95,7 +95,7 @@
         </div>
         <div class="file column">
           <label for="avatar">Ajouter une photo de profil:</label>
-          <input type="file" @change="addFile" />
+          <input type="file" class="file_choose" @change="addFile" />
         </div>
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         <input
@@ -114,6 +114,7 @@
 <script>
 import axios from "axios";
 import modalConnect from "../components/basicModal.vue";
+import { useVuelidate } from "@vuelidate/core";
 export default {
   name: "login",
 
@@ -142,6 +143,26 @@ export default {
       showModal: false,
       modalText: "Compte créé vous pouvez vous connecter",
       errorMessage: "",
+    };
+  },
+  setup: () => ({ v$: useVuelidate() }),
+  validations() {
+    return {
+      signupUserData: [
+        {
+          userName: "",
+          email: "",
+          password: "",
+          avatar: "",
+          jobTitle: "",
+        },
+      ],
+      loginUserData: [
+        {
+          email: "",
+          password: "",
+        },
+      ],
     };
   },
   methods: {
@@ -263,6 +284,7 @@ export default {
   align-items: center;
   position: relative;
   height: fit-content;
+  margin-bottom: 30px;
 }
 
 .onglets {
@@ -378,5 +400,8 @@ label {
 .button {
   margin-top: 10px;
   margin-bottom: 15px;
+}
+.file_choose {
+  border-radius: none;
 }
 </style>

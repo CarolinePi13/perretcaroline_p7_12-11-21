@@ -38,8 +38,8 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  right: 20px;
-  top: 8px;
+  right: 40px;
+  top: 10px;
   align-items: center;
 }
 .alter_Btn {
