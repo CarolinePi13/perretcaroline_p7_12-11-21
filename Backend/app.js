@@ -12,11 +12,13 @@ const cors= require('cors')
 const postRoutes = require('./src/routes/post');
 const userRoutes = require('./src/routes/user');
 const commRoutes = require('./src/routes/comment');
-const sequelize = require('./src/config/config');
+// const sequelize = require('./src/config/config');
 const comment= require('./src/models/comment');
 const post= require('./src/models/post');
 const user= require('./src/models/user');
 const vote= require('./src/models/vote');
+
+const rateLimit = require("express-rate-limit");
 
 
 
@@ -31,7 +33,13 @@ app.use(helmet());
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true},{limit: '2mb'}))
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 2000 // limit each IP to 100 requests per windowMs
+});
 
+app.use(limiter);
+// sets realations between db tables
 user.hasMany(post,{
 
   onDelete: 'CASCADE'
@@ -53,7 +61,7 @@ user.hasMany(vote,{
   onDelete: 'CASCADE'
 });
 
-// use below code with 'force=true'to reintianlize the db
+// use below code with 'force=true'to reintialize the db or make changes in models/use without 'force=true' to set default users such as admin.
 // ----------------------------------------
 
 // sequelize.sync().then(()=>{
@@ -66,8 +74,7 @@ user.hasMany(vote,{
 app.use('/api/user', userRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commRoutes)
-// app.use("api/post/:id/vote")
-// app.use("api/comment/:id")
+
 app.use('/images',express.static(path.join(__dirname, 'src/images')) );
 app.use(express.static('images'));
 

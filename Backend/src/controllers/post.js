@@ -64,24 +64,7 @@ exports.getAllPosts=(req, res, next) =>{
     }
 };
 
-    exports.getOnePost=(req, res, next) =>{
-        if(res.user){
-            Post.findOne({where: {id:req.params.id}})
-            .then(post=>{
-                res.status(200).json(post)
-                
-            })
-            .catch(err => {
-              res.status(500).send({
-                message:
-                  "le post est introuvable"
-              });
-            });
-        }else{
-            res.status(401).json({message:"unauthorized request"})
-        }
-    
-        }
+
     
 
 exports.ModifyAPost=(req, res, next) =>{

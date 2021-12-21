@@ -180,7 +180,8 @@ body {
   box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
   transition: 0.4s ease-out;
 
-  &:hover {
+  &:hover,
+  :active {
     box-shadow: 6px 6px rgba(0, 0, 0, 0.6);
   }
   @media (min-width: 620px) {

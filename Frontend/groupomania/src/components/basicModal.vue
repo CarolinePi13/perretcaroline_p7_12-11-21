@@ -35,8 +35,8 @@ export default {
   background-color: rgba(168, 140, 141, 0.404);
 }
 .modal-text {
-  width: 250px;
-  height: 110px;
+  width: 80%;
+  height: fit-content;
   background-color: white;
   text-align: center;
   border-radius: 8px;
@@ -44,5 +44,6 @@ export default {
 }
 .ok-Btn {
   cursor: pointer;
+  width: 50px;
 }
 </style>

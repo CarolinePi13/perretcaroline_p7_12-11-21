@@ -17,7 +17,7 @@
     </div>
     <!--login after sign-up-->
     <div class="card" v-if="mode == 'login'">
-      <form action="login" class="card_flex" @submit.prevent="loginRequest">
+      <form action="login" class="card_flex" @submit.prevent="loginRequest()">
         <div class="login_email column">
           <label for="login-email">Email: </label>
           <input
@@ -47,9 +47,9 @@
     </div>
     <!-- create an account-->
     <div class="card card_sign-up" v-if="mode == 'create'">
-      <form action="sign-up" class="card_flex" @submit.prevent="createAccount">
+      <form action="sign-up" class="card_flex" @submit.prevent="submitCreate">
         <div class="userName column">
-          <label for="userName">Nom et Prenom: </label>
+          <label for="userName">* Nom et Prenom: </label>
           <input
             id="userName"
             required
@@ -63,7 +63,6 @@
           <label for="jobTitle">Poste: </label>
           <input
             id="jobTitle"
-            required
             class="type-input"
             type="text"
             v-model="signupUserData.jobTitle"
@@ -72,7 +71,7 @@
         </div>
 
         <div class="sign-up-input column">
-          <label for="sign-up-email">Email: </label>
+          <label for="sign-up-email">* Email: </label>
           <input
             id="sign-up-email"
             required
@@ -82,8 +81,12 @@
             @input="errorMessage = false"
           />
         </div>
+        <span v-if="v$.signupUserData.email.$error" class="error">{{
+          v$.signupUserData.email.$errors[0].$message
+        }}</span>
         <div class="pass column">
-          <label for="sign-up-password">Mot de passe: </label>
+          <label for="sign-up-password">* Mot de passe: </label>
+
           <input
             id="sign-up-password"
             required
@@ -91,11 +94,36 @@
             type="password"
             v-model="signupUserData.password"
             @input="errorMessage = false"
+            autocomplete="current-password"
           />
         </div>
+        <div class="confirm-pass column">
+          <label for="sign-up-password--confirm"
+            >* Confirmer votre mot de passe:
+          </label>
+          <input
+            id="sign-up-password--confirm"
+            required
+            class="type-input"
+            type="password"
+            v-model="signupUserData.passwordConfirm"
+            autocomplete="current-password"
+            @input="
+              (errorMessage = false), v$.signupUserData.passwordConfirm.$touch()
+            "
+          />
+        </div>
+        <span v-if="v$.signupUserData.passwordConfirm.$invalid" class="error">{{
+          v$.signupUserData.passwordConfirm.$errors[0].$message
+        }}</span>
         <div class="file column">
           <label for="avatar">Ajouter une photo de profil:</label>
-          <input type="file" class="file_choose" @change="addFile" />
+          <input
+            type="file"
+            class="file_choose"
+            accept="image/*"
+            @change="addFile"
+          />
         </div>
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         <input
@@ -104,6 +132,7 @@
           value="Créer un compte"
           class="button"
         />
+        <span v-if="v$.$anyError">Merci de remplir les champs requis</span>
       </form>
     </div>
   </div>
@@ -115,6 +144,15 @@
 import axios from "axios";
 import modalConnect from "../components/basicModal.vue";
 import { useVuelidate } from "@vuelidate/core";
+
+import {
+  required,
+  email,
+  alphaNum,
+  maxLength,
+  sameAs,
+  helpers,
+} from "@vuelidate/validators";
 export default {
   name: "login",
 
@@ -124,45 +162,45 @@ export default {
   data() {
     return {
       mode: "login",
+      v$: useVuelidate({ $lazy: true }),
+      signupUserData: {
+        userName: "",
+        email: "",
+        password: "",
+        passwordConfirm: "",
+        avatar: "",
+        jobTitle: "",
+      },
 
-      signupUserData: [
-        {
-          userName: "",
-          email: "",
-          password: "",
-          avatar: "",
-          jobTitle: "",
-        },
-      ],
-      loginUserData: [
-        {
-          email: "",
-          password: "",
-        },
-      ],
-      showModal: false,
+      loginUserData: {
+        email: "",
+        password: "",
+      },
+
+      showModal: false, //show modal to confirm accoutn creations
       modalText: "Compte créé vous pouvez vous connecter",
       errorMessage: "",
     };
   },
-  setup: () => ({ v$: useVuelidate() }),
+  // validation of inputs
   validations() {
     return {
-      signupUserData: [
-        {
-          userName: "",
-          email: "",
-          password: "",
-          avatar: "",
-          jobTitle: "",
+      signupUserData: {
+        userName: {
+          required,
+
+          maxLengthValue: maxLength(50),
         },
-      ],
-      loginUserData: [
-        {
-          email: "",
-          password: "",
+        email: { required, email },
+        password: { required },
+        passwordConfirm: {
+          sameAsPassword: helpers.withMessage(
+            "Les deux champs doivent être identiques",
+            sameAs(this.signupUserData.password)
+          ),
         },
-      ],
+        jobTitle: { alphaNum, maxLengthValue: maxLength(50) },
+      },
     };
   },
   methods: {
@@ -175,6 +213,17 @@ export default {
     closeModal() {
       this.showModal = !this.showModal;
       document.location.reload();
+    },
+    submitCreate() {
+      console.log(this.v$.signupUserData.$validate());
+
+      this.v$.signupUserData.$validate().then(() => {
+        if (!this.v$.signupUserData.$error) {
+          this.createAccount();
+        } else {
+          console.log("error in validation");
+        }
+      });
     },
 
     createAccount() {
@@ -390,12 +439,12 @@ label {
 }
 .error {
   color: darken(red, 20%);
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: bold;
   margin: 4px;
   text-align: center;
   height: fit-content;
-  width: 50%;
+  width: 90%;
 }
 .button {
   margin-top: 10px;
