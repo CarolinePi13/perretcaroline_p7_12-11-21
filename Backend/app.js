@@ -12,7 +12,7 @@ const cors= require('cors')
 const postRoutes = require('./src/routes/post');
 const userRoutes = require('./src/routes/user');
 const commRoutes = require('./src/routes/comment');
-// const sequelize = require('./src/config/config');
+const sequelize = require('./src/config/config');
 const comment= require('./src/models/comment');
 const post= require('./src/models/post');
 const user= require('./src/models/user');
@@ -61,10 +61,10 @@ user.hasMany(vote,{
   onDelete: 'CASCADE'
 });
 
-// use below code with 'force=true'to reintialize the db or make changes in models/use without 'force=true' to set default users such as admin.
+// use below code with {force:true}to reintialize the db or make changes in models/use without {force:true} to set default users such as admin.
 // ----------------------------------------
 
-// sequelize.sync().then(()=>{
+// sequelize.sync({force:true}).then(()=>{
 //   console.log('this works');
 // }).catch((err)=>{
 //   console.log(err)
@@ -76,6 +76,6 @@ app.use('/api/posts', postRoutes);
 app.use('/api/comments', commRoutes)
 
 app.use('/images',express.static(path.join(__dirname, 'src/images')) );
-app.use(express.static('images'));
+// app.use(express.static('images'));
 
 module.exports = app;

@@ -59,6 +59,9 @@
             @input="errorMessage = false"
           />
         </div>
+        <span v-if="v$.signupUserData.userName.$invalid" class="error">{{
+          v$.signupUserData.userName.$errors[0].$message
+        }}</span>
         <div class="jobTitle column">
           <label for="jobTitle">Poste: </label>
           <input
@@ -153,6 +156,7 @@ import {
   sameAs,
   helpers,
 } from "@vuelidate/validators";
+
 export default {
   name: "login",
 
@@ -177,18 +181,23 @@ export default {
         password: "",
       },
 
-      showModal: false, //show modal to confirm accoutn creations
+      showModal: false, //show modal to confirm account creations
       modalText: "Compte créé vous pouvez vous connecter",
       errorMessage: "",
     };
   },
+
   // validation of inputs
+
   validations() {
     return {
       signupUserData: {
         userName: {
           required,
-
+          noNumbers: helpers.withMessage(
+            "Le champs nom et prénom ne peut pas contenir de chiffres ou de charactères spéciaux",
+            helpers.regex(/^[a-zA-ZÀ-ÿ-. ]*$/)
+          ),
           maxLengthValue: maxLength(50),
         },
         email: { required, email },
@@ -204,16 +213,20 @@ export default {
     };
   },
   methods: {
+    //show sign-up
     showCreateAccount() {
       this.mode = "create";
     },
+    //show login
     showLogin() {
       this.mode = "login";
     },
+    //close account confirmation modal
     closeModal() {
       this.showModal = !this.showModal;
       document.location.reload();
     },
+    // validate and submit a new account
     submitCreate() {
       console.log(this.v$.signupUserData.$validate());
 
@@ -225,7 +238,7 @@ export default {
         }
       });
     },
-
+    // create a new account
     createAccount() {
       let formData = new FormData();
       let self = this;
@@ -308,8 +321,7 @@ export default {
         .catch(function (error) {
           if (error.response) {
             // The request was made and the server responded with a status code
-            self.errorMessage = error.response.data.message;
-            console.log(error.response.data);
+            self.errorMessage = `L'email ou le mot de passe est incorrect`;
           } else if (error.request) {
             // The request was made but no response was received
 

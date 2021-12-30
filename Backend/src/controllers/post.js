@@ -104,9 +104,12 @@ exports.DeleteAPost=(req, res, next) =>{
 
     Post.findOne({where: {id:req.params.id}}).then((post)=>{
        if ((post.userId == res.user.id)||(res.user.isAdmin)){
+          
             if (post.imageUrl!== null){
                 const filename = post.imageUrl.split('/images/')[1];
-                fs.unlink("images/"+ filename,()=>{
+                console.log('this is the filename: ');
+                console.log(filename);
+                fs.unlink("src/images/"+ filename,()=>{
                     Post.destroy({where: {id:req.params.id}})
                     .then(() => res.status(200).json({ message: 'objet deleted'}))
                     .catch(

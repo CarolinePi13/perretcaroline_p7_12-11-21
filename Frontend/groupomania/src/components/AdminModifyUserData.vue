@@ -23,15 +23,25 @@
               </label>
             </div>
             <div class="user-data">
+              <label> Nom d'utilisateur</label>
               <input
                 class="userName"
                 type="text"
                 v-model="newUserData.userName"
               />
+              <label> Fonction</label>
               <input
                 class="jobTitle"
                 type="text"
                 v-model="newUserData.jobTitle"
+              />
+              <label for="passwordReset">
+                Réinitialiser le mot de passe de l'utilisateur</label
+              >
+              <input
+                type="password"
+                id="passwordReset"
+                v-model="newUserData.resetPassword"
               />
             </div>
             <input type="submit" class="button margin-button" />
@@ -53,6 +63,7 @@ export default {
         userName: this.eachUser.userName,
         jobTitle: this.eachUser.jobTitle,
         avatar: this.eachUser.avatar,
+        resetPassword: null,
       },
       previewAvatarUrl: this.eachUser.avatar,
       token: "",
@@ -80,6 +91,9 @@ export default {
       this.getLocalStorage();
       let id = this.userId;
       let formData = new FormData();
+      if (this.resetPassword !== null) {
+        formData.append("image", this.newUserData.resetPassword);
+      }
       formData.append("image", this.newUserData.avatar);
       formData.append("userName", this.newUserData.userName);
       formData.append("jobTitle", this.newUserData.jobTitle);
@@ -139,9 +153,9 @@ export default {
 
   display: flex;
   flex-direction: column;
-  align-items: center;
+
   font-weight: bold;
-  font-size: 2em;
+  font-size: 1em;
 
   border-radius: 15px;
   padding: 10px;
@@ -150,6 +164,10 @@ export default {
   border: 1px solid rgb(94, 86, 86);
   input {
     margin: 5px;
+    padding: 5px;
+    @media (min-width: 620px) {
+      padding: 10px;
+    }
   }
 }
 .three-dots {
@@ -184,5 +202,8 @@ export default {
 }
 .margin-button {
   margin: 20px;
+}
+.modify-bg {
+  background-color: rgba(168, 140, 141, 0.8);
 }
 </style>

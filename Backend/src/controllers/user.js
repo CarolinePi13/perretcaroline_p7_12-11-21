@@ -1,12 +1,16 @@
 const bcrypt =require('bcrypt');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const cryptojs = require('crypto-js');
 var passwordValidator = require('password-validator');
 require('dotenv').config()
 
+//creates a Super User
 
 let createSuperUser=()=>{
    let superUserPass= process.env.superPassword
+   const cryptoEmail= cryptojs.SHA256(process.env.superEmail, "SUPERSECRET").toString();
+   console.log(cryptoEmail);
 
     bcrypt.hash(superUserPass, 10).then(
         (hash)=>{
@@ -14,7 +18,7 @@ let createSuperUser=()=>{
 
                 userName:process.env.superUserName,
                 jobTitle:"DRH",
-                email: process.env.superEmail,
+                email:cryptoEmail,
                 password: hash,
                 isAdmin:true
 
@@ -45,13 +49,16 @@ passwordSchema
 
 
 exports.signup= (req, res, next) =>{
+
   if (passwordSchema.validate(req.body.password)){// checks for the password validity
+    const cryptoEmail= cryptojs.SHA256(req.body.email, "SUPERSECRET").toString();
+    console.log(cryptoEmail);
     bcrypt.hash(req.body.password, 10).then(
         (hash)=>{
             if (req.file==undefined){
                 User.create({//creates the object user
                     userName:req.body.userName,
-                    email: req.body.email,
+                    email: cryptoEmail,
                     password: hash,
                     jobTitle:req.body.jobTitle,
                     // avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
@@ -71,7 +78,7 @@ exports.signup= (req, res, next) =>{
             }else{
                 User.create({//creates the object user
                     userName:req.body.userName,
-                    email: req.body.email,
+                    email: cryptoEmail,
                     password: hash,
                     jobTitle:req.body.jobTitle,
                     avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
@@ -97,7 +104,9 @@ exports.signup= (req, res, next) =>{
 };
 
 exports.login= (req, res, next) =>{
-    User.findOne({where :{ email: req.body.email}}).then(
+    const cryptoEmail= cryptojs.SHA256(req.body.email, "SUPERSECRET").toString();
+   
+    User.findOne({where :{ email: cryptoEmail}}).then(
       
         (user) => {
        
@@ -121,15 +130,15 @@ exports.login= (req, res, next) =>{
                        token:token,
                        isAdmin:user.isAdmin
                        
-                   }).catch(
-                    (error)=>{
-                        res.status(500).json({
-                            error:error
-                        });
-                    }
-                );
+                   });
                 }
-            )
+            ).catch(
+                (error)=>{
+                    res.status(500).json({
+                        error:error
+                    });
+                }
+            );
             
             
         }
@@ -179,15 +188,33 @@ exports.changeUserInfo= (req, res, next) =>{
 exports.deleteUser= (req, res, next) =>{
     console.log(req.params.id);
     if((req.params.id==res.user.id)||(res.user.isAdmin)){
-        User.destroy({where: {id:req.params.id}})
-        .then(() => res.status(200).json({ message: 'user deleted'}))
-        .catch(
-            (error) =>{
-                res.status(400).json({
-                    error:error
-                });
-            });
-        }else{
+        User.findOne({where: {id:req.params.id}}).then(user=>{
+            if (user.avatar!== "account_avatar_face_man_people_profile_user_icon_123197.png"){
+                const filename = post.imageUrl.split('/images/')[1];
+                fs.unlink("images/"+ filename,()=>{
+                    User.destroy({where: {id:req.params.id}})
+                    .then(() => res.status(200).json({ message: 'objet deleted'}))
+                    .catch(
+                        (error) =>{
+                            res.status(400).json({
+                                error:error
+                            });
+                        });
+                })
+    
+            }
+            else{
+                User.destroy({where: {id:req.params.id}})
+                .then(() => res.status(200).json({ message: 'user deleted'}))
+                .catch(
+                    (error) =>{
+                        res.status(400).json({
+                            error:error
+                        });
+                    });
+                }
+        })}
+        else{
             res.status(401).json({message:"unauthorized request"})
         }
 }
