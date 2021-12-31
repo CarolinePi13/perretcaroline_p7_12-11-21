@@ -1,16 +1,18 @@
 <template>
   <article>
     <div class="post-card shadow">
+      <!--this module allows modify and delete-->
       <SuppModModule
         v-if="showModule"
         @deleteOrConfirm="deletePost(post.id)"
         @updateThis="toggleUpdatePost"
         :key="post.id"
       />
-
+      <!--contains all user Data-->
       <div class="user-data">
         <img :src="postUserData.avatar" alt="user avatar" class="user-avatar" />
         <p class="user-name">{{ postUserData.userName }}</p>
+
         <img
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
           alt=""
@@ -18,6 +20,7 @@
           @click="showIfAllowed()"
         />
       </div>
+      <span class="time">{{ postTime }}</span>
       <div class="post-content" @click="closeSuppModModule()">
         <div class="show-img" v-show="post.imageUrl !== null">
           <img :src="post.imageUrl" alt="Post image" />
@@ -123,6 +126,7 @@ export default {
       thisUserliked: "",
       thisVoteId: "",
       isAdmin: "",
+      postTime: "",
     };
   },
   methods: {
@@ -131,6 +135,18 @@ export default {
     },
     displayWriteNewComment() {
       this.writeComment = !this.writeComment;
+    },
+    formatDate() {
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      let d = new Date(this.post.createdAt);
+      const date = d.toLocaleDateString("fr-FR", options);
+      console.log(date);
+      this.postTime = date;
     },
 
     getLocalStorage() {
@@ -329,6 +345,7 @@ export default {
     this.getLocalStorage();
     this.getPostUserData();
     this.getThisPostsVotes();
+    this.formatDate();
   },
   mounted() {
     this.getAllComments();

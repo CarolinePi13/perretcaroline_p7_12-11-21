@@ -190,6 +190,7 @@ export default {
   // validation of inputs
 
   validations() {
+    const endswithGroupomania = (value) => value.includes("@groupomania.fr");
     return {
       signupUserData: {
         userName: {
@@ -200,7 +201,7 @@ export default {
           ),
           maxLengthValue: maxLength(50),
         },
-        email: { required, email },
+        email: { required, email, endswithGroupomania },
         password: { required },
         passwordConfirm: {
           sameAsPassword: helpers.withMessage(

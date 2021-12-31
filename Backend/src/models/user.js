@@ -17,7 +17,8 @@ const User =sequelize.define('user',
         email:{
             type:Sequelize.STRING,
             allowNull:false,
-            unique:true
+            unique:true,
+            contains:"@grouponamia.fr"
         },
         jobTitle:{
             type:Sequelize.STRING,

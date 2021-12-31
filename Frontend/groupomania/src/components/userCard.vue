@@ -119,7 +119,7 @@ export default {
 <style scoped lang="scss">
 .user-card {
   width: 95%;
-  height: 400px;
+
   border-bottom: 1px solid gray;
   border-left: 1px solid gray;
   border-right: 1px solid gray;
@@ -131,7 +131,7 @@ export default {
   justify-content: space-around;
   align-items: center;
   position: relative;
-
+  height: fit-content;
   margin-top: 50px;
 }
 
@@ -140,6 +140,7 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 90%;
+  margin: 10px;
 }
 .user-data {
   margin: 10px;
