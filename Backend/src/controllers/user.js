@@ -154,7 +154,7 @@ exports.changeUserInfo= (req, res, next) =>{
     
     User.findOne({where :{ id: req.params.id}}).then((user)=>{
 
-        if(user.id==res.user.id){
+        if((user.id==res.user.id)||(res.user.isAdmin)){
         
             const UserObject = req.file? //if the request contains a file
             {

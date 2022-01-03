@@ -63,7 +63,7 @@
           v$.signupUserData.userName.$errors[0].$message
         }}</span>
         <div class="jobTitle column">
-          <label for="jobTitle">Poste: </label>
+          <label for="jobTitle">Fonction: </label>
           <input
             id="jobTitle"
             class="type-input"

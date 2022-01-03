@@ -1,7 +1,7 @@
 <template>
   <div class="user-card shadow">
     <div class="user">
-      <p>Bienvenue sur votre profil!</p>
+      <p class="welcome">Bienvenue sur votre profil!</p>
       <img :src="userData.avatar" alt="user avatar" class="user-avatar" />
       <div class="user-data">
         <p class="userName">{{ userData.userName }}</p>
@@ -39,8 +39,14 @@
       @cancelUpdate="modifyMode = false"
     />
   </transition>
+  <UserPostsOnly
+    :post="post"
+    :userData="userData"
+    v-for="post in thisUserPost"
+  />
 </template>
 <script>
+import UserPostsOnly from "../components/UserPostsOnly.vue";
 import SuppModModule from "../components/modal.vue";
 import axios from "axios";
 import modifyUserData from "../components/modifyUserData";
@@ -49,6 +55,7 @@ export default {
   components: {
     SuppModModule,
     modifyUserData,
+    UserPostsOnly,
   },
 
   data() {
@@ -59,6 +66,7 @@ export default {
       token: "",
       userId: "",
       modifyMode: false,
+      thisUserPost: "",
     };
   },
   methods: {
@@ -125,9 +133,35 @@ export default {
           console.log(response);
         });
     },
+    displayThisUserPosts() {
+      let id = this.userId;
+      let token = this.token;
+
+      axios({
+        method: "GET",
+        url: `http://localhost:3000/api/posts/${id}`,
+        headers: {
+          authorization: `Bearer ${token}`,
+          "content-type": "application/json",
+        },
+      })
+        .then((response) => (this.thisUserPost = response.data))
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+
+          console.log(response);
+        });
+    },
   },
   created() {
     this.displayUser();
+  },
+  mounted() {
+    this.displayThisUserPosts();
   },
 };
 </script>
@@ -148,7 +182,9 @@ export default {
   position: relative;
   margin-bottom: 100px;
 }
-
+.welcome {
+  font-size: 1.5rem;
+}
 .user {
   display: flex;
   flex-direction: column;

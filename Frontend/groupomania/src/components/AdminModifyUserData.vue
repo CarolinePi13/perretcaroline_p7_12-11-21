@@ -89,7 +89,9 @@ export default {
     },
     updateUser() {
       this.getLocalStorage();
-      let id = this.userId;
+      let id = this.eachUser.id;
+      console.log(id);
+
       let formData = new FormData();
       if (this.newUserData.resetPassword !== null) {
         formData.append("image", this.newUserData.resetPassword);

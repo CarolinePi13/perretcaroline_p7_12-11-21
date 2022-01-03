@@ -64,7 +64,25 @@ exports.getAllPosts=(req, res, next) =>{
     }
 };
 
-
+exports.getAllThisUserPosts=(req, res, next) =>{
+    if(res.user){
+        Post.findAll({where:{userId:req.params.id}},{order: [['updatedAt', "DESC"], ['createdAt', "DESC"]] })
+        .then(posts=>{
+            res.status(200).json(posts)
+            
+        })
+        .catch(err => {
+          res.status(500).send({
+            message:
+              err.message || "erreur lors de la récupération des posts"
+          });
+        });
+    
+        
+        }else{
+            res.status(401).json({message:"unauthorized request"})
+        }
+}
     
 
 exports.ModifyAPost=(req, res, next) =>{
