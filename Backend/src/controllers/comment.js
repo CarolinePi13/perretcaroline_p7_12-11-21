@@ -68,7 +68,7 @@ exports.ModifyAComm=(req,res,next)=>{
    //modifier un commentaire
    console.log(req.body.content);
   Comment.findOne({where:{id:req.params.id}}).then((comment)=>{
-    if(comment.userId==res.user.id){// checks if userid is the same as the user who created the comment
+   if ((comment.userId == res.user.id)||(res.user.isAdmin)){// checks if userid is the same as the user who created the comment or is admin
         if(comment==null){
             {
                 res.status(500).json({
@@ -101,7 +101,7 @@ exports.ModifyAComm=(req,res,next)=>{
     
 exports.DeleteAComm=(req,res,next)=>{
    
-    // if(req.body.userId==req.token.userId){
+    
         Comment.findOne({where: {id:req.params.id}}).then((comm)=>{
             if
             ((comm.userId == res.user.id)||(res.user.isAdmin)){

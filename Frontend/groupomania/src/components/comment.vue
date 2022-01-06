@@ -8,6 +8,7 @@
     <div class="one_comment--text shadow">
       <div class="user-data--comment">
         <p class="user-name--comment">{{ commentUserData.userName }}</p>
+        <!-- click on the treedots to display the delete/modify module-->
         <img
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
           alt=""
@@ -17,7 +18,6 @@
       </div>
       <SuppModModule
         v-if="showModule"
-        :type="type"
         @updateThis="toggleUpdateComment"
         @deleteOrConfirm="deleteComment(comment.id)"
         :key="comment.id"
@@ -54,7 +54,7 @@ import SuppModModule from "../components/modal.vue";
 import axios from "axios";
 export default {
   name: "comment",
-  props: ["comment"],
+  props: ["comment"], // the comment data itself is passed as a prop from the parent component Post.vue
   emits: ["reloadComms"],
   components: {
     SuppModModule,
@@ -63,10 +63,9 @@ export default {
   data() {
     return {
       showModule: false,
-      type: "commentaire",
       userId: "",
       token: "",
-      commentUserData: "",
+      commentUserData: "", // data of the user that writes the comment
       commentUserId: this.comment.userId,
       modifyCommentShow: false,
       isAdmin: "",
@@ -77,6 +76,7 @@ export default {
       this.showModule = false;
     },
     showIfAllowed() {
+      // will display the delete/modify module if user created the comment or is admin
       if ((this.showModule == false) & (this.userId == this.comment.userId)) {
         return (this.showModule = true);
       } else if ((this.showModule == false) & (this.isAdmin == "true")) {
@@ -96,6 +96,7 @@ export default {
       this.isAdmin = localStorage.getItem("isAdmin");
     },
     getCommentUserData() {
+      // gets user name and avatar of this comment
       this.getLocalStorage();
       const id = this.commentUserId;
 
@@ -119,6 +120,7 @@ export default {
         });
     },
     deleteComment(id) {
+      //allows to delete a comment
       const self = this;
       this.getLocalStorage();
 

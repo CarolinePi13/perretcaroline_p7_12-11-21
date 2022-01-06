@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <navigation v-if="!['Login'].includes($route.name)" />
-
+    <!-- nav bar only shows when user is logged in-->
     <Title />
 
     <router-view />
@@ -27,6 +27,7 @@ export default {
     getLocalStorage() {
       this.isLoggedIn = localStorage.getItem("loggedIn");
     },
+    // checks if user is loggedIn if yes the route /wallposts is pushed otherwise it pushes the loggin page
     checkIfIsLoggedIn() {
       this.getLocalStorage();
       if (this.isLoggedIn) {

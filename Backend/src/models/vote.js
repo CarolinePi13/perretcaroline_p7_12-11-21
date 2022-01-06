@@ -1,4 +1,4 @@
-const { INTEGER } = require('sequelize');
+
 const Sequelize = require('sequelize');
 
 const sequelize = require('../config/config')
@@ -13,7 +13,7 @@ const Vote= sequelize.define('postsVotes',
             autoIncrement:true
         },
         vote:{
-            type:INTEGER,
+            type:Sequelize.INTEGER,
             allowNull:false
         },
         createdAt: {

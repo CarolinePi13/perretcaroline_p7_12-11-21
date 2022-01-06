@@ -2,6 +2,7 @@
   <header>
     <nav class="shadow">
       <router-link
+        class="user"
         :to="{ name: 'User' }"
         @mouseover="myAccountShow = true"
         @mouseleave="myAccountShow = false"
@@ -14,6 +15,7 @@
       >
 
       <router-link
+        class="wall"
         :to="{ name: 'Wall' }"
         @mouseover="myWallShow = true"
         @mouseleave="myWallShow = false"
@@ -67,6 +69,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.logout,
+.wall,
+.user {
+  position: relative;
+}
 img,
 p {
   height: 50px;
@@ -87,6 +94,7 @@ nav {
     font-size: 1.4em;
     display: flex;
     align-items: center;
+    position: relative;
     &:hover {
     }
   }
@@ -96,10 +104,11 @@ nav {
   height: 20px;
   display: flex;
   width: 100%;
-  justify-content: space-between;
-  padding: 10px;
+  justify-content: center;
+  padding-top: 10px;
   align-items: center;
 }
+
 .logout {
   cursor: pointer;
 }

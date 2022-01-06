@@ -19,7 +19,7 @@ module.exports= (req, res, next) => {
     });
   } else {
     res.user = null;
-    // res.status(401).json('user unauthorized')
+  
     next();
   }
 };

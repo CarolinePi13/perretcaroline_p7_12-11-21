@@ -1,5 +1,5 @@
 <template>
-  <div class="isLoggedIn wall">
+  <div class="wall">
     <createPost :currentUserData="currentUserData" />
     <postCard
       v-for="post in Posts"
@@ -31,9 +31,6 @@ export default {
     createPost,
   },
   methods: {
-    logged() {
-      this.isLoggedIn = true;
-    },
     getLocalStorage() {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
@@ -82,10 +79,20 @@ export default {
 
           console.log(response);
         })
-        .catch(function (response) {
-          //handle error
+        .catch(function (error) {
+          if (error.response.status === 401) {
+            // The request was made and the server responded with a status code
+            localStorage.clear();
+            this.$router.push("/");
+          } else if (error.request) {
+            // The request was made but no response was received
 
-          console.log(response);
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
         });
     },
   },

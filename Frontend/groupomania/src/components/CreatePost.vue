@@ -1,5 +1,6 @@
 <template>
   <div class="post-card shadow">
+    <!--cross to be clicked to close the create a post action-->
     <img
       src="../assets/4115230-cancel-close-cross-delete_114048.svg"
       alt="close window"
@@ -7,6 +8,7 @@
       v-if="writeIsClicked"
       @click="close"
     />
+    <!--displays the name and avatar of the user currently logged in-->
     <div class="post-top">
       <div class="createPost-user-data">
         <img
@@ -16,6 +18,7 @@
         />
         <p class="user-name">{{ currentUserData.userName }}</p>
       </div>
+      <!--unfolds the textarea so that the user can create a post-->
       <div class="new-post" v-if="!writeIsClicked">
         <img
           src="../assets/write-smth.svg"
@@ -24,7 +27,7 @@
         />
       </div>
     </div>
-
+    <!--text area to write the text-->
     <div class="post-text" v-if="writeIsClicked">
       <img v-if="url" :src="url" alt="image du post" class="post-image" />
       <form action="submit" @submit.prevent="createANewPost" ref="newPost">
@@ -40,7 +43,7 @@
         <input type="submit" value="Publier" class="publier button" />
       </form>
     </div>
-
+    <!--the image is included in the label so that the input event is triggered on clicking the image-->
     <div class="upload-file" v-if="writeIsClicked">
       <label for="add-img" class="label-img">
         <input
@@ -92,6 +95,7 @@ export default {
       this.postData.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
     },
+    //allows a preview of the file before posting it
     previewImg() {
       const file = this.postData.image;
       this.url = URL.createObjectURL(file);
@@ -100,7 +104,7 @@ export default {
       this.postData.image = e.target.files[0];
       this.previewImg();
     },
-
+    // creating a new post
     createANewPost() {
       this.getLocalStorage();
       let formData = new FormData();

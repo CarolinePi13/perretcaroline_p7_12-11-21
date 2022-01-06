@@ -2,6 +2,7 @@
   <div class="modify-bg">
     <transition name="slide" appear>
       <div class="mod-card shadow">
+        <!-- close the component without modifying-->
         <img
           src="../assets/4115230-cancel-close-cross-delete_114048.svg"
           alt="close window"
@@ -9,6 +10,7 @@
           @click="close"
         />
         <div class="post-content">
+          <!--takes the post content to be displayed-->
           <form
             action="submit"
             @submit.prevent="updateAPost"
@@ -76,11 +78,12 @@ export default {
       token: "",
       postId: this.post.id,
       previewPostUrl: this.post.imageUrl,
-      hideInputOn: false,
+      hideInputOn: false, //hides the file input
     };
   },
   methods: {
     close() {
+      //closes the modal to cancel the modification
       this.$emit("cancelUpdate");
     },
     addFile(e) {

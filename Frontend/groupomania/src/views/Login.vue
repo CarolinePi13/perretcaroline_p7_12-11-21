@@ -84,9 +84,11 @@
             @input="errorMessage = false"
           />
         </div>
+
         <span v-if="v$.signupUserData.email.$error" class="error">{{
           v$.signupUserData.email.$errors[0].$message
         }}</span>
+
         <div class="pass column">
           <label for="sign-up-password">* Mot de passe: </label>
 
@@ -100,6 +102,7 @@
             autocomplete="current-password"
           />
         </div>
+
         <div class="confirm-pass column">
           <label for="sign-up-password--confirm"
             >* Confirmer votre mot de passe:
@@ -116,9 +119,11 @@
             "
           />
         </div>
+
         <span v-if="v$.signupUserData.passwordConfirm.$invalid" class="error">{{
           v$.signupUserData.passwordConfirm.$errors[0].$message
         }}</span>
+
         <div class="file column">
           <label for="avatar">Ajouter une photo de profil:</label>
           <input
@@ -128,13 +133,16 @@
             @change="addFile"
           />
         </div>
+
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
         <input
           type="submit"
           id="login"
           value="Créer un compte"
           class="button"
         />
+
         <span v-if="v$.$anyError">Merci de remplir les champs requis</span>
       </form>
     </div>
@@ -146,6 +154,7 @@
 <script>
 import axios from "axios";
 import modalConnect from "../components/basicModal.vue";
+//input validation tools
 import { useVuelidate } from "@vuelidate/core";
 
 import {
@@ -196,12 +205,19 @@ export default {
         userName: {
           required,
           noNumbers: helpers.withMessage(
-            "Le champs nom et prénom ne peut pas contenir de chiffres ou de charactères spéciaux",
+            "Ce champs ne peut pas contenir de chiffres ou de charactères spéciaux",
             helpers.regex(/^[a-zA-ZÀ-ÿ-. ]*$/)
           ),
           maxLengthValue: maxLength(50),
         },
-        email: { required, email, endswithGroupomania },
+        email: {
+          required,
+          email,
+          endswithGroupomania: helpers.withMessage(
+            "Cet email n'est pas valide",
+            endswithGroupomania
+          ),
+        },
         password: { required },
         passwordConfirm: {
           sameAsPassword: helpers.withMessage(
@@ -287,6 +303,7 @@ export default {
           console.log(error.config);
         });
     },
+    //ajouter le fichier
     addFile(e) {
       this.signupUserData.avatar = e.target.files[0];
     },

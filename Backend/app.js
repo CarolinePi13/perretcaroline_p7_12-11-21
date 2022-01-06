@@ -76,6 +76,6 @@ app.use('/api/posts', postRoutes);
 app.use('/api/comments', commRoutes)
 
 app.use('/images',express.static(path.join(__dirname, 'src/images')) );
-// app.use(express.static('images'));
+
 
 module.exports = app;

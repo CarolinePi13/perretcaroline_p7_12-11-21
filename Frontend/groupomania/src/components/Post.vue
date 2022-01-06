@@ -12,7 +12,7 @@
       <div class="user-data">
         <img :src="postUserData.avatar" alt="user avatar" class="user-avatar" />
         <p class="user-name">{{ postUserData.userName }}</p>
-
+        <!--click on the dots to open the delete/modify module for admin and user -->
         <img
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
           alt=""
@@ -22,21 +22,24 @@
       </div>
       <span class="time">{{ postTime }}</span>
       <div class="post-content" @click="closeSuppModModule()">
+        <!--affiche l'image si il y en a une-->
         <div class="show-img" v-show="post.imageUrl !== null">
           <img :src="post.imageUrl" alt="Post image" />
         </div>
-
+        <!--affiche le texte si il y en a un-->
         <div class="post-text">
           <p v-if="post.content !== 'undefined'">
             {{ post.content }}
           </p>
         </div>
       </div>
+      <!--displays comments and like count-->
       <div class="comment-count">
         <p>{{ numberOfComments }} commentaire(s)</p>
         <p>{{ totalLikes }} j'aime(s)</p>
       </div>
       <div class="post-actions">
+        <!--affiche les commemtaires-->
         <div class="unfold">
           <img
             src="../assets/downarrow_120663.png"
@@ -46,10 +49,12 @@
             @click="toggleComments()"
           />
         </div>
+        <!--affiche le composant pour ecrire un commantaire-->
         <div class="comment-button" @click="displayWriteNewComment">
           <img src="../assets/commentmono_105952.svg" alt="click to comment" />
           <p>Commenter</p>
         </div>
+        <!--click ici pour like ou unlike-->
         <div class="likes">
           <i
             class="fas fa-thumbs-up like-button like-button--plein"
@@ -64,7 +69,7 @@
           ></i>
         </div>
       </div>
-
+      <!--unfold comments -->
       <div v-if="showComments" class="comments-card">
         <comments
           v-for="comment in comments"
@@ -82,6 +87,7 @@
       </div>
     </div>
   </article>
+  <!--affiche le composant de modification du post-->
   <transition name="fade" appear>
     <modifyPost
       :post="post"
@@ -113,20 +119,18 @@ export default {
       showComments: false,
       writeComment: false,
       showModule: false,
-      postId: this.post.id,
-      postUserId: this.post.userId,
+      postId: this.post.id, // gets the id of the post
+      postUserId: this.post.userId, //gets the user that created the post
       token: "",
       userId: "",
-      comments: "",
-      numberOfComments: "",
-      modifyMode: false,
-      postUserData: "",
+      comments: "", // gatters all comments to pass to the comments components
+      numberOfComments: "", // allows to display the total number of comments
+      postUserData: "", // data about the user who wrote the post
       totalLikes: 0,
-      modifyPostShow: false,
-      thisUserliked: "",
-      thisVoteId: "",
+      modifyPostShow: false, //allows to display the modify post component
+      thisUserliked: "", // allows to display full or empty thumb up if user likes the specific post or not
       isAdmin: "",
-      postTime: "",
+      postTime: "", // allows to display the post time
     };
   },
   methods: {
@@ -136,7 +140,9 @@ export default {
     displayWriteNewComment() {
       this.writeComment = !this.writeComment;
     },
+
     formatDate() {
+      //to display the date in french in a standard format
       const options = {
         weekday: "long",
         year: "numeric",
@@ -150,6 +156,7 @@ export default {
     },
 
     getLocalStorage() {
+      // fecthes data in local storage
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
       this.isAdmin = localStorage.getItem("isAdmin");
@@ -162,6 +169,7 @@ export default {
       this.showModule = false;
     },
     showIfAllowed() {
+      // will display the delete/modify module if user created the post or is admin
       if ((this.showModule == false) & (this.userId == this.post.userId)) {
         return (this.showModule = true);
       } else if ((this.showModule == false) & (this.isAdmin == "true")) {
@@ -199,6 +207,7 @@ export default {
         });
     },
     getThisPostsVotes() {
+      //to display all votes for the post
       let PostId = this.postId;
 
       axios({
@@ -220,6 +229,7 @@ export default {
         });
     },
     getOneVote() {
+      // to display wether or not the user likes this post or not
       let id = this.postId;
 
       axios({
@@ -246,6 +256,7 @@ export default {
     },
 
     unlikePost() {
+      // removes the vote
       let id = this.postId;
       axios({
         method: "DELETE",
@@ -268,6 +279,7 @@ export default {
         });
     },
     deletePost(id) {
+      //remove the post
       const self = this;
       this.getLocalStorage();
 
@@ -294,6 +306,7 @@ export default {
         });
     },
     getPostUserData() {
+      // collects data form the user that created the post
       this.getLocalStorage();
       const id = this.postUserId;
 
@@ -317,6 +330,7 @@ export default {
         });
     },
     getAllComments() {
+      // collects all comments for that post
       let self = this;
       axios({
         method: "GET",
