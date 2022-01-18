@@ -13,7 +13,7 @@
         <p class="user-name">{{ userData.userName }}</p>
         <img
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
-          alt=""
+          alt="bouton déroulant trois petits points"
           class="three-dots"
           @click="showIfAllowed()"
         />

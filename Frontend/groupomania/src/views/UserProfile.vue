@@ -23,12 +23,15 @@
   </div>
   <div class="confirm modal-bg shadow" v-if="showConfirm">
     <div class="modal-text">
-      <p>Etes vous sur de vouloir supprimer cet utilisateur ?</p>
-      <button class="confirm_btn confirm_btn--supp" @click="deleteUser">
-        supprimer
+      <p>Etes vous sur de vouloir supprimer votre profil ?</p>
+      <button class="confirm_btn confirm_btn--supp button" @click="deleteUser">
+        SUPPRIMER
       </button>
-      <button class="confirm_btn confirm_btn--cancel" @click="cancelDeleteUser">
-        annuler
+      <button
+        class="confirm_btn confirm_btn--cancel button"
+        @click="cancelDeleteUser"
+      >
+        ANNULER
       </button>
     </div>
   </div>
@@ -127,10 +130,20 @@ export default {
           //handle success
           console.log(response);
         })
-        .catch(function (response) {
-          //handle error
+        .catch(function (error) {
+          if (error.response.status === 401) {
+            // The request was made and the server responded with a status code
+            localStorage.clear();
+            this.$router.push("/");
+          } else if (error.request) {
+            // The request was made but no response was received
 
-          console.log(response);
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
         });
     },
     displayThisUserPosts() {
@@ -232,15 +245,19 @@ export default {
   box-shadow: 1px 1px 3px 1px rgb(94, 86, 86);
 }
 .modal-text {
-  // width: 300px;
+  width: 70%;
   height: 150px;
   background-color: white;
   text-align: center;
   border-radius: 15px;
+  font-weight: 1.2em;
+  z-index: 97;
+}
+.button {
+  margin: 10px;
 }
 .confirm_btn {
-  width: 80px;
-  margin: 5px;
+  font-size: 1em;
   &--supp {
     background: linear-gradient(
       120deg,

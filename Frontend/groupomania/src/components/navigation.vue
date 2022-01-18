@@ -7,7 +7,7 @@
         @mouseover="myAccountShow = true"
         @mouseleave="myAccountShow = false"
       >
-        <img src="../assets/user_account_icon_145918.png" />
+        <img src="../assets/user_account_icon_145918.png" alt="mon compte" />
       </router-link>
 
       <router-link :to="{ name: 'admin' }" v-if="isAdmin == 'true'">
@@ -20,12 +20,12 @@
         @mouseover="myWallShow = true"
         @mouseleave="myWallShow = false"
       >
-        <img class="mon-compte" src="../assets/small-icone-coupe.png" />
+        <img class="mur" src="../assets/small-icone-coupe.png" alt="mur" />
       </router-link>
 
       <img
         src="../assets/log_out_icon_197724.png"
-        alt="logout"
+        alt="se déconnecter"
         class="logout"
         @click="logout"
         @mouseover="myLogoutShow = true"

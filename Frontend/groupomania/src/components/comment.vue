@@ -11,7 +11,7 @@
         <!-- click on the treedots to display the delete/modify module-->
         <img
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
-          alt=""
+          alt="bouton déroulant trois petits points"
           class="three-dots smaller-dots"
           @click="showIfAllowed()"
         />
@@ -186,6 +186,7 @@ p.user-name--comment {
   margin: 2%;
 }
 .comment-text > p {
+  white-space: pre-wrap;
   margin: 10px;
   font-size: 0.9em;
   @media (min-width: 620px) {

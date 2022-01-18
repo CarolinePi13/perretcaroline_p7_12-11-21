@@ -47,7 +47,7 @@
                   <img
                     src="../assets/frame_gallery_image_images_photo_picture_pictures_icon_123209.svg"
                     alt=" add a file"
-                    aria-label="afficher les commentaires"
+                    aria-label="ajouter ou changer une image"
                     class="add-img"
                   />
                   <span v-if="newPostData.image">Modifiez l'image</span>

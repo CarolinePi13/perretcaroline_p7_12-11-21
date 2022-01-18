@@ -15,7 +15,7 @@
         <!--click on the dots to open the delete/modify module for admin and user -->
         <img
           src="../assets/three-dots-more-indicator_icon-icons.com_72518.svg"
-          alt=""
+          alt="bouton déroulant trois petits points"
           class="three-dots"
           @click="showIfAllowed()"
         />
@@ -24,7 +24,7 @@
       <div class="post-content" @click="closeSuppModModule()">
         <!--affiche l'image si il y en a une-->
         <div class="show-img" v-show="post.imageUrl !== null">
-          <img :src="post.imageUrl" alt="Post image" />
+          <img :src="post.imageUrl" alt="image du poste" />
         </div>
         <!--affiche le texte si il y en a un-->
         <div class="post-text">
@@ -43,7 +43,7 @@
         <div class="unfold">
           <img
             src="../assets/downarrow_120663.png"
-            alt="down"
+            alt="afficher les commentaires"
             aria-label="afficher les commentaires"
             class="down-arrow"
             @click="toggleComments()"
@@ -59,11 +59,13 @@
           <i
             class="fas fa-thumbs-up like-button like-button--plein"
             v-if="thisUserliked"
+            aria-label="dislike"
             @click="unlikePost()"
           ></i>
 
           <i
             class="far fa-thumbs-up like-button like-button--vide"
+            aria-label="like"
             @click="likePost()"
             v-if="!thisUserliked"
           ></i>
@@ -464,36 +466,34 @@ div.comment-button > img {
 .post-content {
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 90%;
   align-items: center;
   margin-top: 10px;
 
   img {
     width: 100%;
-    max-width: 250px;
-    max-height: 250px;
     height: auto;
+    max-width: 250px;
     @media (min-width: 620px) {
-      min-width: 350px;
-      min-height: auto;
-      max-width: 450px;
+      max-width: 350px;
       max-height: 450px;
     }
+    @media (min-width: 920px) {
+      max-width: 450px;
+    }
     @media (min-width: 1600px) {
-      min-width: 450px;
-      min-height: auto;
       max-width: 550px;
       max-height: 550px;
     }
   }
 }
 .post-text {
-  text-align: justify;
   font-size: 14px;
   width: 100%;
   font-size: 1.1em;
   margin-bottom: 30px;
   margin-top: 10px;
+  white-space: pre-wrap;
   @media (min-width: 620px) {
     font-size: 1.3em;
   }

@@ -35,14 +35,6 @@
                 type="text"
                 v-model="newUserData.jobTitle"
               />
-              <label for="passwordReset">
-                Réinitialiser le mot de passe de l'utilisateur</label
-              >
-              <input
-                type="password"
-                id="passwordReset"
-                v-model="newUserData.resetPassword"
-              />
             </div>
             <input type="submit" class="button margin-button" />
           </form>
@@ -63,7 +55,6 @@ export default {
         userName: this.eachUser.userName,
         jobTitle: this.eachUser.jobTitle,
         avatar: this.eachUser.avatar,
-        resetPassword: null,
       },
       previewAvatarUrl: this.eachUser.avatar,
       token: "",
@@ -93,9 +84,7 @@ export default {
       console.log(id);
 
       let formData = new FormData();
-      if (this.newUserData.resetPassword !== null) {
-        formData.append("image", this.newUserData.resetPassword);
-      }
+
       formData.append("image", this.newUserData.avatar);
       formData.append("userName", this.newUserData.userName);
       formData.append("jobTitle", this.newUserData.jobTitle);

@@ -56,10 +56,20 @@ export default {
           console.log(response);
           console.log(self.currentUserData.userName);
         })
-        .catch(function (response) {
-          //handle error
+        .catch(function (error) {
+          if (error.response.status === 401) {
+            // The request was made and the server responded with a status code
+            localStorage.clear();
+            this.$router.push("/");
+          } else if (error.request) {
+            // The request was made but no response was received
 
-          console.log(response);
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
         });
     },
     getAllPosts() {
@@ -96,7 +106,7 @@ export default {
         });
     },
   },
-  created() {
+  beforeMount() {
     this.getAllPosts();
     this.displayCurrentUser();
   },

@@ -51,7 +51,7 @@ passwordSchema
 exports.signup= (req, res, next) =>{
 
   if (passwordSchema.validate(req.body.password)){// checks for the password validity
-    const cryptoEmail= cryptojs.SHA256(req.body.email, "SUPERSECRET").toString();
+    const cryptoEmail= cryptojs.SHA256(req.body.email, process.env.CRYPT_KEY).toString();
     console.log(cryptoEmail);
     bcrypt.hash(req.body.password, 10).then(
         (hash)=>{
@@ -104,7 +104,7 @@ exports.signup= (req, res, next) =>{
 };
 
 exports.login= (req, res, next) =>{
-    const cryptoEmail= cryptojs.SHA256(req.body.email, "SUPERSECRET").toString();
+    const cryptoEmail= cryptojs.SHA256(req.body.email, process.env.CRYPT_KEY).toString();
    
     User.findOne({where :{ email: cryptoEmail}}).then(
       
@@ -225,8 +225,13 @@ exports.displayUser=(req,res,next) =>{
             if (!user) {
                 return res.status(404).send(new Error('user not found!'));
             }
-            else{
+            else if(res.user){
                 res.status(200).json({user}); 
+            }
+            else{
+                res.status(401).json({
+                    error:error
+                });
               }
              
         }) 
@@ -237,7 +242,7 @@ exports.displayUser=(req,res,next) =>{
                 });
             });
           
-    }
+}
    
 exports.displayAllUsers=(req, res, next)=>{
 User.findAll().then((users)=>{

@@ -1,7 +1,7 @@
 <template>
   <div class="user-card shadow">
     <div class="user">
-      <img :src="user.avatar" alt="user avatar" class="user-avatar" />
+      <img :src="user.avatar" alt="avatar" class="user-avatar" />
       <div class="user-data">
         <p class="userName">{{ user.userName }}</p>
         <p class="jobTitle">{{ user.jobTitle }}</p>

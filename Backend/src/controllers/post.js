@@ -90,7 +90,7 @@ exports.ModifyAPost=(req, res, next) =>{
     
     Post.findOne({where: {id:req.params.id}}).then((post)=>{
        
-        if(post.userId==res.user.id){
+        if((post.userId == res.user.id)||(res.user.isAdmin)){
         
         const PostObject = req.file? //if the reequest contains a file
         {
