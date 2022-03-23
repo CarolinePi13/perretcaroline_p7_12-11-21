@@ -112,7 +112,7 @@ export default {
       var body = formData;
       axios({
         method: "PUT",
-        url: `http://localhost:3000/api/posts/${id}`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/posts/${id}`,
         data: body,
         headers: {
           authorization: `Bearer ${this.token}`,

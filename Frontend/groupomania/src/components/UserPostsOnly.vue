@@ -162,7 +162,7 @@ export default {
       };
       axios({
         method: "POST",
-        url: `http://localhost:3000/api/posts/vote-post`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/posts/vote-post`,
         data: body,
         headers: {
           authorization: `Bearer ${this.token}`,
@@ -187,7 +187,7 @@ export default {
 
       axios({
         method: "GET",
-        url: `http://localhost:3000/api/posts/all-votes-post/${PostId}`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/posts/all-votes-post/${PostId}`,
 
         headers: {
           authorization: `Bearer ${this.token}`,
@@ -208,7 +208,7 @@ export default {
 
       axios({
         method: "GET",
-        url: `http://localhost:3000/api/posts/one-vote/${id}`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/posts/one-vote/${id}`,
 
         headers: {
           authorization: `Bearer ${this.token}`,
@@ -233,7 +233,7 @@ export default {
       let id = this.postId;
       axios({
         method: "DELETE",
-        url: `http://localhost:3000/api/posts/vote-post/${id}`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/posts/vote-post/${id}`,
 
         headers: {
           authorization: `Bearer ${this.token}`,
@@ -257,7 +257,7 @@ export default {
 
       axios({
         method: "DELETE",
-        url: `http://localhost:3000/api/posts/${id}`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/posts/${id}`,
 
         headers: {
           authorization: `Bearer ${this.token}`,
@@ -283,7 +283,7 @@ export default {
 
     //   axios({
     //     method: "GET",
-    //     url: `http://localhost:3000/api/user/${id}`,
+    //     url: `https://carolinep13-groupomania.herokuapp.com/api/user/${id}`,
     //     headers: {
     //       authorization: `Bearer ${this.token}`,
     //       "content-type": "application/json",
@@ -304,7 +304,7 @@ export default {
       let self = this;
       axios({
         method: "GET",
-        url: `http://localhost:3000/api/comments/posts/${this.postId}`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/comments/posts/${this.postId}`,
 
         headers: {
           authorization: `Bearer ${this.token}`,

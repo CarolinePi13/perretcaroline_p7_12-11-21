@@ -92,7 +92,7 @@ exports.ModifyAPost=(req, res, next) =>{
        
         if((post.userId == res.user.id)||(res.user.isAdmin)){
         
-        const PostObject = req.file? //if the reequest contains a file
+        const PostObject = req.file? //if the request contains a file
         {
             ...req.body,
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`

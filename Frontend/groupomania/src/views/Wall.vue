@@ -44,7 +44,7 @@ export default {
       let self = this;
       axios({
         method: "GET",
-        url: `http://localhost:3000/api/user/${this.userId}`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/user/${this.userId}`,
         headers: {
           authorization: `Bearer ${this.token}`,
           "content-type": "application/json",
@@ -77,7 +77,7 @@ export default {
 
       axios({
         method: "GET",
-        url: `http://localhost:3000/api/posts`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/posts`,
         headers: {
           authorization: `Bearer ${this.token}`,
           "content-type": "multipart/form-data",

@@ -26,7 +26,7 @@ export default {
       let self = this;
       axios({
         method: "GET",
-        url: `http://localhost:3000/api/user`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/user`,
         headers: {
           authorization: `Bearer ${token}`,
           "content-type": "application/json",

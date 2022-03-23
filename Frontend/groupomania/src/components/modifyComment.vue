@@ -66,7 +66,7 @@ export default {
 
       axios({
         method: "PUT",
-        url: `http://localhost:3000/api/comments/${id}`,
+        url: `https://carolinep13-groupomania.herokuapp.com/api/comments/${id}`,
         data: body,
         headers: {
           authorization: `Bearer ${this.token}`,

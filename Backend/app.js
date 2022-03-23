@@ -68,13 +68,23 @@ user.hasMany(vote,{
 // use below code with {force:true}to reintialize the db or make changes in models/use without {force:true} to set default users such as admin.
 // ----------------------------------------
 
-// sequelize.sync({force:true}).then(()=>{
-//   console.log('this works');
-// }).catch((err)=>{
-//   console.log(err)
-// });
+sequelize.sync().then(()=>{
+  console.log('this works');
+}).catch((err)=>{
+  console.log(err)
+});
 // -------------------------------------------
+app.get('/', (req, res, next) => {
 
+  res.status(200).json({
+      status: 'success',
+      data: {
+          name: 'groupomania',
+          version: '0.1.0'
+      }
+  });
+
+});
 app.use('/api/user', userRoutes,limiter);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commRoutes)
